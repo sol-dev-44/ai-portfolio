@@ -27,7 +27,7 @@ export interface TokenizeResponse {
 export const tokenizerApi = createApi({
   reducerPath: 'tokenizerApi',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: 'http://localhost:8000/api' 
+    baseUrl: 'http://localhost:8080/api' 
   }),
   tagTypes: ['Tokenizers'],
   endpoints: (builder) => ({
