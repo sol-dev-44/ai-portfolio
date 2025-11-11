@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-const API_BASE_URL = 'hhttps://ai-portfolio-production-7eb9.up.railway.app/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+
 
 // TypeScript types matching backend models
 export interface TokenizerInfo {
@@ -28,7 +29,7 @@ export interface TokenizeResponse {
 export const tokenizerApi = createApi({
   reducerPath: 'tokenizerApi',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: 'https://ai-portfolio-production-7eb9.up.railway.app/api'
+    baseUrl: API_BASE_URL
   }),
   tagTypes: ['Tokenizers'],
   endpoints: (builder) => ({
