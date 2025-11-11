@@ -11,7 +11,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
     "http://localhost:3000",
-    "https://ai-portfolio-production-7eb9.up.railway.app/api"
+    "https://ai-portfolio-production-7eb9.up.railway.app"
 ],
     allow_credentials=True,
     allow_methods=["*"],
