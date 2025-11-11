@@ -11,7 +11,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
     "http://localhost:3000",
-    "https://ai-portfolio-in418kblp-miami-sol-devs-projects.vercel.app"
+    "https://ai-portfolio-production-7eb9.up.railway.app/api"
 ],
     allow_credentials=True,
     allow_methods=["*"],
