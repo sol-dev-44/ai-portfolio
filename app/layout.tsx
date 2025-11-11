@@ -34,6 +34,7 @@ export default function RootLayout({
         <ThemeProvider>
           <Providers>
             <Navbar />
+            <ThemeToggle />
             {children}
           </Providers>
         </ThemeProvider>

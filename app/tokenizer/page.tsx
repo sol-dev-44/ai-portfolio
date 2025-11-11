@@ -4,6 +4,49 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGetTokenizersQuery, useLazyTokenizeQuery } from '@/store/api/tokenizer';
 
+// Inline Tooltip Component
+function Tooltip({ content, children, position = 'center' }: { content: string; children: React.ReactNode; position?: 'center' | 'right' }) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  const positionClasses = position === 'right' 
+    ? 'top-full right-0 mt-2'
+    : 'top-full left-1/2 transform -translate-x-1/2 mt-2';
+  
+  const arrowClasses = position === 'right'
+    ? 'bottom-full right-4 mb-1'
+    : 'bottom-full left-1/2 transform -translate-x-1/2 mb-1';
+
+  return (
+    <div className="relative inline-block">
+      <div
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+        className="cursor-help"
+      >
+        {children}
+      </div>
+      
+      <AnimatePresence>
+        {isVisible && (
+          <motion.div
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 5 }}
+            transition={{ duration: 0.15 }}
+            className={`absolute z-50 px-3 py-2 text-sm text-white bg-gray-900 dark:bg-gray-700 rounded-lg shadow-lg pointer-events-none ${positionClasses}`}
+            style={{ minWidth: 'max-content', maxWidth: '300px', whiteSpace: 'normal' }}
+          >
+            {content}
+            <div className={`absolute ${arrowClasses}`}>
+              <div className="border-4 border-transparent border-b-gray-900 dark:border-b-gray-700" />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // Color palette for tokens
 const TOKEN_COLORS = [
   'bg-blue-100 border-blue-300 dark:bg-blue-900/30 dark:border-blue-700',
@@ -14,6 +57,14 @@ const TOKEN_COLORS = [
   'bg-red-100 border-red-300 dark:bg-red-900/30 dark:border-red-700',
   'bg-indigo-100 border-indigo-300 dark:bg-indigo-900/30 dark:border-indigo-700',
   'bg-orange-100 border-orange-300 dark:bg-orange-900/30 dark:border-orange-700',
+];
+
+// Example sentences
+const EXAMPLE_SENTENCES = [
+  { label: 'Emoji', text: 'The 🌟 star-programmer implemented AGI overnight! 🚀🤖💡' },
+  { label: 'Code', text: "const fetchData = async () => await fetch('https://api.example.com');" },
+  { label: 'Multilingual', text: 'Hello 世界 مرحبا Привет こんにちは' },
+  { label: 'Mixed', text: '🎨 AI-powered self-driving @ https://example.com costs $99.99/month in 2024!' },
 ];
 
 export default function TokenizerPage() {
@@ -179,6 +230,27 @@ export default function TokenizerPage() {
               </motion.div>
             )}
           </div>
+          
+          {/* Example Buttons */}
+          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className="text-sm text-gray-600 dark:text-gray-400">Quick examples:</span>
+              {EXAMPLE_SENTENCES.map((example, index) => (
+                <motion.button
+                  key={example.label}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 + index * 0.05 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setInputText(example.text)}
+                  className="px-3 py-1.5 text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                >
+                  {example.label}
+                </motion.button>
+              ))}
+            </div>
+          </div>
         </motion.div>
 
         {/* Results */}
@@ -203,10 +275,18 @@ export default function TokenizerPage() {
                           Tokenizer
                         </th>
                         <th className="text-right py-3 px-4 font-semibold text-gray-900 dark:text-white">
-                          Tokens
+                          <Tooltip content="Total number of tokens generated">
+                            <span className="border-b border-dashed border-gray-400 dark:border-gray-500">
+                              Tokens
+                            </span>
+                          </Tooltip>
                         </th>
                         <th className="text-right py-3 px-4 font-semibold text-gray-900 dark:text-white">
-                          Chars/Token
+                          <Tooltip content="Higher is better! More characters per token = lower costs & more context available" position="right">
+                            <span className="border-b border-dashed border-gray-400 dark:border-gray-500">
+                              Chars/Token
+                            </span>
+                          </Tooltip>
                         </th>
                       </tr>
                     </thead>
@@ -227,7 +307,11 @@ export default function TokenizerPage() {
                           >
                             <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">
                               {tokenizers?.find(t => t.id === name)?.name || name}
-                              {isWinner && <span className="ml-2">⭐</span>}
+                              {isWinner && (
+                                <Tooltip content="Most efficient - uses fewest tokens!">
+                                  <span className="ml-2">⭐</span>
+                                </Tooltip>
+                              )}
                             </td>
                             <td className="text-right py-3 px-4 text-gray-700 dark:text-gray-300">
                               {result.count}
@@ -254,6 +338,9 @@ export default function TokenizerPage() {
                 >
                   <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
                     {tokenizers?.find(t => t.id === name)?.name || name} ({result.count} tokens)
+                    <Tooltip content="Each colored pill represents one token. Colors help visualize chunking patterns.">
+                      <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">ℹ️</span>
+                    </Tooltip>
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {result.decoded_tokens.map((token, tokenIndex) => (
