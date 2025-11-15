@@ -2,16 +2,23 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import tiktoken
-from typing import List, Dict
+from typing import List, Dict, Optional, Literal
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM
+import re
 
 app = FastAPI(title="Tokenizer API")
 
 # CORS middleware for Next.js frontend
+# Use regex pattern to match Vercel preview branches
+origins_regex = r"https://.*\.vercel\.app"
+
 app.add_middleware(
     CORSMiddleware,
+    allow_origin_regex=origins_regex,
     allow_origins=[
         "http://localhost:3000",
-        "https://ai-portfolio-psi-lyart.vercel.app",  # Vercel frontend
+        "https://ai-portfolio-psi-lyart.vercel.app",
         "https://ai-portfolio-production-7eb9.up.railway.app"
     ],
     allow_credentials=True,
@@ -33,6 +40,29 @@ class TokenizerInfo(BaseModel):
     id: str
     name: str
     description: str
+
+# LLM Generation Models
+class LLMGenerateRequest(BaseModel):
+    prompt: str = Field(..., max_length=2000)
+    model_id: Literal["gpt2", "qwen"] = Field(default="gpt2")
+    strategy: Literal["greedy", "top_k", "top_p", "beam"] = Field(default="greedy")
+    max_new_tokens: int = Field(default=128, ge=1, le=512)
+    temperature: float = Field(default=1.0, ge=0.1, le=2.0)
+    top_k: Optional[int] = Field(default=50, ge=1, le=100)
+    top_p: Optional[float] = Field(default=0.9, ge=0.0, le=1.0)
+    num_beams: Optional[int] = Field(default=4, ge=1, le=10)
+
+class LLMGenerateResponse(BaseModel):
+    generated_text: str
+    model_used: str
+    strategy_used: str
+    tokens_generated: int
+
+class LLMModelInfo(BaseModel):
+    id: str
+    name: str
+    description: str
+    parameters: str
 
 # Dynamically discover all available tokenizers from tiktoken
 def initialize_tokenizers():
@@ -68,6 +98,60 @@ def initialize_tokenizers():
 
 # Initialize tokenizers once at startup
 TOKENIZERS, TOKENIZER_METADATA = initialize_tokenizers()
+
+# LLM Models initialization
+def initialize_llm_models():
+    """Initialize LLM models for text generation."""
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    models = {}
+    model_metadata = []
+    
+    # GPT-2 (124M parameters)
+    try:
+        gpt2_tokenizer = AutoTokenizer.from_pretrained("gpt2")
+        gpt2_model = AutoModelForCausalLM.from_pretrained("gpt2").to(device)
+        gpt2_model.eval()  # Set to evaluation mode
+        
+        models["gpt2"] = {
+            "tokenizer": gpt2_tokenizer,
+            "model": gpt2_model,
+            "device": device
+        }
+        
+        model_metadata.append(LLMModelInfo(
+            id="gpt2",
+            name="GPT-2",
+            description="OpenAI's GPT-2 completion model",
+            parameters="124M"
+        ))
+    except Exception as e:
+        print(f"Warning: Could not load GPT-2: {e}")
+    
+    # Qwen 0.6B (instruction-tuned)
+    try:
+        qwen_tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2.5-0.5B-Instruct")
+        qwen_model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen2.5-0.5B-Instruct").to(device)
+        qwen_model.eval()  # Set to evaluation mode
+        
+        models["qwen"] = {
+            "tokenizer": qwen_tokenizer,
+            "model": qwen_model,
+            "device": device
+        }
+        
+        model_metadata.append(LLMModelInfo(
+            id="qwen",
+            name="Qwen 2.5 (0.5B)",
+            description="Instruction-tuned chat model",
+            parameters="500M"
+        ))
+    except Exception as e:
+        print(f"Warning: Could not load Qwen: {e}")
+    
+    return models, model_metadata
+
+# Initialize LLMs once at startup
+LLM_MODELS, LLM_MODEL_METADATA = initialize_llm_models()
 
 @app.get("/")
 async def root():
@@ -119,6 +203,72 @@ async def tokenize(request: TokenizeRequest) -> Dict[str, TokenizerResult]:
         )
     
     return results
+
+
+@app.get("/api/llm/models")
+async def get_llm_models() -> List[LLMModelInfo]:
+    """
+    Get list of available LLM models with metadata.
+    """
+    return LLM_MODEL_METADATA
+
+
+@app.post("/api/llm/generate")
+async def generate_text(request: LLMGenerateRequest) -> LLMGenerateResponse:
+    """
+    Generate text using specified LLM model and decoding strategy.
+    """
+    if not request.prompt:
+        raise HTTPException(status_code=400, detail="Prompt cannot be empty")
+    
+    if request.model_id not in LLM_MODELS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Model {request.model_id} not available. Available models: {list(LLM_MODELS.keys())}"
+        )
+    
+    model_info = LLM_MODELS[request.model_id]
+    tokenizer = model_info["tokenizer"]
+    model = model_info["model"]
+    device = model_info["device"]
+    
+    # Tokenize input
+    inputs = tokenizer(request.prompt, return_tensors="pt").to(device)
+    input_length = inputs["input_ids"].shape[1]
+    
+    # Prepare generation kwargs based on strategy
+    gen_kwargs = {
+        "max_new_tokens": request.max_new_tokens,
+        "temperature": request.temperature,
+        "pad_token_id": tokenizer.eos_token_id,
+    }
+    
+    if request.strategy == "greedy":
+        gen_kwargs["do_sample"] = False
+    elif request.strategy == "top_k":
+        gen_kwargs["do_sample"] = True
+        gen_kwargs["top_k"] = request.top_k
+    elif request.strategy == "top_p":
+        gen_kwargs["do_sample"] = True
+        gen_kwargs["top_p"] = request.top_p
+    elif request.strategy == "beam":
+        gen_kwargs["num_beams"] = request.num_beams
+        gen_kwargs["do_sample"] = False
+    
+    # Generate text
+    with torch.no_grad():
+        outputs = model.generate(**inputs, **gen_kwargs)
+    
+    # Decode only the new tokens
+    generated_text = tokenizer.decode(outputs[0][input_length:], skip_special_tokens=True)
+    tokens_generated = outputs.shape[1] - input_length
+    
+    return LLMGenerateResponse(
+        generated_text=generated_text,
+        model_used=request.model_id,
+        strategy_used=request.strategy,
+        tokens_generated=tokens_generated
+    )
 
 
 if __name__ == "__main__":
