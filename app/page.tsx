@@ -57,7 +57,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.7 }}
-            className="flex gap-4 justify-center pt-4"
+            className="flex flex-wrap gap-4 justify-center pt-4"
           >
             <Link href="/tokenizer">
               <motion.div
@@ -65,20 +65,21 @@ export default function Home() {
                 whileTap={{ scale: 0.95 }}
                 className="group px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl cursor-pointer"
               >
-                Try Tokenizer
+                Tokenizer
                 <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
               </motion.div>
             </Link>
             
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="relative px-8 py-4 bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 rounded-xl font-semibold text-lg shadow-lg border border-gray-300 dark:border-gray-700 cursor-not-allowed"
-            >
-              View Projects
-              <span className="absolute -top-2 -right-2 px-2 py-1 text-xs bg-yellow-400 text-yellow-900 rounded-md font-bold">
-                Coming Soon
-              </span>
-            </motion.div>
+            <Link href="/llm-playground">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="group px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl cursor-pointer"
+              >
+                LLM Playground
+                <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
+              </motion.div>
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -135,9 +136,13 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
               Featured Projects
             </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              Interactive tools for exploring AI/ML concepts
+            </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8">
+            {/* Tokenizer Project */}
             <Link href="/tokenizer">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -153,10 +158,10 @@ export default function Home() {
                   </h3>
                   <span className="text-2xl">🔤</span>
                 </div>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Interactive tool to compare how different LLM tokenizers split text into tokens. Built with Python FastAPI backend and Next.js frontend.
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                  Compare how different LLM tokenizers (GPT-2, GPT-3.5, GPT-4, GPT-4o) split text into tokens. Visualize tokenization patterns and efficiency metrics in real-time.
                 </p>
-                <div className="flex gap-2 mt-4">
+                <div className="flex gap-2 flex-wrap">
                   <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
                     Python
                   </span>
@@ -166,34 +171,66 @@ export default function Home() {
                   <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
                     Next.js
                   </span>
+                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
+                    TikToken
+                  </span>
                 </div>
               </motion.div>
             </Link>
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.02 }}
-              className="relative p-8 bg-gray-100 dark:bg-gray-900/50 rounded-2xl border-2 border-dashed border-gray-300 dark:border-gray-700 cursor-not-allowed"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <h3 className="text-2xl font-bold text-gray-500 dark:text-gray-500">
-                  More Projects
-                </h3>
-                <span className="text-2xl grayscale opacity-50">🚀</span>
-              </div>
-              <p className="text-gray-500 dark:text-gray-500 leading-relaxed">
-                Additional AI/ML projects, full-stack applications, and experimental tools coming soon.
-              </p>
-              <div className="mt-4 inline-flex items-center gap-2 text-gray-500 dark:text-gray-500 font-medium">
-                <span className="px-3 py-1 bg-yellow-400 text-yellow-900 rounded-md text-sm font-bold">
-                  In Development
-                </span>
-              </div>
-            </motion.div>
+            {/* LLM Playground Project */}
+            <Link href="/llm-playground">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5 }}
+                className="group p-8 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 transition-all hover:shadow-xl cursor-pointer"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                    LLM Playground
+                  </h3>
+                  <span className="text-2xl">🚀</span>
+                </div>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                  Experiment with language models (GPT-2, Qwen) using different decoding strategies. Adjust temperature, sampling methods, and see how LLMs generate text in real-time.
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">
+                    PyTorch
+                  </span>
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">
+                    Transformers
+                  </span>
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">
+                    FastAPI
+                  </span>
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">
+                    Next.js
+                  </span>
+                </div>
+              </motion.div>
+            </Link>
           </div>
+          
+          {/* More Coming Soon */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            viewport={{ once: true }}
+            className="mt-12 text-center"
+          >
+            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-full">
+              <span className="text-2xl">✨</span>
+              <p className="text-gray-700 dark:text-gray-300 font-medium">
+                More features & projects coming soon
+              </p>
+              <span className="text-2xl">🚧</span>
+            </div>
+          </motion.div>
         </div>
       </section>
     </main>
