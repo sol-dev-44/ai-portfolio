@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 const navItems = [
   { name: 'Home', path: '/', enabled: true },
   { name: 'Tokenizer', path: '/tokenizer', enabled: true },
-  { name: 'LLM Playground', path: '/llm-playground', enabled: false },
+  { name: 'LLM Playground', path: '/llm-playground', enabled: true },
   { name: 'About', path: '/about', enabled: false },
 ];
 

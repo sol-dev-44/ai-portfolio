@@ -1,8 +1,8 @@
+// store/api/llm.ts
+// Updated for simpler /api/hf-generate route
+
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-
-// TypeScript types matching backend models
 export interface LLMModelInfo {
   id: string;
   name: string;
@@ -28,32 +28,91 @@ export interface LLMGenerateResponse {
   tokens_generated: number;
 }
 
-// RTK Query API
+const MODELS: LLMModelInfo[] = [
+  {
+    id: 'gpt2',
+    name: 'GPT-2',
+    description: 'OpenAI\'s GPT-2 completion model',
+    parameters: '124M',
+  },
+  {
+    id: 'qwen',
+    name: 'Qwen 2.5 (0.5B)',
+    description: 'Instruction-tuned chat model',
+    parameters: '500M',
+  },
+];
+
 export const llmApi = createApi({
   reducerPath: 'llmApi',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: API_BASE_URL
+    baseUrl: '/api',  // Simple base URL
   }),
   tagTypes: ['LLMModels'],
   endpoints: (builder) => ({
-    // GET /api/llm/models - Fetch available LLM models
     getLLMModels: builder.query<LLMModelInfo[], void>({
-      query: () => '/llm/models',
+      queryFn: () => ({ data: MODELS }),
       providesTags: ['LLMModels'],
     }),
     
-    // POST /api/llm/generate - Generate text
     generateText: builder.mutation<LLMGenerateResponse, LLMGenerateRequest>({
-      query: (body) => ({
-        url: '/llm/generate',
-        method: 'POST',
-        body,
-      }),
+      query: (body) => {
+        const {
+          prompt,
+          model_id,
+          strategy,
+          max_new_tokens,
+          temperature,
+          top_k = 50,
+          top_p = 0.9,
+          num_beams = 4,
+        } = body;
+
+        // Build HF parameters
+        const parameters: Record<string, any> = {
+          max_new_tokens,
+          temperature,
+          return_full_text: false,
+        };
+
+        if (strategy === 'greedy') {
+          parameters.do_sample = false;
+        } else if (strategy === 'top_k') {
+          parameters.do_sample = true;
+          parameters.top_k = top_k;
+        } else if (strategy === 'top_p') {
+          parameters.do_sample = true;
+          parameters.top_p = top_p;
+        } else if (strategy === 'beam') {
+          parameters.num_beams = num_beams;
+          parameters.do_sample = false;
+        }
+
+        return {
+          url: '/hf-generate',  // Simpler route!
+          method: 'POST',
+          body: {
+            model_id,
+            prompt,
+            parameters,
+          },
+        };
+      },
+      transformResponse: (response: any[], meta, arg) => {
+        const generatedText = response[0]?.generated_text || '';
+        const tokensGenerated = Math.ceil(generatedText.length / 4);
+
+        return {
+          generated_text: generatedText,
+          model_used: arg.model_id,
+          strategy_used: arg.strategy,
+          tokens_generated: tokensGenerated,
+        };
+      },
     }),
   }),
 });
 
-// Export hooks for usage in components
 export const { 
   useGetLLMModelsQuery,
   useGenerateTextMutation,
