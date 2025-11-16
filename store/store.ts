@@ -1,17 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { tokenizerApi} from './api/tokenizer';
-import { llmApi } from './api/llm';
+import { tokenizerApi } from './api/tokenizer';
+import { generationApi } from './api/generation';
 
 export const store = configureStore({
   reducer: {
     [tokenizerApi.reducerPath]: tokenizerApi.reducer,
-    [llmApi.reducerPath]: llmApi.reducer,
+    [generationApi.reducerPath]: generationApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(tokenizerApi.middleware)
-      .concat(llmApi.middleware),
+      .concat(generationApi.middleware),
 });
 
 setupListeners(store.dispatch);

@@ -2,15 +2,14 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import tiktoken
-from typing import List, Dict, Optional, Literal
+from typing import List, Dict
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
-import re
+import torch.nn.functional as F
 
-app = FastAPI(title="Tokenizer API")
+app = FastAPI(title="AI Portfolio API")
 
 # CORS middleware for Next.js frontend
-# Use regex pattern to match Vercel preview branches
 origins_regex = r"https://.*\.vercel\.app"
 
 app.add_middleware(
@@ -26,6 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ===== TOKENIZER MODELS =====
 class TokenizeRequest(BaseModel):
     text: str = Field(..., max_length=10000)
     tokenizers: List[str] = Field(..., min_items=1)
@@ -41,39 +41,30 @@ class TokenizerInfo(BaseModel):
     name: str
     description: str
 
-# LLM Generation Models
-class LLMGenerateRequest(BaseModel):
-    prompt: str = Field(..., max_length=2000)
-    model_id: Literal["gpt2", "qwen"] = Field(default="gpt2")
-    strategy: Literal["greedy", "top_k", "top_p", "beam"] = Field(default="greedy")
-    max_new_tokens: int = Field(default=128, ge=1, le=512)
-    temperature: float = Field(default=1.0, ge=0.1, le=2.0)
-    top_k: Optional[int] = Field(default=50, ge=1, le=100)
-    top_p: Optional[float] = Field(default=0.9, ge=0.0, le=1.0)
-    num_beams: Optional[int] = Field(default=4, ge=1, le=10)
+# ===== GENERATION VISUALIZATION MODELS =====
+class ProbabilityRequest(BaseModel):
+    prompt: str = Field(..., max_length=500, description="Text prompt to analyze")
+    top_k: int = Field(default=10, ge=5, le=50, description="Number of top tokens to return")
 
-class LLMGenerateResponse(BaseModel):
-    generated_text: str
-    model_used: str
-    strategy_used: str
-    tokens_generated: int
+class TokenProbability(BaseModel):
+    token: str
+    token_id: int
+    probability: float
+    log_probability: float
 
-class LLMModelInfo(BaseModel):
-    id: str
-    name: str
-    description: str
-    parameters: str
+class ProbabilityResponse(BaseModel):
+    prompt: str
+    top_tokens: List[TokenProbability]
+    total_tokens_considered: int
 
-# Dynamically discover all available tokenizers from tiktoken
+# ===== TOKENIZER INITIALIZATION =====
 def initialize_tokenizers():
     """Initialize all available tiktoken encodings dynamically."""
     tokenizers = {}
     metadata = []
     
-    # Get all available encoding names from tiktoken
     available_encodings = tiktoken.list_encoding_names()
     
-    # Friendly names mapping (optional - for better display)
     friendly_names = {
         "gpt2": "GPT-2",
         "r50k_base": "GPT-3 (Davinci)",
@@ -85,7 +76,6 @@ def initialize_tokenizers():
     
     for encoding_name in available_encodings:
         enc = tiktoken.get_encoding(encoding_name)
-        
         tokenizers[encoding_name] = enc
         
         metadata.append(TokenizerInfo(
@@ -96,97 +86,55 @@ def initialize_tokenizers():
     
     return tokenizers, metadata
 
-# Initialize tokenizers once at startup
 TOKENIZERS, TOKENIZER_METADATA = initialize_tokenizers()
 
-# LLM Models initialization
-def initialize_llm_models():
-    """Initialize LLM models for text generation."""
+# ===== GPT-2 INITIALIZATION FOR PROBABILITY EXTRACTION =====
+def initialize_gpt2():
+    """Initialize GPT-2 model for probability extraction."""
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    models = {}
-    model_metadata = []
     
-    # GPT-2 (124M parameters) - Fast and efficient
     try:
-        print("Loading GPT-2 model...")
-        gpt2_tokenizer = AutoTokenizer.from_pretrained("gpt2")
-        gpt2_model = AutoModelForCausalLM.from_pretrained("gpt2").to(device)
-        gpt2_model.eval()  # Set to evaluation mode
+        print("🔄 Loading GPT-2 for probability extraction...")
+        tokenizer = AutoTokenizer.from_pretrained("gpt2")
+        model = AutoModelForCausalLM.from_pretrained("gpt2").to(device)
+        model.eval()
         
-        models["gpt2"] = {
-            "tokenizer": gpt2_tokenizer,
-            "model": gpt2_model,
+        print(f"✅ GPT-2 loaded on {device}")
+        return {
+            "tokenizer": tokenizer,
+            "model": model,
             "device": device
         }
-        
-        model_metadata.append(LLMModelInfo(
-            id="gpt2",
-            name="GPT-2",
-            description="OpenAI's GPT-2 completion model",
-            parameters="124M"
-        ))
-        print("✅ GPT-2 loaded successfully")
     except Exception as e:
         print(f"❌ Could not load GPT-2: {e}")
-    
-    # Qwen 0.5B (instruction-tuned) - DISABLED for Railway free tier performance
-    # Uncomment below to enable (requires more RAM and CPU)
-    """
-    try:
-        print("Loading Qwen model...")
-        qwen_tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2.5-0.5B-Instruct")
-        qwen_model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen2.5-0.5B-Instruct").to(device)
-        qwen_model.eval()  # Set to evaluation mode
-        
-        models["qwen"] = {
-            "tokenizer": qwen_tokenizer,
-            "model": qwen_model,
-            "device": device
-        }
-        
-        model_metadata.append(LLMModelInfo(
-            id="qwen",
-            name="Qwen 2.5 (0.5B)",
-            description="Instruction-tuned chat model",
-            parameters="500M"
-        ))
-        print("✅ Qwen loaded successfully")
-    except Exception as e:
-        print(f"❌ Could not load Qwen: {e}")
-    """
-    
-    print(f"📊 Loaded {len(models)} model(s) on {device}")
-    return models, model_metadata
+        return None
 
-# Initialize LLMs once at startup
-LLM_MODELS, LLM_MODEL_METADATA = initialize_llm_models()
+GPT2_MODEL = initialize_gpt2()
 
+# ===== BASIC ROUTES =====
 @app.get("/")
 async def root():
-    return {"message": "Tokenizer API is running", "models_loaded": len(LLM_MODELS)}
+    return {
+        "message": "AI Portfolio API",
+        "gpt2_loaded": GPT2_MODEL is not None
+    }
 
 @app.get("/health")
 async def health():
-    """Health check endpoint - returns model status"""
     return {
         "status": "healthy",
-        "models_loaded": list(LLM_MODELS.keys()),
-        "model_count": len(LLM_MODELS)
+        "gpt2_loaded": GPT2_MODEL is not None
     }
 
+# ===== TOKENIZER ENDPOINTS =====
 @app.get("/api/tokenizers")
 async def get_tokenizers() -> List[TokenizerInfo]:
-    """
-    Get list of available tokenizers with metadata.
-    """
+    """Get list of available tokenizers with metadata."""
     return TOKENIZER_METADATA
 
 @app.post("/api/tokenize")
 async def tokenize(request: TokenizeRequest) -> Dict[str, TokenizerResult]:
-    """
-    Tokenize text using specified tokenizers.
-    Returns a dictionary mapping tokenizer names to their results.
-    """
+    """Tokenize text using specified tokenizers."""
     if not request.text:
         raise HTTPException(status_code=400, detail="Text cannot be empty")
     
@@ -196,18 +144,13 @@ async def tokenize(request: TokenizeRequest) -> Dict[str, TokenizerResult]:
         if tokenizer_name not in TOKENIZERS:
             raise HTTPException(
                 status_code=400, 
-                detail=f"Invalid tokenizer: {tokenizer_name}. Valid options: {list(TOKENIZERS.keys())}"
+                detail=f"Invalid tokenizer: {tokenizer_name}"
             )
         
         enc = TOKENIZERS[tokenizer_name]
-        
-        # Encode the text
         token_ids = enc.encode(request.text)
-        
-        # Decode each token individually to show the breakdown
         decoded_tokens = [enc.decode([token_id]) for token_id in token_ids]
         
-        # Calculate character to token ratio
         char_count = len(request.text)
         token_count = len(token_ids)
         ratio = char_count / token_count if token_count > 0 else 0.0
@@ -221,102 +164,74 @@ async def tokenize(request: TokenizeRequest) -> Dict[str, TokenizerResult]:
     
     return results
 
-
-@app.get("/api/llm/models")
-async def get_llm_models() -> List[LLMModelInfo]:
+# ===== GENERATION VISUALIZATION ENDPOINTS =====
+@app.post("/api/generation/probabilities")
+async def get_token_probabilities(request: ProbabilityRequest) -> ProbabilityResponse:
     """
-    Get list of available LLM models with metadata.
+    Get token probability distribution for the next token.
+    This is used to visualize how different generation strategies work.
     """
-    return LLM_MODEL_METADATA
-
-
-@app.post("/api/llm/generate")
-async def generate_text(request: LLMGenerateRequest) -> LLMGenerateResponse:
-    """
-    Generate text using specified LLM model and decoding strategy.
-    """
-    import time
-    start_time = time.time()
+    if not GPT2_MODEL:
+        raise HTTPException(
+            status_code=503,
+            detail="GPT-2 model not available"
+        )
     
     if not request.prompt:
         raise HTTPException(status_code=400, detail="Prompt cannot be empty")
     
-    if request.model_id not in LLM_MODELS:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Model {request.model_id} not available. Available models: {list(LLM_MODELS.keys())}"
-        )
-    
-    print(f"🚀 Generation request: model={request.model_id}, strategy={request.strategy}, max_tokens={request.max_new_tokens}")
-    
-    model_info = LLM_MODELS[request.model_id]
-    tokenizer = model_info["tokenizer"]
-    model = model_info["model"]
-    device = model_info["device"]
-    
-    # Tokenize input
-    tokenize_start = time.time()
-    inputs = tokenizer(request.prompt, return_tensors="pt").to(device)
-    input_length = inputs["input_ids"].shape[1]
-    print(f"⏱️  Tokenization: {time.time() - tokenize_start:.2f}s")
-    
-    # Prepare generation kwargs based on strategy
-    gen_kwargs = {
-        "max_new_tokens": request.max_new_tokens,
-        "temperature": request.temperature,
-        "pad_token_id": tokenizer.eos_token_id,
-    }
-    
-    if request.strategy == "greedy":
-        gen_kwargs["do_sample"] = False
-    elif request.strategy == "top_k":
-        gen_kwargs["do_sample"] = True
-        gen_kwargs["top_k"] = request.top_k
-    elif request.strategy == "top_p":
-        gen_kwargs["do_sample"] = True
-        gen_kwargs["top_p"] = request.top_p
-    elif request.strategy == "beam":
-        gen_kwargs["num_beams"] = request.num_beams
-        gen_kwargs["do_sample"] = False
-    
-    # Generate text
     try:
-        gen_start = time.time()
-        print(f"🔮 Starting generation...")
+        tokenizer = GPT2_MODEL["tokenizer"]
+        model = GPT2_MODEL["model"]
+        device = GPT2_MODEL["device"]
+        
+        # Tokenize input
+        inputs = tokenizer(request.prompt, return_tensors="pt").to(device)
+        
+        # Get model predictions
         with torch.no_grad():
-            outputs = model.generate(**inputs, **gen_kwargs)
-        gen_time = time.time() - gen_start
-        print(f"⏱️  Generation: {gen_time:.2f}s")
+            outputs = model(**inputs)
+            logits = outputs.logits
         
-        # Decode only the new tokens
-        decode_start = time.time()
-        generated_text = tokenizer.decode(outputs[0][input_length:], skip_special_tokens=True)
-        tokens_generated = outputs.shape[1] - input_length
-        print(f"⏱️  Decoding: {time.time() - decode_start:.2f}s")
+        # Get logits for the next token (last position)
+        next_token_logits = logits[0, -1, :]
         
-        total_time = time.time() - start_time
-        print(f"✅ Total request time: {total_time:.2f}s, Generated {tokens_generated} tokens")
+        # Convert to probabilities
+        probabilities = F.softmax(next_token_logits, dim=-1)
+        log_probabilities = F.log_softmax(next_token_logits, dim=-1)
         
-        return LLMGenerateResponse(
-            generated_text=generated_text,
-            model_used=request.model_id,
-            strategy_used=request.strategy,
-            tokens_generated=tokens_generated
+        # Get top-k tokens
+        top_probs, top_indices = torch.topk(probabilities, k=request.top_k)
+        
+        # Build response
+        top_tokens = []
+        for prob, idx in zip(top_probs.cpu().tolist(), top_indices.cpu().tolist()):
+            token = tokenizer.decode([idx])
+            top_tokens.append(TokenProbability(
+                token=token,
+                token_id=idx,
+                probability=round(prob, 6),
+                log_probability=round(log_probabilities[idx].item(), 4)
+            ))
+        
+        return ProbabilityResponse(
+            prompt=request.prompt,
+            top_tokens=top_tokens,
+            total_tokens_considered=len(probabilities)
         )
+        
     except Exception as e:
-        print(f"❌ Generation error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Generation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Probability extraction failed: {str(e)}")
 
 
 if __name__ == "__main__":
     import uvicorn
     import os
     port = int(os.environ.get("PORT", 8080))
-    # Increase timeout for model inference
     uvicorn.run(
         app, 
         host="0.0.0.0", 
         port=port,
-        timeout_keep_alive=75,  # Keep connections alive longer
-        limit_concurrency=10     # Limit concurrent requests
+        timeout_keep_alive=75,
+        limit_concurrency=10
     )

@@ -69,6 +69,16 @@ export default function Home() {
                 <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
               </motion.div>
             </Link>
+            <Link href="/generation">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="group px-8 py-4 bg-gradient-to-r from-pink-500 to-cyan-500 hover:from-pink-600 hover:to-cyan-600 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl cursor-pointer"
+              >
+                Explore Generation
+                <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
+              </motion.div>
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -130,7 +140,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {/* Tokenizer Project */}
             <Link href="/tokenizer" className="h-full">
               <motion.div
@@ -138,70 +148,102 @@ export default function Home() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -5 }}
-                className="h-full group p-8 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-xl cursor-pointer flex flex-col"
+                className="h-full group p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-xl cursor-pointer flex flex-col"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                <div className="flex items-start justify-between mb-3">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     Tokenizer Comparison
                   </h3>
                   <span className="text-2xl">🔤</span>
                 </div>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-grow">
-                  Compare how different LLM tokenizers (GPT-2, GPT-3.5, GPT-4, GPT-4o) split text into tokens. Visualize tokenization patterns and efficiency metrics in real-time.
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-grow text-sm">
+                  Compare how different LLM tokenizers (GPT-2, GPT-3.5, GPT-4, GPT-4o) split text into tokens. Visualize tokenization patterns and efficiency metrics.
                 </p>
                 <div className="flex gap-2 flex-wrap">
-                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
+                  <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
                     Python
                   </span>
-                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
+                  <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
                     FastAPI
                   </span>
-                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
-                    Next.js
-                  </span>
-                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
+                  <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
                     TikToken
                   </span>
                 </div>
               </motion.div>
             </Link>
 
-            {/* LLM Playground - Coming Soon */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.02 }}
-              className="h-full relative p-8 bg-gray-100 dark:bg-gray-900/50 rounded-2xl border-2 border-dashed border-gray-300 dark:border-gray-700 cursor-not-allowed flex flex-col"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <h3 className="text-2xl font-bold text-gray-500 dark:text-gray-500">
-                  LLM Playground
-                </h3>
-                <span className="text-2xl grayscale opacity-50">🚀</span>
-              </div>
-              <p className="text-gray-500 dark:text-gray-500 leading-relaxed mb-4 flex-grow">
-                Interactive playground for experimenting with language models (GPT-2, Qwen) using different decoding strategies. Text generation with real PyTorch models.
-              </p>
-              <div className="flex gap-2 flex-wrap mb-4">
-                <span className="px-3 py-1 bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-600 rounded-full text-sm font-medium">
-                  PyTorch
-                </span>
-                <span className="px-3 py-1 bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-600 rounded-full text-sm font-medium">
-                  Transformers
-                </span>
-                <span className="px-3 py-1 bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-600 rounded-full text-sm font-medium">
-                  FastAPI
-                </span>
-              </div>
-              <div className="mt-4 inline-flex items-center gap-2 text-gray-600 dark:text-gray-500 font-medium">
-                <span className="px-3 py-1 bg-yellow-400 text-yellow-900 rounded-md text-sm font-bold">
-                  Coming Soon - GPU Required
-                </span>
-              </div>
-            </motion.div>
+            {/* Generation Strategies */}
+            <Link href="/generation" className="h-full">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                viewport={{ once: true }}
+                className="h-full group p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-pink-500 dark:hover:border-cyan-500 transition-all hover:shadow-xl cursor-pointer flex flex-col relative overflow-hidden"
+              >
+                {/* Gradient background effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-transparent to-cyan-50 dark:from-pink-900/10 dark:to-cyan-900/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-cyan-600 group-hover:bg-clip-text group-hover:text-transparent transition-all">
+                      Generation Strategies
+                    </h3>
+                    <span className="text-2xl">📊</span>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-grow text-sm">
+                    Visualize how different text generation strategies (greedy, top-k, top-p, beam search) select tokens. Interactive D3.js charts showing real GPT-2 probabilities.
+                  </p>
+                  <div className="flex gap-2 flex-wrap">
+                    <span className="px-2 py-1 bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-200 rounded-full text-xs font-medium">
+                      PyTorch
+                    </span>
+                    <span className="px-2 py-1 bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-200 rounded-full text-xs font-medium">
+                      D3.js
+                    </span>
+                    <span className="px-2 py-1 bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-200 rounded-full text-xs font-medium">
+                      GPT-2
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+
+            {/* LLM Playground */}
+            <Link href="/llm-playground" className="h-full">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="h-full group p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 transition-all hover:shadow-xl cursor-pointer flex flex-col"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                    LLM Arena
+                  </h3>
+                  <span className="text-2xl">🚀</span>
+                </div>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-grow text-sm">
+                  Battle-test 5 specialized LLMs (Gemma 2B, Qwen 7B, GPT-OSS 120B, Qwen Coder 480B, DeepSeek R1). Live D3 bar charts show tokens/second, compare models side-by-side, and explore speed vs capability trade-offs.
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                  <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
+                    5 Models
+                  </span>
+                  <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
+                    D3 Perf Viz
+                  </span>
+                  <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
+                    Live Metrics
+                  </span>
+                  <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
+                    Compare Mode
+                  </span>
+                </div>
+              </motion.div>
+            </Link>
           </div>
           
           {/* More Coming Soon */}
