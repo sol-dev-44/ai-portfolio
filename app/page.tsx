@@ -59,6 +59,16 @@ export default function Home() {
             transition={{ delay: 0.6, duration: 0.7 }}
             className="flex flex-wrap gap-4 justify-center pt-4"
           >
+            <Link href="/dashboard">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="group px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl cursor-pointer"
+              >
+                Try Dashboard Studio ✨
+                <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
+              </motion.div>
+            </Link>
             <Link href="/tokenizer">
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -66,16 +76,6 @@ export default function Home() {
                 className="group px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl cursor-pointer"
               >
                 Try Tokenizer
-                <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
-              </motion.div>
-            </Link>
-            <Link href="/generation">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="group px-8 py-4 bg-gradient-to-r from-pink-500 to-cyan-500 hover:from-pink-600 hover:to-cyan-600 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl cursor-pointer"
-              >
-                Explore Generation
                 <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
               </motion.div>
             </Link>
@@ -140,13 +140,55 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Tokenizer Project */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Dashboard Studio - NEW! */}
+            <Link href="/dashboard" className="h-full">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="h-full group p-6 bg-white dark:bg-gray-900 rounded-2xl border-2 border-transparent hover:border-pink-500 dark:hover:border-purple-500 transition-all hover:shadow-2xl cursor-pointer flex flex-col relative overflow-hidden"
+              >
+                {/* NEW badge */}
+                <div className="absolute top-3 right-3 px-2 py-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs font-bold rounded-full animate-pulse">
+                  NEW!
+                </div>
+                
+                {/* Animated gradient background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-purple-50 to-transparent dark:from-pink-900/10 dark:via-purple-900/10 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all">
+                      Dashboard Studio
+                    </h3>
+                    <span className="text-2xl">🎨</span>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-grow text-sm">
+                    Transform dashboards with natural language! AI-powered code generation using Claude Sonnet 4. Real-time preview, unlimited undo/redo, and version history.
+                  </p>
+                  <div className="flex gap-2 flex-wrap">
+                    <span className="px-2 py-1 bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-200 rounded-full text-xs font-medium">
+                      Claude AI
+                    </span>
+                    <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
+                      react-live
+                    </span>
+                    <span className="px-2 py-1 bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-200 rounded-full text-xs font-medium">
+                      Real-time
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+
+            {/* Tokenizer Comparison */}
             <Link href="/tokenizer" className="h-full">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
                 viewport={{ once: true }}
                 className="h-full group p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-xl cursor-pointer flex flex-col"
               >
@@ -178,7 +220,7 @@ export default function Home() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
                 viewport={{ once: true }}
                 className="h-full group p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-pink-500 dark:hover:border-cyan-500 transition-all hover:shadow-xl cursor-pointer flex flex-col relative overflow-hidden"
               >
@@ -210,12 +252,12 @@ export default function Home() {
               </motion.div>
             </Link>
 
-            {/* LLM Playground */}
+            {/* LLM Arena */}
             <Link href="/llm-playground" className="h-full">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
                 viewport={{ once: true }}
                 className="h-full group p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 transition-all hover:shadow-xl cursor-pointer flex flex-col"
               >
@@ -226,20 +268,17 @@ export default function Home() {
                   <span className="text-2xl">🚀</span>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-grow text-sm">
-                  Battle-test 5 specialized LLMs (Gemma 2B, Qwen 7B, GPT-OSS 120B, Qwen Coder 480B, DeepSeek R1). Live D3 bar charts show tokens/second, compare models side-by-side, and explore speed vs capability trade-offs.
+                  Battle-test 5 specialized LLMs. Live D3 bar charts show tokens/second, compare models side-by-side, and explore speed vs capability trade-offs.
                 </p>
                 <div className="flex gap-2 flex-wrap">
                   <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
                     5 Models
                   </span>
                   <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
-                    D3 Perf Viz
+                    D3 Viz
                   </span>
                   <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
-                    Live Metrics
-                  </span>
-                  <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
-                    Compare Mode
+                    Compare
                   </span>
                 </div>
               </motion.div>
@@ -250,7 +289,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
             viewport={{ once: true }}
             className="mt-12 text-center"
           >
