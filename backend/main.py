@@ -315,7 +315,13 @@ async def stream_generator(request: GenerationRequest):
 async def generate_stream(request: GenerationRequest):
     return StreamingResponse(
         stream_generator(request),
-        media_type="application/x-ndjson"
+        media_type="application/x-ndjson",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "Content-Type": "application/x-ndjson",
+            "X-Accel-Buffering": "no", # Important for Nginx/proxies
+        }
     )
 
 
