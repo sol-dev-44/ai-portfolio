@@ -9,7 +9,7 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/solana',
+        source: '/projects/solana',
         destination: 'https://sol-watch-eight.vercel.app/',
         permanent: false,
       },
