@@ -223,6 +223,101 @@ async def get_token_probabilities(request: ProbabilityRequest) -> ProbabilityRes
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Probability extraction failed: {str(e)}")
 
+# ===== STREAMING GENERATION ENDPOINTS =====
+from fastapi.responses import StreamingResponse
+import json
+import asyncio
+
+class GenerationRequest(BaseModel):
+    prompt: str = Field(..., max_length=1000)
+    model_id: str = "gpt2"
+    max_new_tokens: int = Field(default=50, le=200)
+    temperature: float = Field(default=0.7, ge=0.1, le=2.0)
+    top_k: int = Field(default=50, ge=0)
+    top_p: float = Field(default=0.9, ge=0.0, le=1.0)
+    strategy: str = "top_k"  # greedy, top_k, top_p, beam
+
+async def stream_generator(request: GenerationRequest):
+    """Yields tokens one by one for SSE."""
+    if not GPT2_MODEL:
+        yield json.dumps({"error": "Model not loaded"}) + "\n"
+        return
+
+    tokenizer = GPT2_MODEL["tokenizer"]
+    model = GPT2_MODEL["model"]
+    device = GPT2_MODEL["device"]
+    
+    inputs = tokenizer(request.prompt, return_tensors="pt").to(device)
+    input_ids = inputs.input_ids
+    
+    # We'll generate one token at a time manually to simulate streaming
+    # In a real scenario with a better library (like vLLM or TGI), this is built-in.
+    # For HuggingFace `generate`, it's harder to stream, so we'll do a loop.
+    
+    curr_input_ids = input_ids
+    
+    for _ in range(request.max_new_tokens):
+        with torch.no_grad():
+            outputs = model(curr_input_ids)
+            next_token_logits = outputs.logits[:, -1, :]
+            
+            # Apply temperature
+            next_token_logits = next_token_logits / request.temperature
+            
+            # Apply strategy
+            if request.strategy == "greedy":
+                next_token = torch.argmax(next_token_logits, dim=-1).unsqueeze(-1)
+            elif request.strategy == "top_k":
+                # Simple top-k implementation
+                top_k = min(request.top_k, next_token_logits.size(-1))
+                indices_to_remove = next_token_logits < torch.topk(next_token_logits, top_k)[0][..., -1, None]
+                next_token_logits[indices_to_remove] = -float('Inf')
+                probs = F.softmax(next_token_logits, dim=-1)
+                next_token = torch.multinomial(probs, num_samples=1)
+            elif request.strategy == "top_p":
+                # Simple top-p implementation
+                sorted_logits, sorted_indices = torch.sort(next_token_logits, descending=True)
+                cumulative_probs = torch.cumsum(F.softmax(sorted_logits, dim=-1), dim=-1)
+                sorted_indices_to_remove = cumulative_probs > request.top_p
+                sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
+                sorted_indices_to_remove[..., 0] = 0
+                indices_to_remove = sorted_indices_to_remove.scatter(1, sorted_indices, sorted_indices_to_remove)
+                next_token_logits[indices_to_remove] = -float('Inf')
+                probs = F.softmax(next_token_logits, dim=-1)
+                next_token = torch.multinomial(probs, num_samples=1)
+            else:
+                # Default to greedy
+                next_token = torch.argmax(next_token_logits, dim=-1).unsqueeze(-1)
+        
+        # Decode token
+        new_token_str = tokenizer.decode(next_token[0])
+        
+        # Yield result
+        response_data = {
+            "token": new_token_str,
+            "finished": False
+        }
+        yield json.dumps(response_data) + "\n"
+        
+        # Update input for next iteration
+        curr_input_ids = torch.cat([curr_input_ids, next_token], dim=-1)
+        
+        # Stop if EOS token
+        if next_token.item() == tokenizer.eos_token_id:
+            break
+            
+        # Small delay to make the streaming visible (since GPT-2 is too fast on small inputs)
+        await asyncio.sleep(0.05)
+
+    yield json.dumps({"token": "", "finished": True}) + "\n"
+
+@app.post("/api/llm/generate_stream")
+async def generate_stream(request: GenerationRequest):
+    return StreamingResponse(
+        stream_generator(request),
+        media_type="application/x-ndjson"
+    )
+
 
 if __name__ == "__main__":
     import uvicorn

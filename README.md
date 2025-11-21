@@ -29,6 +29,7 @@ Experiment with language models using different generation strategies.
 - **Four strategies**: Greedy, Top-K, Top-P (Nucleus), Beam Search
 - **Interactive controls** for temperature, max tokens, and more
 - **Real-time generation** with helpful tooltips and examples
+- **Streaming support** (SSE) for instant feedback
 
 ---
 
@@ -234,6 +235,19 @@ Content-Type: application/json
   "temperature": 0.8,
   "top_p": 0.9
 }
+```
+
+**Stream Text Generation (SSE)**
+```bash
+POST /api/llm/generate_stream
+Content-Type: application/json
+
+{
+  "prompt": "Once upon a time",
+  "model_id": "gpt2",
+  "max_new_tokens": 50
+}
+# Returns a stream of JSON objects: {"token": "...", "finished": false}
 ```
 
 **Full API Documentation**: Visit `/docs` endpoint when backend is running.
@@ -502,7 +516,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Future enhancements planned:
 - [ ] Add more LLM models (Llama, Mistral)
-- [ ] Streaming text generation (SSE)
+- [x] Streaming text generation (SSE)
 - [ ] Conversation history and context
 - [ ] Fine-tuning interface
 - [ ] Token usage analytics dashboard

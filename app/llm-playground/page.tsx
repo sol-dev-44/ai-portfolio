@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import * as d3 from 'd3';
+import { useLLMStream } from '@/hooks/useLLMStream';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -27,15 +28,15 @@ interface PerformanceMetric {
 function Tooltip({ content, children, position = 'center' }: { content: string; children: React.ReactNode; position?: 'center' | 'right' | 'left' }) {
   const [isVisible, setIsVisible] = useState(false);
 
-  const positionClasses = 
+  const positionClasses =
     position === 'right' ? 'top-full right-0 mt-2' :
-    position === 'left' ? 'top-full left-0 mt-2' :
-    'top-full left-1/2 transform -translate-x-1/2 mt-2';
-  
-  const arrowClasses = 
+      position === 'left' ? 'top-full left-0 mt-2' :
+        'top-full left-1/2 transform -translate-x-1/2 mt-2';
+
+  const arrowClasses =
     position === 'right' ? 'bottom-full right-4 mb-1' :
-    position === 'left' ? 'bottom-full left-4 mb-1' :
-    'bottom-full left-1/2 transform -translate-x-1/2 mb-1';
+      position === 'left' ? 'bottom-full left-4 mb-1' :
+        'bottom-full left-1/2 transform -translate-x-1/2 mb-1';
 
   return (
     <div className="relative inline-block">
@@ -46,7 +47,7 @@ function Tooltip({ content, children, position = 'center' }: { content: string; 
       >
         {children}
       </div>
-      
+
       <AnimatePresence>
         {isVisible && (
           <motion.div
@@ -69,45 +70,45 @@ function Tooltip({ content, children, position = 'center' }: { content: string; 
 }
 
 const MODELS = [
-  { 
-    id: 'gemma-2b', 
-    name: 'Gemma 2B', 
+  {
+    id: 'gemma-2b',
+    name: 'Gemma 2B',
     fullName: 'google/gemma-2-2b-it',
     desc: 'Tiny & Fast',
     fullDesc: 'Ultra-small instruction-tuned model. Lightning fast for simple tasks, casual chat, and quick queries.',
     icon: '⚡',
     color: '#4285F4'
   },
-  { 
-    id: 'qwen-7b', 
-    name: 'Qwen 7B', 
+  {
+    id: 'qwen-7b',
+    name: 'Qwen 7B',
     fullName: 'Qwen/Qwen2.5-7B-Instruct-1M',
     desc: 'Long Context',
     fullDesc: 'Supports extremely long instructions (1M tokens). Perfect for analyzing long documents or conversations.',
     icon: '📜',
     color: '#7C3AED'
   },
-  { 
-    id: 'gpt-oss', 
-    name: 'GPT-OSS 120B', 
+  {
+    id: 'gpt-oss',
+    name: 'GPT-OSS 120B',
     fullName: 'openai/gpt-oss-120b',
     desc: 'Tool Calling',
     fullDesc: 'Excellent at function calling and structured outputs. Best for integrations and API interactions.',
     icon: '🔧',
     color: '#10B981'
   },
-  { 
-    id: 'qwen-coder', 
-    name: 'Qwen Coder 480B', 
+  {
+    id: 'qwen-coder',
+    name: 'Qwen Coder 480B',
     fullName: 'Qwen/Qwen3-Coder-480B-A35B-Instruct',
     desc: 'Code Expert',
     fullDesc: 'Specialized for code generation, debugging, and technical explanations. Top choice for programming tasks.',
     icon: '💻',
     color: '#F59E0B'
   },
-  { 
-    id: 'deepseek', 
-    name: 'DeepSeek R1', 
+  {
+    id: 'deepseek',
+    name: 'DeepSeek R1',
     fullName: 'deepseek-ai/DeepSeek-R1',
     desc: 'Reasoning',
     fullDesc: 'Advanced reasoning model. Excels at complex logic, multi-step problem solving, and mathematical reasoning.',
@@ -209,13 +210,13 @@ function PerformanceChart({ metrics }: { metrics: PerformanceMetric[] }) {
 export default function ImprovedPlayground() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
   const [selectedModel, setSelectedModel] = useState('gpt-oss');
   const [compareMode, setCompareMode] = useState(false);
-  const [streamingText, setStreamingText] = useState('');
   const [showInfo, setShowInfo] = useState(false);
   const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const { streamGenerate, streamingText, isLoading: loading, error } = useLLMStream();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -225,62 +226,7 @@ export default function ImprovedPlayground() {
     scrollToBottom();
   }, [messages, streamingText]);
 
-  const parseSSE = (text: string) => {
-    const lines = text.split('\n');
-    let content = '';
-    
-    for (const line of lines) {
-      if (line.startsWith('data: ')) {
-        const data = line.slice(6);
-        if (data === '[DONE]') continue;
-        
-        try {
-          const json = JSON.parse(data);
-          const delta = json.choices?.[0]?.delta?.content;
-          if (delta) content += delta;
-        } catch (e) {
-          // Skip invalid JSON
-        }
-      }
-    }
-    return content;
-  };
 
-  const streamGeneration = async (model: string) => {
-    const startTime = Date.now();
-    let tokenCount = 0;
-
-    const response = await fetch('/api/hf-stream', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: input, model }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Stream failed');
-    }
-
-    const reader = response.body?.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-    let fullText = '';
-
-    while (true) {
-      const { done, value } = await reader!.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-      const parsed = parseSSE(buffer);
-      fullText = parsed;
-      tokenCount = Math.ceil(fullText.length / 4); // Rough estimate
-      setStreamingText(fullText);
-    }
-
-    const totalTime = (Date.now() - startTime) / 1000; // seconds
-    const tokensPerSecond = tokenCount / totalTime;
-
-    return { fullText, tokensPerSecond, totalTime, tokenCount };
-  };
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
@@ -293,8 +239,8 @@ export default function ImprovedPlayground() {
 
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
-    setLoading(true);
-    setStreamingText('');
+    // loading state is handled by hook
+    // streamingText state is handled by hook
 
     const newMetrics: PerformanceMetric[] = [];
 
@@ -302,9 +248,17 @@ export default function ImprovedPlayground() {
       if (compareMode) {
         // Compare mode: run all models
         for (const model of MODELS) {
-          setStreamingText('');
-          const { fullText, tokensPerSecond, totalTime, tokenCount } = await streamGeneration(model.id);
-          
+          const startTime = Date.now();
+          const fullText = await streamGenerate({
+            prompt: userMessage.content,
+            model_id: model.id,
+            strategy: 'top_k' // Default strategy
+          });
+
+          const totalTime = (Date.now() - startTime) / 1000; // seconds
+          const tokenCount = Math.ceil(fullText.length / 4); // Rough estimate
+          const tokensPerSecond = tokenCount / totalTime;
+
           setMessages((prev) => [
             ...prev,
             {
@@ -327,9 +281,19 @@ export default function ImprovedPlayground() {
         setPerformanceMetrics(newMetrics);
       } else {
         // Single model
-        const { fullText, tokensPerSecond, totalTime, tokenCount } = await streamGeneration(selectedModel);
+        const startTime = Date.now();
+        const fullText = await streamGenerate({
+          prompt: userMessage.content,
+          model_id: selectedModel,
+          strategy: 'top_k'
+        });
+
+        const totalTime = (Date.now() - startTime) / 1000; // seconds
+        const tokenCount = Math.ceil(fullText.length / 4); // Rough estimate
+        const tokensPerSecond = tokenCount / totalTime;
+
         const modelInfo = MODELS.find((m) => m.id === selectedModel);
-        
+
         setMessages((prev) => [
           ...prev,
           {
@@ -360,16 +324,13 @@ export default function ImprovedPlayground() {
           timestamp: new Date(),
         },
       ]);
-    } finally {
-      setLoading(false);
-      setStreamingText('');
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-indigo-950 dark:to-purple-950">
       <div className="max-w-6xl mx-auto px-4 py-6">
-        
+
         {/* Compact Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -380,7 +341,7 @@ export default function ImprovedPlayground() {
             LLM Arena
           </h1>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Compare language models • 
+            Compare language models •
             <button
               onClick={() => setShowInfo(!showInfo)}
               className="ml-1 text-blue-600 dark:text-blue-400 hover:underline"
@@ -454,7 +415,7 @@ export default function ImprovedPlayground() {
         {/* Compact Controls */}
         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-xl p-4 mb-4 shadow-xl border border-gray-200/50 dark:border-gray-700/50">
           <div className="flex items-center gap-3 flex-wrap">
-            
+
             {/* Model Selector */}
             <div className="flex-1 min-w-[200px]">
               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -544,13 +505,13 @@ export default function ImprovedPlayground() {
             </div>
             <div className="flex gap-2 flex-wrap">
               {EXAMPLE_PROMPTS.map((example, index) => (
-                <Tooltip 
+                <Tooltip
                   key={index}
                   content={
                     index === 0 ? "Tests creative writing - see how models handle poetry and artistic expression" :
-                    index === 1 ? "Tests math reasoning - compare how models solve equations and explain concepts" :
-                    index === 2 ? "Tests code generation - Qwen Coder should excel here!" :
-                    "Tests logical reasoning - DeepSeek R1's specialty!"
+                      index === 1 ? "Tests math reasoning - compare how models solve equations and explain concepts" :
+                        index === 2 ? "Tests code generation - Qwen Coder should excel here!" :
+                          "Tests logical reasoning - DeepSeek R1's specialty!"
                   }
                   position="center"
                 >
@@ -621,7 +582,7 @@ export default function ImprovedPlayground() {
         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-xl shadow-xl 
                       border border-gray-200/50 dark:border-gray-700/50 mb-4 
                       h-[450px] overflow-y-auto p-4 space-y-3">
-          
+
           <AnimatePresence>
             {messages.map((message, idx) => (
               <motion.div
@@ -631,11 +592,10 @@ export default function ImprovedPlayground() {
                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] rounded-xl px-3 py-2 ${
-                    message.role === 'user'
+                  className={`max-w-[80%] rounded-xl px-3 py-2 ${message.role === 'user'
                       ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
                       : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
-                  }`}
+                    }`}
                 >
                   {message.model && (
                     <Tooltip content={MODELS.find(m => m.name === message.model)?.fullDesc || 'AI response'}>
