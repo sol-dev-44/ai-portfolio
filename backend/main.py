@@ -306,8 +306,8 @@ async def stream_generator(request: GenerationRequest):
         if next_token.item() == tokenizer.eos_token_id:
             break
             
-        # Small delay to make the streaming visible (since GPT-2 is too fast on small inputs)
-        await asyncio.sleep(0.05)
+        # Small delay removed for production performance
+        # await asyncio.sleep(0.05)
 
     yield json.dumps({"token": "", "finished": True}) + "\n"
 
