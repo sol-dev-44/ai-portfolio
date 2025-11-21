@@ -22,6 +22,7 @@ Compare how different OpenAI tokenizers (GPT-2, GPT-3.5, GPT-4, GPT-4o) split te
 - **Efficiency metrics** to compare token count and chars/token ratio
 - **Interactive examples** for emoji, code, multilingual text
 - **Cost estimation** for API usage optimization
+- [Read more](./app/tokenizer/readme.md)
 
 ### 🚀 LLM Playground
 Experiment with language models using different generation strategies.
@@ -30,6 +31,14 @@ Experiment with language models using different generation strategies.
 - **Interactive controls** for temperature, max tokens, and more
 - **Real-time generation** with helpful tooltips and examples
 - **Streaming support** (SSE) for instant feedback
+- [Read more](./app/llm-playground/readme.md)
+
+### 📊 Generation Visualization
+Visualize the inner workings of a Language Model by seeing the probability distribution of the next token.
+- **Real-time Probability Analysis**
+- **Interactive D3.js Chart**
+- **Educational Tooltips**
+- [Read more](./app/generation/readme.md)
 
 ---
 
@@ -131,22 +140,20 @@ Frontend runs on `http://localhost:3000`
 ai-portfolio/
 ├── backend/                    # FastAPI backend
 │   ├── main.py                # API server with all endpoints
-│   ├── requirements.txt       # Python dependencies
-│   └── venv/                  # Virtual environment (local)
+│   ├── readme.md              # Backend documentation
+│   └── ...
 │
-├── frontend/                   # Next.js frontend (or src/ depending on structure)
-│   ├── app/                   # Next.js App Router
-│   │   ├── page.tsx          # Homepage
-│   │   ├── tokenizer/        # Tokenizer feature
-│   │   └── llm-playground/   # LLM Playground feature
-│   ├── components/           # Reusable UI components
-│   ├── store/                # Redux store + RTK Query
-│   └── package.json          # Node dependencies
-│
-├── docs/                      # Documentation (optional)
-│   ├── TOKENIZER.md
-│   ├── LLM_PLAYGROUND.md
-│   └── BACKEND.md
+├── app/                        # Next.js App Router
+│   ├── page.tsx               # Homepage
+│   ├── tokenizer/             # Tokenizer feature
+│   │   ├── page.tsx
+│   │   └── readme.md          # Feature documentation
+│   ├── llm-playground/        # LLM Playground feature
+│   │   ├── page.tsx
+│   │   └── readme.md          # Feature documentation
+│   └── generation/            # Generation Visualization
+│       ├── page.tsx
+│       └── readme.md          # Feature documentation
 │
 └── README.md                  # This file
 ```
