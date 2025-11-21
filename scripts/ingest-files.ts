@@ -1,5 +1,6 @@
 // scripts/ingest-files.ts - FILE-BASED INGESTION
-// run with: npx tsx --env-file=.env.local scripts/ingest-files.ts --clear 
+// run with: 
+//  npx tsx --env-file=.env.local scripts/ingest-files.ts --clear 
 
 import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
@@ -47,7 +48,7 @@ const CONFIG = {
   chunkOverlap: 50,
   
   // Base URL for your portfolio (used in citations)
-  baseUrl: 'https://yourportfolio.com',
+  baseUrl: 'https://ai-portfolio-psi-lyart.vercel.app',
 };
 
 // ============================================================================
