@@ -108,7 +108,7 @@ Every single metric has a comprehensive tooltip explaining:
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/solwatch.git
+git clone https://github.com/sol-dev-44/solwatch.git
 cd solwatch
 ```
 
@@ -290,6 +290,6 @@ background: linear-gradient(135deg, #F94C9B 0%, #00B8D4 100%);
 
 **Built with ❤️ for the Solana community**
 
-[⭐ Star on GitHub](https://github.com/yourusername/solwatch) • [🐛 Report Bug](https://github.com/yourusername/solwatch/issues) • [💡 Request Feature](https://github.com/yourusername/solwatch/issues)
+[⭐ Star on GitHub](https://github.com/sol-dev-44/solwatch) • [🐛 Report Bug](https://github.com/sol-dev-44/solwatch/issues) • [💡 Request Feature](https://github.com/sol-dev-44/solwatch/issues)
 
 </div>

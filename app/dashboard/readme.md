@@ -10,7 +10,7 @@ Built with Claude Sonnet 4, React 19, and react-live for real-time code generati
 
 Dashboard Studio lets you modify a live React dashboard using plain English. Type "make it cyberpunk" or "add beach vibes" and watch Claude Sonnet 4 generate and render the code instantly.
 
-**Live Demo:** [Your URL Here]
+**Live Demo:** [https://ai-portfolio-psi-lyart.vercel.app/](https://ai-portfolio-psi-lyart.vercel.app/)
 
 ---
 
@@ -298,10 +298,10 @@ Scales to 50+ versions easily without performance issues.
 
 Built by **Alan Campbell**
 
-- Portfolio: [Your Portfolio URL]
-- LinkedIn: [Your LinkedIn]
-- GitHub: [Your GitHub]
-- Email: [Your Email]
+- Portfolio: [https://ai-portfolio-psi-lyart.vercel.app/](https://ai-portfolio-psi-lyart.vercel.app/)
+- LinkedIn: [https://www.linkedin.com/in/alan-james-campbell/](https://www.linkedin.com/in/alan-james-campbell/)
+- GitHub: [https://github.com/sol-dev-44](https://github.com/sol-dev-44)
+- Email: alancampbell4444@gmail.com
 
 ---
 

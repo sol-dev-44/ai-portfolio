@@ -10,7 +10,7 @@
 
 A full-stack AI engineering portfolio featuring two interactive tools for understanding language models: a tokenizer comparison tool and an LLM playground. Built to demonstrate practical AI/ML integration with modern web technologies.
 
-**[Live Demo](https://your-portfolio.vercel.app)** | **[API Docs](https://your-backend.railway.app/docs)**
+**[Live Demo](https://ai-portfolio-psi-lyart.vercel.app/)** | **[API Docs](https://ai-portfolio-production-7eb9.up.railway.app/docs)**
 
 ---
 
@@ -89,7 +89,7 @@ Perfect for understanding LLM fundamentals while building real-world application
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/ai-portfolio.git
+git clone https://github.com/sol-dev-44/ai-portfolio.git
 cd ai-portfolio
 ```
 
@@ -513,9 +513,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📧 Contact
 
 **Alan Campbell**
-- Portfolio: [your-portfolio.com](https://your-portfolio.com)
-- LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
-- Email: your.email@example.com
+- Portfolio: [ai-portfolio-psi-lyart.vercel.app](https://ai-portfolio-psi-lyart.vercel.app/)
+- LinkedIn: [linkedin.com/in/alan-james-campbell](https://www.linkedin.com/in/alan-james-campbell/)
+- Email: alancampbell4444@gmail.com
 
 ---
 
@@ -540,6 +540,6 @@ Future enhancements planned:
 
 ⭐ Star this repo if you find it helpful!
 
-[Report Bug](https://github.com/yourusername/ai-portfolio/issues) · [Request Feature](https://github.com/yourusername/ai-portfolio/issues)
+[Report Bug](https://github.com/sol-dev-44/ai-portfolio/issues) · [Request Feature](https://github.com/sol-dev-44/ai-portfolio/issues)
 
 </div>
