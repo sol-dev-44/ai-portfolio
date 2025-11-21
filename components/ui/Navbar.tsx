@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react'; // ADD THIS
 
 const navItems = [
   { name: 'Home', path: '/', enabled: true },
@@ -79,6 +80,29 @@ export function Navbar() {
                 </motion.div>
               );
             })}
+
+            {/* ============================================ */}
+            {/* ADD THIS: AI Chat Button */}
+            {/* ============================================ */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: navItems.length * 0.1 }}
+            >
+              <Link href="/rag-chat">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="ml-2 flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>Ask AI</span>
+                </motion.button>
+              </Link>
+            </motion.div>
+            {/* ============================================ */}
+            {/* END OF ADDITION */}
+            {/* ============================================ */}
           </div>
         </div>
       </div>

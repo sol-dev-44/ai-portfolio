@@ -1,0 +1,72 @@
+ALAN CAMPBELL
+Full-Stack Staff Engineer | AI Integration & Frontend Architecture Specialist
+Truckee, CA | alancampbell4444@gmail.com | 406-270-6256 | linkedin.com/in/alan-james-campbell
+PROFESSIONAL SUMMARY
+Full-Stack Staff Engineer with 10+ years architecting scalable, high-performance web applications with expertise in AI/ML integration and frontend architecture specialization. Proven track record building AI-powered platforms, leading platform modernization initiatives, and delivering greenfield applications from the ground up. Expert in React ecosystem, TypeScript-first development, state management architecture, and AWS infrastructure. Delivered $100K+ cost savings per client through innovative AI-enhanced solutions while reducing API infrastructure load by 50% and accelerating development velocity by 30%. Experienced influencing cross-functional teams of 15+ engineers, shipping to Fortune 500 insurance carriers and top law firms processing hundreds of transactions daily.
+TECHNICAL EXPERTISE
+AI/ML Integration & Platform Engineering: LLM Integration, Document Processing, Bounding Box Extraction, AI-Powered Analytics, Reusable Infrastructure, NPM Package Development, Schema-Driven Architecture
+Frontend Architecture & Frameworks: React 19, TypeScript, Redux, RTK Query, React Query, React Final Form, Formik, Material UI v7, Tailwind CSS, Framer Motion, Storybook, Micro-frontends, Island Architecture
+Backend & Cloud Infrastructure: Node.js, Deno, Express, Fresh, AWS (Lambda, API Gateway, S3, Amplify, Cognito), Terraform, PostgreSQL, RESTful APIs, Serverless Architecture
+State Management & Data Flow: Redux Toolkit, RTK Query, Context API, React Hooks, Optimistic Updates, Intelligent Caching, Real-time Synchronization
+Development & Quality: TypeScript/JavaScript (ES6+), Playwright, Jest, React Testing Library, CI/CD, Git, Webpack, Babel, Performance Optimization
+Security & Best Practices: OAuth/JWT Authentication, Security Architecture, Responsive Design, Data Visualization (D3.js, Highcharts, Recharts), Yup Validation
+PROFESSIONAL EXPERIENCE
+Staff Engineer
+Precedent | Charlotte, NC (Remote) | January 2024 - Present
+Leading full-stack development with frontend architecture specialization for AI-enhanced insurance claim mediation platform serving top law firms and Fortune 500 insurance carriers processing hundreds of demands daily. Driving platform modernization, architecting greenfield applications, and delivering transformational technical initiatives with measurable business impact.
+Platform Architecture & Innovation:
+•	Architected Claim Companion application ground-up, delivering complete greenfield product from initial design to production launch, establishing modern development patterns (RTK Query, React Final Form, Yup validation, comprehensive document management) serving as template for future applications
+•	Delivered $100K+ cost savings per firm by replacing legacy Quickbase subscriptions with modern, integrated solution
+•	Built reusable TypeScript-first platform infrastructure (NPM packages, shared schemas, MUI theme library) achieving 100% type safety and benefiting entire engineering organization
+•	Established comprehensive TypeScript architecture with 15+ sophisticated MirageJS field generators for realistic API simulation
+•	Led React 19 & Material UI 7 platform modernization, managing 280+ dependency updates with zero production incidents and 100% backward compatibility
+•	Future-proofed entire platform for 2-3 years of development runway while eliminating blocking technical debt
+•	Reduced build times and improved developer experience across 15-person engineering team
+Performance & Scalability:
+•	Implemented RTK Query revolutionizing API integration, reducing infrastructure load by 50%, decreasing feature development time by 30%, and eliminating 60% of data fetching boilerplate code
+•	Overhauled demand editing system, transforming core daily workflow for law firm users with advanced form management, real-time state synchronization, and optimized UX (modified 52+ files in primary implementation)
+•	Drove React performance optimization achieving 30% application speed improvement through strategic memoization, useCallback optimizations, and component architecture restructuring
+Integration & Security:
+•	Built end-to-end Clio integration platform, enabling seamless document import and workflow automation, reducing case setup time from hours to minutes (15+ integration features delivered)
+•	Integrated AI-powered medical case analysis directly into demand editing workflow, providing intelligent insights and recommendations with real-time bounding box navigation
+•	Overhauled authentication & session management, achieving 25% improvement in security reliability with activity-based session monitoring and automatic token refresh
+Team Leadership & Operational Excellence:
+•	In 2024, merged 340+ pull requests demonstrating high development velocity; completed 282 tasks showcasing productivity
+•	Influenced team of 15 engineers through mentoring in React best practices, architectural guidance, and code review feedback
+•	Modernized codebase eliminating ~35% legacy code and reducing maintenance overhead by 25%
+•	Contributed to record growth over last 6+ months through technical innovation and platform reliability
+
+Staff Engineer
+CSAA Insurance Group (AAA Insurer) | Glendale, AZ (Remote) | June 2020 - 2024
+Lead frontend developer for multi-product insurance quoting application serving multiple states with React, TypeScript, Redux, Material UI, and AWS infrastructure.
+•	Architected and shipped production application to multiple states with ongoing expansion, establishing state management patterns and design systems
+•	Led frontend architecture strategy implementing React Hooks, React Query, and Storybook for component-driven development
+•	Developed comprehensive unit tests upholding quality standards and promoting test-driven development culture
+•	Mentored junior developers and interns providing technical guidance, conducting code reviews, and supporting career growth
+Software Engineer
+American Express | Phoenix, AZ (Remote) | December 2018 - June 2020
+Full-stack developer on MYCA (Manage Your Card Account) team building internal and client-facing account management portals using Node.js, Express, React, Redux, and PostgreSQL.
+•	Contributed to robust micro-frontend architecture enabling independent feature deployment with enhanced flexibility
+•	Emphasized functional design patterns and test-driven development ensuring high code quality and application reliability
+•	Mentored junior developers providing technical guidance in modern application architecture and best practices
+Software Engineer - Lead Frontend Architect
+Sierra Telecom, Inc | Zephyr Cove, NV (Hybrid) | September 2017 - December 2018
+Architected commercial-scale IoT monitoring dashboard managing devices and visualizing real-time sensor data for enterprise clients.
+•	Designed React/Redux dashboard with dynamic UI enabling efficient provisioning and monitoring of IoT devices
+•	Visualized millions of real-time data points using Pond.js, D3, and Highcharts creating dynamic charts supporting in-depth analysis
+•	Integrated Google Maps API and Leaflet.js enabling custom interactive maps for device management on building floor plans
+
+
+Full-Stack Developer
+Freelance Software Development | Reno, NV | October 2015 - September 2017
+Sole developer on contracted full-stack SPAs handling all aspects of development, deployment, and maintenance using Node.js, React, Redux, Express, and AWS Serverless architecture.
+•	Leveraged AWS Lambda, API Gateway, and S3 creating scalable, cost-effective backend solutions with minimal infrastructure overhead
+•	Designed PostgreSQL databases with efficient schemas and integrated CI/CD pipelines ensuring quality and rapid deployments
+EDUCATION
+Fullstack Academy of Code | Software Engineering Immersive | 2015 - 2016
+•	1000+ hour intensive program: Advanced JavaScript, React/Redux, Node.js/Express, SQL, Computer Science fundamentals
+•	Capstone: Sentiment Analysis Web Application combining IBM Watson NLP with custom Naive Bayes classifier
+Bellevue University | Bachelor of Business Administration | 4.0 GPA, Summa Cum Laude
+LEADERSHIP & CERTIFICATIONS
+USCG Licensed Captain (100-ton) | U.S. Coast Guard
+15+ years maritime command experience developing systems thinking, crisis management, and team leadership skills translating directly to technical architecture and cross-functional engineering leadership

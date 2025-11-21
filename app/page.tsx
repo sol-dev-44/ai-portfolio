@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { MessageSquare, Sparkles } from 'lucide-react';
 
 const techStack = [
   { name: 'TypeScript', icon: '⚡' },
@@ -303,6 +304,35 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      {/* Floating RAG Chat Button */}
+      <Link href="/rag-chat">
+        <motion.button
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:shadow-3xl transition-shadow group"
+          title="Ask AI about my work"
+        >
+          <MessageSquare className="w-6 h-6 relative z-10" />
+          
+          {/* Pulse effect */}
+          <motion.span
+            className="absolute -inset-1 rounded-full bg-blue-400/50"
+            initial={{ scale: 1, opacity: 0 }}
+            animate={{ scale: 1.5, opacity: [0.5, 0] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeOut"
+            }}
+          />
+          
+          {/* Sparkle on hover */}
+          <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-yellow-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+        </motion.button>
+      </Link>
     </main>
   );
 }
