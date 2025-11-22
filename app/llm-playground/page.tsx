@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import * as d3 from 'd3';
+import Tooltip from '@/components/ui/Tooltip';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -23,50 +24,7 @@ interface PerformanceMetric {
   tokenCount: number;
 }
 
-// Inline Tooltip Component
-function Tooltip({ content, children, position = 'center' }: { content: string; children: React.ReactNode; position?: 'center' | 'right' | 'left' }) {
-  const [isVisible, setIsVisible] = useState(false);
 
-  const positionClasses =
-    position === 'right' ? 'top-full right-0 mt-2' :
-      position === 'left' ? 'top-full left-0 mt-2' :
-        'top-full left-1/2 transform -translate-x-1/2 mt-2';
-
-  const arrowClasses =
-    position === 'right' ? 'bottom-full right-4 mb-1' :
-      position === 'left' ? 'bottom-full left-4 mb-1' :
-        'bottom-full left-1/2 transform -translate-x-1/2 mb-1';
-
-  return (
-    <div className="relative inline-block">
-      <div
-        onMouseEnter={() => setIsVisible(true)}
-        onMouseLeave={() => setIsVisible(false)}
-        className="cursor-help"
-      >
-        {children}
-      </div>
-
-      <AnimatePresence>
-        {isVisible && (
-          <motion.div
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 5 }}
-            transition={{ duration: 0.15 }}
-            className={`absolute z-50 px-3 py-2 text-sm text-white bg-gray-900 dark:bg-gray-700 rounded-lg shadow-lg pointer-events-none ${positionClasses}`}
-            style={{ minWidth: 'max-content', maxWidth: '320px', whiteSpace: 'normal' }}
-          >
-            {content}
-            <div className={`absolute ${arrowClasses}`}>
-              <div className="border-4 border-transparent border-b-gray-900 dark:border-b-gray-700" />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
 
 const MODELS = [
   {
@@ -212,6 +170,7 @@ export default function ImprovedPlayground() {
   const [loading, setLoading] = useState(false);
   const [selectedModel, setSelectedModel] = useState('gpt-oss');
   const [compareMode, setCompareMode] = useState(false);
+  const [selectedCompareModels, setSelectedCompareModels] = useState<string[]>(MODELS.map(m => m.id));
   const [streamingText, setStreamingText] = useState('');
   const [showInfo, setShowInfo] = useState(false);
   const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
@@ -300,8 +259,9 @@ export default function ImprovedPlayground() {
 
     try {
       if (compareMode) {
-        // Compare mode: run all models
-        for (const model of MODELS) {
+        // Compare mode: run selected models
+        const modelsToRun = MODELS.filter(m => selectedCompareModels.includes(m.id));
+        for (const model of modelsToRun) {
           setStreamingText('');
           const { fullText, tokensPerSecond, totalTime, tokenCount } = await streamGeneration(model.id);
 
@@ -462,32 +422,59 @@ export default function ImprovedPlayground() {
                   <span className="border-b border-dashed border-gray-400 dark:border-gray-500">Model Selection</span>
                 </Tooltip>
               </label>
-              <select
-                value={selectedModel}
-                onChange={(e) => setSelectedModel(e.target.value)}
-                disabled={compareMode}
-                className="w-full px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 
-                         bg-white dark:bg-gray-900 text-gray-900 dark:text-white
-                         disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {MODELS.map((model) => (
-                  <option key={model.id} value={model.id}>
-                    {model.icon} {model.name} • {model.desc}
-                  </option>
-                ))}
-              </select>
-              {!compareMode && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="mt-1.5 text-xs text-gray-600 dark:text-gray-400"
-                >
-                  <Tooltip content={`Full model path: ${MODELS.find(m => m.id === selectedModel)?.fullName}`} position="left">
-                    <span className="border-b border-dashed border-gray-400 dark:border-gray-500 cursor-help">
-                      {MODELS.find(m => m.id === selectedModel)?.fullDesc}
-                    </span>
-                  </Tooltip>
-                </motion.div>
+
+              {compareMode ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-white dark:bg-gray-900 p-2 rounded-lg border border-gray-300 dark:border-gray-600">
+                  {MODELS.map((model) => (
+                    <label key={model.id} className="flex items-center gap-2 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={selectedCompareModels.includes(model.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedCompareModels([...selectedCompareModels, model.id]);
+                          } else {
+                            // Prevent deselecting the last one
+                            if (selectedCompareModels.length > 1) {
+                              setSelectedCompareModels(selectedCompareModels.filter(id => id !== model.id));
+                            }
+                          }
+                        }}
+                        className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <span className="text-xs text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        {model.icon} {model.name}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <select
+                    value={selectedModel}
+                    onChange={(e) => setSelectedModel(e.target.value)}
+                    className="w-full px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 
+                             bg-white dark:bg-gray-900 text-gray-900 dark:text-white
+                             disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {MODELS.map((model) => (
+                      <option key={model.id} value={model.id}>
+                        {model.icon} {model.name} • {model.desc}
+                      </option>
+                    ))}
+                  </select>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="mt-1.5 text-xs text-gray-600 dark:text-gray-400"
+                  >
+                    <Tooltip content={`Full model path: ${MODELS.find(m => m.id === selectedModel)?.fullName}`} position="left">
+                      <span className="border-b border-dashed border-gray-400 dark:border-gray-500 cursor-help">
+                        {MODELS.find(m => m.id === selectedModel)?.fullDesc}
+                      </span>
+                    </Tooltip>
+                  </motion.div>
+                </>
               )}
             </div>
 
@@ -552,7 +539,7 @@ export default function ImprovedPlayground() {
                         index === 2 ? "Tests code generation - Qwen Coder should excel here!" :
                           "Tests logical reasoning - DeepSeek R1's specialty!"
                   }
-                  position="center"
+                  position="top"
                 >
                   <motion.button
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -632,8 +619,8 @@ export default function ImprovedPlayground() {
               >
                 <div
                   className={`max-w-[80%] rounded-xl px-3 py-2 ${message.role === 'user'
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
                     }`}
                 >
                   {message.model && (
@@ -725,13 +712,13 @@ export default function ImprovedPlayground() {
                 Try the examples above or ask anything
               </p>
               <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1 max-w-md mx-auto">
-                <Tooltip content="Enable Compare Mode and ask a coding question. Watch Qwen Coder excel while Gemma struggles!" position="center">
+                <Tooltip content="Enable Compare Mode and ask a coding question. Watch Qwen Coder excel while Gemma struggles!" position="top">
                   <p className="border-b border-dashed border-gray-400 dark:border-gray-500 cursor-help inline-block">
                     💡 Tip: Try comparing models on the same coding question
                   </p>
                 </Tooltip>
                 <br />
-                <Tooltip content="The D3 chart will show you exactly how much faster smaller models are vs larger ones. Typical range: 30-120 tokens/second!" position="center">
+                <Tooltip content="The D3 chart will show you exactly how much faster smaller models are vs larger ones. Typical range: 30-120 tokens/second!" position="top">
                   <p className="border-b border-dashed border-gray-400 dark:border-gray-500 cursor-help inline-block">
                     📊 Tip: Watch the performance chart after each query
                   </p>
@@ -779,7 +766,7 @@ export default function ImprovedPlayground() {
           <div className="text-xs text-gray-500 dark:text-gray-400 mt-1.5 flex items-center justify-between">
             <span>Press Enter to send</span>
             <span>
-              {compareMode ? '🔄 Comparing all models' : `${MODELS.find(m => m.id === selectedModel)?.icon} ${MODELS.find(m => m.id === selectedModel)?.name}`}
+              {compareMode ? `🔄 Comparing ${selectedCompareModels.length} models` : `${MODELS.find(m => m.id === selectedModel)?.icon} ${MODELS.find(m => m.id === selectedModel)?.name}`}
             </span>
           </div>
         </div>

@@ -1,0 +1,23 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="favicon_gradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background (Optional, usually favicons are transparent, but a bg helps visibility on dark/light tabs) -->
+  <rect width="64" height="64" rx="16" fill="#0F172A" /> <!-- Slate-900 -->
+  
+  <!-- Icon -->
+  <g transform="translate(12, 12)">
+    <!-- Connections -->
+    <path d="M20 0 L0 20 M20 0 L40 20 M0 20 L20 40 M40 20 L20 40 M20 0 L20 40" stroke="url(#favicon_gradient)" stroke-width="4" stroke-linecap="round" />
+    
+    <!-- Nodes -->
+    <circle cx="20" cy="0" r="6" fill="url(#favicon_gradient)" />
+    <circle cx="0" cy="20" r="6" fill="url(#favicon_gradient)" />
+    <circle cx="40" cy="20" r="6" fill="url(#favicon_gradient)" />
+    <circle cx="20" cy="40" r="6" fill="url(#favicon_gradient)" />
+  </g>
+</svg>

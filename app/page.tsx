@@ -1,8 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { MessageSquare, Sparkles } from 'lucide-react';
+import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe } from 'lucide-react';
+import { useRef } from 'react';
 
 const techStack = [
   { name: 'TypeScript', icon: '⚡' },
@@ -13,293 +14,269 @@ const techStack = [
   { name: 'FastAPI', icon: '⚙️' },
   { name: 'PyTorch', icon: '🔥' },
   { name: 'TensorFlow', icon: '🧠' },
+  { name: 'Tailwind', icon: '🎨' },
+  { name: 'Docker', icon: '🐳' },
+  { name: 'PostgreSQL', icon: '🐘' },
+  { name: 'GraphQL', icon: '🕸️' },
 ];
 
-export default function Home() {
+// Infinite Marquee Component
+const TechTicker = () => {
   return (
-    <main className="min-h-screen">
+    <div className="relative flex overflow-hidden py-8 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border-y border-gray-200 dark:border-gray-800">
+      <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-white via-transparent to-white dark:from-gray-950 dark:via-transparent dark:to-gray-950" />
+      <motion.div
+        className="flex gap-12 whitespace-nowrap"
+        animate={{ x: [0, -1000] }}
+        transition={{
+          repeat: Infinity,
+          ease: "linear",
+          duration: 20,
+        }}
+      >
+        {[...techStack, ...techStack, ...techStack].map((tech, i) => (
+          <div key={i} className="flex items-center gap-3 text-gray-600 dark:text-gray-400 font-medium text-lg">
+            <span className="text-2xl">{tech.icon}</span>
+            {tech.name}
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
+export default function Home() {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+
+  return (
+    <main ref={containerRef} className="min-h-screen bg-gray-50 dark:bg-gray-950 selection:bg-blue-500/30">
+
       {/* Hero Section */}
-      <section className="relative px-4 py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20" />
-        <div className="absolute inset-0 bg-grid-slate-200/50 dark:bg-grid-slate-700/25" />
-        
-        <div className="relative max-w-5xl mx-auto text-center space-y-8">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-4">
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-[40%] -left-[20%] w-[70%] h-[70%] rounded-full bg-blue-500/20 blur-[120px] animate-pulse" />
+          <div className="absolute top-[20%] -right-[20%] w-[60%] h-[60%] rounded-full bg-purple-500/20 blur-[120px] animate-pulse delay-1000" />
+          <div className="absolute -bottom-[30%] left-[20%] w-[50%] h-[50%] rounded-full bg-indigo-500/20 blur-[120px] animate-pulse delay-2000" />
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03] dark:opacity-[0.05]" />
+        </div>
+
+        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="inline-block"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border border-blue-200 dark:border-blue-900/50 shadow-lg shadow-blue-500/10"
           >
-            <span className="px-4 py-2 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-sm font-semibold">
-              AI/ML Engineer
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            </span>
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+              Available for new projects
             </span>
           </motion.div>
-          
+
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.7 }}
-            className="text-6xl md:text-8xl font-bold text-gray-900 dark:text-white tracking-tight"
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight"
           >
-            Alan Campbell
+            <span className="bg-clip-text text-transparent bg-gradient-to-b from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
+              Building
+            </span>
+            <br />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 animate-gradient-x">
+              Intelligence
+            </span>
           </motion.h1>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.7 }}
-            className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed"
           >
-            Building intelligent systems with TypeScript, Python, and modern AI frameworks. 
-            Staff Engineer exploring the intersection of full-stack development and machine learning.
+            Staff Engineer merging full-stack architecture with advanced machine learning.
+            Crafting the next generation of AI-powered web applications.
           </motion.p>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.7 }}
-            className="flex flex-wrap gap-4 justify-center pt-4"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-wrap gap-4 justify-center pt-8"
           >
             <Link href="/dashboard">
-              <motion.div
+              <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="group px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl cursor-pointer"
+                className="group relative px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-bold text-lg shadow-2xl shadow-blue-500/20 overflow-hidden"
               >
-                Try Dashboard Studio ✨
-                <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
-              </motion.div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-10 transition-opacity" />
+                <span className="flex items-center gap-2">
+                  Explore Studio <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </motion.button>
             </Link>
-            <Link href="/tokenizer">
-              <motion.div
+            <Link href="/rag-chat">
+              <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="group px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl cursor-pointer"
+                className="px-8 py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-800 rounded-2xl font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
-                Try Tokenizer
-                <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
-              </motion.div>
+                Chat with AI
+              </motion.button>
             </Link>
           </motion.div>
         </div>
       </section>
 
-      {/* Tech Stack Section */}
-      <section className="px-4 py-24 bg-white dark:bg-gray-900">
-        <div className="max-w-6xl mx-auto">
+      {/* Tech Ticker */}
+      <TechTicker />
+
+      {/* Featured Projects */}
+      <section className="py-32 px-4">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Tech Stack
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              Tools and technologies I work with
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {techStack.map((tech, index) => (
-              <motion.div
-                key={tech.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="group p-6 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-lg cursor-pointer"
-              >
-                <div className="text-4xl mb-3">{tech.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {tech.name}
-                </h3>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Projects Preview */}
-      <section className="px-4 py-24 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Featured Projects
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              Interactive tools for exploring AI/ML concepts
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Dashboard Studio - NEW! */}
-            <Link href="/dashboard" className="h-full">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-                className="h-full group p-6 bg-white dark:bg-gray-900 rounded-2xl border-2 border-transparent hover:border-pink-500 dark:hover:border-purple-500 transition-all hover:shadow-2xl cursor-pointer flex flex-col relative overflow-hidden"
-              >
-                {/* NEW badge */}
-                <div className="absolute top-3 right-3 px-2 py-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs font-bold rounded-full animate-pulse">
-                  NEW!
-                </div>
-                
-                {/* Animated gradient background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-purple-50 to-transparent dark:from-pink-900/10 dark:via-purple-900/10 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                
-                <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all">
-                      Dashboard Studio
-                    </h3>
-                    <span className="text-2xl">🎨</span>
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-grow text-sm">
-                    Transform dashboards with natural language! AI-powered code generation using Claude Sonnet 4. Real-time preview, unlimited undo/redo, and version history.
-                  </p>
-                  <div className="flex gap-2 flex-wrap">
-                    <span className="px-2 py-1 bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-200 rounded-full text-xs font-medium">
-                      Claude AI
-                    </span>
-                    <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
-                      react-live
-                    </span>
-                    <span className="px-2 py-1 bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-200 rounded-full text-xs font-medium">
-                      Real-time
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                Featured Work
+              </h2>
+              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-xl">
+                Interactive playgrounds demonstrating core AI concepts through modern web interfaces.
+              </p>
+            </div>
+            <Link href="https://github.com/sol-dev-44" target="_blank" className="group flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
+              View GitHub <ExternalLink className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>
+          </motion.div>
 
-            {/* Tokenizer Comparison */}
-            <Link href="/tokenizer" className="h-full">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Project 1: Dashboard Studio */}
+            <Link href="/dashboard">
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                viewport={{ once: true }}
-                className="h-full group p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-xl cursor-pointer flex flex-col"
+                whileHover={{ y: -10 }}
+                className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    Tokenizer Comparison
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-8 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-2xl text-blue-600 dark:text-blue-400">
+                      <Sparkles className="w-8 h-8" />
+                    </div>
+                    <span className="px-3 py-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold rounded-full">
+                      NEW
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    Dashboard Studio
                   </h3>
-                  <span className="text-2xl">🔤</span>
-                </div>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-grow text-sm">
-                  Compare how different LLM tokenizers (GPT-2, GPT-3.5, GPT-4, GPT-4o) split text into tokens. Visualize tokenization patterns and efficiency metrics.
-                </p>
-                <div className="flex gap-2 flex-wrap">
-                  <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
-                    Python
-                  </span>
-                  <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
-                    FastAPI
-                  </span>
-                  <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
-                    TikToken
-                  </span>
-                </div>
-              </motion.div>
-            </Link>
-
-            {/* Generation Strategies */}
-            <Link href="/generation" className="h-full">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                viewport={{ once: true }}
-                className="h-full group p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-pink-500 dark:hover:border-cyan-500 transition-all hover:shadow-xl cursor-pointer flex flex-col relative overflow-hidden"
-              >
-                {/* Gradient background effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-transparent to-cyan-50 dark:from-pink-900/10 dark:to-cyan-900/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                
-                <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:bg-gradient-to-r group-hover:from-pink-600 group-hover:to-cyan-600 group-hover:bg-clip-text group-hover:text-transparent transition-all">
-                      Generation Strategies
-                    </h3>
-                    <span className="text-2xl">📊</span>
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-grow text-sm">
-                    Visualize how different text generation strategies (greedy, top-k, top-p, beam search) select tokens. Interactive D3.js charts showing real GPT-2 probabilities.
+                  <p className="text-gray-600 dark:text-gray-400 mb-6 flex-grow">
+                    Generative UI platform powered by Claude Sonnet. Describe your interface in natural language and watch it build in real-time.
                   </p>
-                  <div className="flex gap-2 flex-wrap">
-                    <span className="px-2 py-1 bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-200 rounded-full text-xs font-medium">
-                      PyTorch
-                    </span>
-                    <span className="px-2 py-1 bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-200 rounded-full text-xs font-medium">
-                      D3.js
-                    </span>
-                    <span className="px-2 py-1 bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-200 rounded-full text-xs font-medium">
-                      GPT-2
-                    </span>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">Generative UI</span>
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">Claude 3.5</span>
                   </div>
                 </div>
               </motion.div>
             </Link>
 
-            {/* LLM Arena */}
-            <Link href="/llm-playground" className="h-full">
+            {/* Project 2: LLM Arena */}
+            <Link href="/llm-playground">
               <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                viewport={{ once: true }}
-                className="h-full group p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 transition-all hover:shadow-xl cursor-pointer flex flex-col"
+                whileHover={{ y: -10 }}
+                className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-8 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-2xl text-purple-600 dark:text-purple-400">
+                      <Zap className="w-8 h-8" />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                     LLM Arena
                   </h3>
-                  <span className="text-2xl">🚀</span>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6 flex-grow">
+                    Compare 5 different language models side-by-side. Visualize performance metrics with D3.js and analyze token generation speeds.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">Performance</span>
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">D3.js</span>
+                  </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-grow text-sm">
-                  Battle-test 5 specialized LLMs. Live D3 bar charts show tokens/second, compare models side-by-side, and explore speed vs capability trade-offs.
-                </p>
-                <div className="flex gap-2 flex-wrap">
-                  <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
-                    5 Models
-                  </span>
-                  <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
-                    D3 Viz
-                  </span>
-                  <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
-                    Compare
-                  </span>
+              </motion.div>
+            </Link>
+
+            {/* Project 3: Tokenizer */}
+            <Link href="/tokenizer">
+              <motion.div
+                whileHover={{ y: -10 }}
+                className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-8 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl text-indigo-600 dark:text-indigo-400">
+                      <Code className="w-8 h-8" />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                    Tokenizer Visualizer
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6 flex-grow">
+                    Deep dive into how LLMs process text. Compare GPT-4, GPT-3.5, and GPT-2 tokenization strategies with real-time visualization.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">NLP</span>
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">TikToken</span>
+                  </div>
                 </div>
               </motion.div>
             </Link>
           </div>
-          
-          {/* More Coming Soon */}
+        </div>
+      </section>
+
+      {/* Contact / Footer Section */}
+      <section className="py-24 px-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+        <div className="max-w-4xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="mt-12 text-center"
+            className="space-y-8"
           >
-            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-full">
-              <span className="text-2xl">✨</span>
-              <p className="text-gray-700 dark:text-gray-300 font-medium">
-                More features & projects coming soon
-              </p>
-              <span className="text-2xl">🚧</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
+              Ready to collaborate?
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400">
+              I'm always open to discussing new projects, opportunities, or just geeking out over AI.
+            </p>
+            <div className="flex justify-center gap-6">
+              <Link href="https://github.com/sol-dev-44" target="_blank" className="p-4 bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white">
+                <Github className="w-6 h-6" />
+              </Link>
+              <Link href="https://www.linkedin.com/in/alan-james-campbell/" target="_blank" className="p-4 bg-blue-100 dark:bg-blue-900/30 rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors text-blue-600 dark:text-blue-400">
+                <Linkedin className="w-6 h-6" />
+              </Link>
+              <Link href="mailto:alancampbell4444@gmail.com" className="p-4 bg-purple-100 dark:bg-purple-900/30 rounded-full hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors text-purple-600 dark:text-purple-400">
+                <Mail className="w-6 h-6" />
+              </Link>
             </div>
           </motion.div>
         </div>
@@ -312,14 +289,12 @@ export default function Home() {
           animate={{ scale: 1 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:shadow-3xl transition-shadow group"
+          className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full shadow-2xl flex items-center justify-center hover:shadow-3xl transition-shadow group"
           title="Ask AI about my work"
         >
           <MessageSquare className="w-6 h-6 relative z-10" />
-          
-          {/* Pulse effect */}
           <motion.span
-            className="absolute -inset-1 rounded-full bg-blue-400/50"
+            className="absolute -inset-1 rounded-full bg-gray-400/30 dark:bg-white/30"
             initial={{ scale: 1, opacity: 0 }}
             animate={{ scale: 1.5, opacity: [0.5, 0] }}
             transition={{
@@ -328,9 +303,7 @@ export default function Home() {
               ease: "easeOut"
             }}
           />
-          
-          {/* Sparkle on hover */}
-          <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-yellow-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-yellow-400 dark:text-yellow-600 opacity-0 group-hover:opacity-100 transition-opacity" />
         </motion.button>
       </Link>
     </main>

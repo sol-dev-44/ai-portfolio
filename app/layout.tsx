@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { ThemeProvider } from "./theme-provider";
-import ThemeToggle from "@/components/ui/ThemeToggle";
 import { Navbar } from "@/components/ui/Navbar";
 
 const geistSans = Geist({
@@ -19,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AI Portfolio - Alan Campbell",
   description: "AI/ML development portfolio",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -34,7 +36,6 @@ export default function RootLayout({
         <ThemeProvider>
           <Providers>
             <Navbar />
-            <ThemeToggle />
             {children}
           </Providers>
         </ThemeProvider>

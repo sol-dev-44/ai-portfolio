@@ -3,15 +3,16 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react'; // ADD THIS
+import { Sparkles } from 'lucide-react';
+import Image from 'next/image';
+import ThemeToggle from './ThemeToggle';
 
 const navItems = [
   { name: 'Home', path: '/', enabled: true },
   { name: 'Tokenizer', path: '/tokenizer', enabled: true },
   { name: 'Generation', path: '/generation', enabled: true },
-  { name: 'Dashboard Studio', path: '/dashboard', enabled: true },
-  { name: 'LLM Playground', path: '/llm-playground', enabled: true },
-  { name: 'About', path: '/about', enabled: false },
+  { name: 'Dashboard', path: '/dashboard', enabled: true },
+  { name: 'Arena', path: '/llm-playground', enabled: true },
 ];
 
 export function Navbar() {
@@ -22,87 +23,72 @@ export function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-      className="sticky top-0 z-50 backdrop-blur-lg bg-white/75 dark:bg-gray-900/75 border-b border-gray-200 dark:border-gray-800"
+      className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 supports-[backdrop-filter]:bg-white/60 shadow-sm"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center space-x-2 group">
+
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3 group">
             <motion.div
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
-              className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg"
-            />
-            <span className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              className="relative"
+            >
+              <div className="absolute inset-0 bg-blue-500/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+              <Image
+                src="/favicon.svg"
+                alt="AI Portfolio Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8 relative z-10"
+              />
+            </motion.div>
+            <span className="font-bold text-lg text-gray-900 dark:text-white tracking-tight hidden sm:block">
               AI Portfolio
             </span>
           </Link>
 
-          <div className="flex items-center space-x-1">
-            {navItems.map((item, index) => {
+          {/* Nav Items */}
+          <div className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => {
               const isActive = pathname === item.path;
-              
-              if (!item.enabled) {
-                return (
-                  <motion.div
-                    key={item.path}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="relative"
-                  >
-                    <span className="px-4 py-2 rounded-lg font-medium text-gray-400 dark:text-gray-600 cursor-not-allowed">
-                      {item.name}
-                    </span>
-                    <span className="absolute -top-1 -right-1 px-1.5 py-0.5 text-xs bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
-                      Soon
-                    </span>
-                  </motion.div>
-                );
-              }
 
               return (
-                <motion.div
+                <Link
                   key={item.path}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Link
-                    href={item.path}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                      isActive
-                        ? 'bg-gray-100 dark:bg-gray-800 text-blue-600 dark:text-blue-400'
-                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  href={item.path}
+                  className={`relative px-4 py-2 rounded-full text-sm font-medium transition-colors ${isActive
+                    ? 'text-gray-900 dark:text-white'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                     }`}
-                  >
-                    {item.name}
-                  </Link>
-                </motion.div>
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="navbar-active"
+                      className="absolute inset-0 bg-gray-200/50 dark:bg-gray-800/50 rounded-full"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  <span className="relative z-10">{item.name}</span>
+                </Link>
               );
             })}
+          </div>
 
-            {/* ============================================ */}
-            {/* ADD THIS: AI Chat Button */}
-            {/* ============================================ */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: navItems.length * 0.1 }}
-            >
-              <Link href="/rag-chat">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="ml-2 flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>Ask AI</span>
-                </motion.button>
-              </Link>
-            </motion.div>
-            {/* ============================================ */}
-            {/* END OF ADDITION */}
-            {/* ============================================ */}
+          {/* CTA Button */}
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <Link href="/rag-chat">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium text-sm shadow-lg hover:shadow-blue-500/25 transition-shadow"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span className="hidden sm:inline">Ask AI</span>
+              </motion.button>
+            </Link>
           </div>
         </div>
       </div>
