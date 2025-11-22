@@ -311,6 +311,18 @@ async def stream_generator(request: GenerationRequest):
 
     yield json.dumps({"token": "", "finished": True}) + "\n"
 
+@app.post("/api/llm/generate")
+async def generate(request: GenerationRequest):
+    """Non-streaming generation endpoint for production stability."""
+    full_text = ""
+    # Reuse the generator logic but consume it entirely
+    async for chunk_str in stream_generator(request):
+        chunk = json.loads(chunk_str)
+        if chunk.get("token"):
+            full_text += chunk["token"]
+            
+    return {"text": full_text}
+
 @app.post("/api/llm/generate_stream")
 async def generate_stream(request: GenerationRequest):
     return StreamingResponse(

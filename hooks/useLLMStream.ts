@@ -46,7 +46,8 @@ export function useLLMStream(): UseLLMStreamResult {
 
         try {
             const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api';
-            const response = await fetch(`${baseUrl}/llm/generate_stream`, {
+            // Use non-streaming endpoint for production stability
+            const response = await fetch(`${baseUrl}/llm/generate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -59,47 +60,19 @@ export function useLLMStream(): UseLLMStreamResult {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            if (!response.body) {
-                throw new Error('Response body is null');
-            }
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-
-            while (true) {
-                const { value, done } = await reader.read();
-                if (done) break;
-
-                const chunk = decoder.decode(value, { stream: true });
-                const lines = chunk.split('\n');
-
-                for (const line of lines) {
-                    if (!line.trim()) continue;
-
-                    try {
-                        const data = JSON.parse(line);
-                        if (data.error) {
-                            throw new Error(data.error);
-                        }
-                        if (data.token) {
-                            fullText += data.token;
-                            setStreamingText((prev) => prev + data.token);
-                        }
-                    } catch (e) {
-                        console.warn('Error parsing JSON chunk:', e);
-                    }
-                }
-            }
+            const data = await response.json();
+            fullText = data.text;
+            setStreamingText(fullText);
 
             return fullText;
         } catch (err: any) {
             if (err.name === 'AbortError') {
                 console.log('Generation aborted');
-                return fullText; // Return what we have so far
+                return fullText;
             } else {
                 setError(err.message || 'An error occurred during generation');
-                console.error('Streaming error:', err);
-                throw err; // Re-throw the error for the caller to handle if needed
+                console.error('Generation error:', err);
+                throw err;
             }
         } finally {
             setIsLoading(false);

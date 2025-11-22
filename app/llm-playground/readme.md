@@ -17,8 +17,8 @@ We've integrated a spectrum of models to demonstrate different capabilities:
 | 💻 | **Qwen Coder** | 480B | Programming, debugging, technical docs |
 | 🧠 | **DeepSeek R1** | Large | Complex reasoning, math, logic |
 
-### ⚡ Real-Time Streaming (SSE)
-Text is generated token-by-token using **Server-Sent Events (SSE)**. This provides an instant, responsive experience similar to ChatGPT, allowing you to read the output as it's being created.
+### ⚡ Fast Generation
+Text is generated using optimized inference pipelines. While we prioritize speed, we use standard HTTP requests to ensure maximum stability and compatibility across all network environments.
 
 ### 📊 Performance Visualization
 A real-time **D3.js bar chart** visualizes the generation speed (tokens/second) for each model.
@@ -37,7 +37,7 @@ Toggle "Compare" to send the same prompt to ALL models at once. This is perfect 
 2.  **Enter a Prompt**: Type your question or use one of the "Try these" examples.
 3.  **Generate**: Click the rocket button 🚀.
 4.  **Watch**:
-    *   See text stream in real-time.
+    *   See the full response appear.
     *   Watch the D3 chart populate with performance data.
     *   Read the detailed metrics below the chart.
 
@@ -45,11 +45,11 @@ Toggle "Compare" to send the same prompt to ALL models at once. This is perfect 
 
 - **Frontend**: Next.js, React, D3.js, Framer Motion
 - **Backend**: FastAPI, PyTorch (simulated or proxying to Hugging Face/vLLM)
-- **Streaming**: Server-Sent Events (SSE)
+- **Generation**: Standard HTTP Inference
 
 ## 🎓 Educational Value
 
 This tool demonstrates:
 - **Latency vs. Throughput**: How model size affects generation speed.
 - **Specialization**: Why you might choose a "Coder" model over a generalist.
-- **Streaming Architecture**: How modern AI apps handle long-running requests.
+- **Inference Architecture**: How modern AI apps handle complex requests.

@@ -376,7 +376,7 @@ export default function ImprovedPlayground() {
                 <div className="pt-1">
                   <strong>Model Guide:</strong>
                   <div className="ml-3 mt-1 space-y-1">
-                    <Tooltip content="Only 2 billion parameters! Fastest response time, lowest latency. Great for testing streaming and simple queries." position="left">
+                    <Tooltip content="Only 2 billion parameters! Fastest response time, lowest latency. Great for quick queries and simple tasks." position="left">
                       <div className="border-b border-dashed border-gray-400 dark:border-gray-500 cursor-help inline-block">
                         ⚡ <strong>Gemma 2B:</strong> Speed demon
                       </div>
@@ -593,8 +593,8 @@ export default function ImprovedPlayground() {
               >
                 <div
                   className={`max-w-[80%] rounded-xl px-3 py-2 ${message.role === 'user'
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
                     }`}
                 >
                   {message.model && (
@@ -612,11 +612,12 @@ export default function ImprovedPlayground() {
                   <div className="prose prose-sm dark:prose-invert max-w-none text-sm">
                     <ReactMarkdown
                       components={{
-                        code({ node, inline, className, children, ...props }) {
+                        code({ node, className, children, ...props }: any) {
                           const match = /language-(\w+)/.exec(className || '');
+                          const inline = props.inline;
                           return !inline && match ? (
                             <SyntaxHighlighter
-                              style={oneDark}
+                              style={oneDark as any}
                               language={match[1]}
                               PreTag="div"
                               {...props}
@@ -757,9 +758,9 @@ export default function ImprovedPlayground() {
             <span>What This Demonstrates</span>
           </h3>
           <div className="grid md:grid-cols-2 gap-2 text-xs text-gray-700 dark:text-gray-300">
-            <Tooltip content="Server-Sent Events (SSE) allow the server to push data to the client in real-time. Watch tokens appear as they're generated, not all at once!" position="left">
+            <Tooltip content="Standard HTTP requests are used to generate text. The server processes the entire prompt and returns the complete response at once." position="left">
               <div className="border-b border-dashed border-gray-400 dark:border-gray-500 cursor-help">
-                <strong>🔄 Streaming:</strong> Real-time SSE token generation
+                <strong>⚡ Generation:</strong> Standard HTTP inference
               </div>
             </Tooltip>
             <Tooltip content="D3.js creates dynamic, interactive data visualizations. This bar chart shows performance metrics using scalable vector graphics (SVG)." position="right">
