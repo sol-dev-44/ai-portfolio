@@ -8,10 +8,10 @@ import { useGetTokenizersQuery, useLazyTokenizeQuery } from '@/store/api/tokeniz
 function Tooltip({ content, children, position = 'center' }: { content: string; children: React.ReactNode; position?: 'center' | 'right' }) {
   const [isVisible, setIsVisible] = useState(false);
 
-  const positionClasses = position === 'right' 
+  const positionClasses = position === 'right'
     ? 'top-full right-0 mt-2'
     : 'top-full left-1/2 transform -translate-x-1/2 mt-2';
-  
+
   const arrowClasses = position === 'right'
     ? 'bottom-full right-4 mb-1'
     : 'bottom-full left-1/2 transform -translate-x-1/2 mb-1';
@@ -25,7 +25,7 @@ function Tooltip({ content, children, position = 'center' }: { content: string; 
       >
         {children}
       </div>
-      
+
       <AnimatePresence>
         {isVisible && (
           <motion.div
@@ -71,12 +71,13 @@ export default function TokenizerPage() {
   const [selectedTokenizers, setSelectedTokenizers] = useState<string[]>([]);
   const [inputText, setInputText] = useState('');
   const [debouncedText, setDebouncedText] = useState('');
+  const [showInfo, setShowInfo] = useState(false);
 
   // Fetch available tokenizers from backend
   const { data: tokenizers, isLoading, error } = useGetTokenizersQuery();
 
   // Lazy query for tokenization (manual trigger)
-  const [triggerTokenize, { data: tokenizeResults, isFetching: isTokenizing }] = 
+  const [triggerTokenize, { data: tokenizeResults, isFetching: isTokenizing }] =
     useLazyTokenizeQuery();
 
   // Set default selected tokenizers when tokenizers load
@@ -155,9 +156,56 @@ export default function TokenizerPage() {
             Tokenizer Comparison
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            Compare how different LLM tokenizers split text into tokens
+            Compare how different LLM tokenizers split text into tokens •
+            <button
+              onClick={() => setShowInfo(!showInfo)}
+              className="ml-1 text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              {showInfo ? 'Hide' : 'Show'} Guide
+            </button>
           </p>
         </motion.div>
+
+        {/* Technical Guide Panel */}
+        <AnimatePresence>
+          {showInfo && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl p-6 border border-blue-100 dark:border-blue-900/30 shadow-xl overflow-hidden"
+            >
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    🔤 What are Tokens?
+                  </h3>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                    LLMs don't process text character-by-character. They break it into <strong>tokens</strong> (words, subwords, or characters). Each token gets converted to a number that the model can understand.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    🧮 BPE Algorithm
+                  </h3>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Most modern tokenizers use <strong>Byte Pair Encoding</strong> (BPE), which learns common patterns from training data. Frequently-seen words become single tokens, while rare words split into subwords.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    💰 Why It Matters
+                  </h3>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Token count directly affects <strong>API costs</strong> and <strong>context limits</strong>. Fewer tokens = cheaper inference and more room for conversation history!
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Tokenizer Selection */}
         <motion.div
@@ -230,7 +278,7 @@ export default function TokenizerPage() {
               </motion.div>
             )}
           </div>
-          
+
           {/* Example Buttons */}
           <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-3 flex-wrap">
@@ -301,9 +349,8 @@ export default function TokenizerPage() {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className={`border-b border-gray-100 dark:border-gray-800 ${
-                              isWinner ? 'bg-green-50 dark:bg-green-900/20' : ''
-                            }`}
+                            className={`border-b border-gray-100 dark:border-gray-800 ${isWinner ? 'bg-green-50 dark:bg-green-900/20' : ''
+                              }`}
                           >
                             <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">
                               {tokenizers?.find(t => t.id === name)?.name || name}
@@ -349,9 +396,8 @@ export default function TokenizerPage() {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: tokenizerIndex * 0.1 + tokenIndex * 0.02 }}
-                        className={`px-3 py-1.5 rounded-lg border text-sm font-mono ${
-                          TOKEN_COLORS[tokenIndex % TOKEN_COLORS.length]
-                        }`}
+                        className={`px-3 py-1.5 rounded-lg border text-sm font-mono ${TOKEN_COLORS[tokenIndex % TOKEN_COLORS.length]
+                          }`}
                         whileHover={{ scale: 1.05 }}
                       >
                         {token.replace(/ /g, '·').replace(/\n/g, '↵')}

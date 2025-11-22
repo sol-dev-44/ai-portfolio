@@ -72,6 +72,7 @@ export default function DashboardPage() {
   const [compareIndex, setCompareIndex] = useState<number | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
+  const [showInfo, setShowInfo] = useState(false);
 
   // New State for Enhancements
   const [isZenMode, setIsZenMode] = useState(false);
@@ -301,6 +302,69 @@ export default function DashboardPage() {
       {/* Main Dashboard Render */}
       <div className={`relative transition-all duration-500 ${isZenMode ? 'pt-4' : 'pt-0'}`}>
         <div className="max-w-7xl mx-auto px-4">
+
+          {/* Technical Guide Panel */}
+          <AnimatePresence>
+            {!isZenMode && (
+              <div className="mb-6">
+                <div className="flex justify-center mb-4">
+                  <button
+                    onClick={() => setShowInfo(!showInfo)}
+                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+                  >
+                    {showInfo ? 'Hide' : 'Show'} Technical Guide ℹ️
+                  </button>
+                </div>
+
+                {showInfo && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl p-6 border border-blue-100 dark:border-blue-900/30 shadow-xl overflow-hidden"
+                  >
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                      <div className="space-y-2">
+                        <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                          <Code2 className="w-4 h-4 text-blue-500" /> React Live
+                        </h3>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                          Enables <strong>real-time code compilation</strong> in the browser. The code you see in the editor is actually running live in the preview window, allowing for instant feedback loops.
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                          <History className="w-4 h-4 text-purple-500" /> Redux Time-Travel
+                        </h3>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                          Every generation creates a new state snapshot. We use <strong>Redux Toolkit</strong> to manage this history, allowing you to Undo/Redo changes instantly without reloading.
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                          <Maximize2 className="w-4 h-4 text-green-500" /> Framer Motion
+                        </h3>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                          Powers the <strong>smooth layout transitions</strong> and entrance animations. Notice how the UI elements stagger in? That's Framer Motion's <code>AnimatePresence</code> at work.
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                          <Share2 className="w-4 h-4 text-orange-500" /> AI Generation
+                        </h3>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                          Your prompts are sent to our LLM backend, which returns <strong>executable React code</strong>. We parse this response and inject it directly into the live preview environment.
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+            )}
+          </AnimatePresence>
 
           {/* Preview Controls */}
           <div className="flex justify-end gap-2 mb-2">
