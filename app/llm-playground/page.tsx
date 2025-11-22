@@ -6,7 +6,6 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import * as d3 from 'd3';
-import { useLLMStream } from '@/hooks/useLLMStream';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -210,13 +209,13 @@ function PerformanceChart({ metrics }: { metrics: PerformanceMetric[] }) {
 export default function ImprovedPlayground() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
   const [selectedModel, setSelectedModel] = useState('gpt-oss');
   const [compareMode, setCompareMode] = useState(false);
+  const [streamingText, setStreamingText] = useState('');
   const [showInfo, setShowInfo] = useState(false);
   const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const { streamGenerate, streamingText, isLoading: loading, error } = useLLMStream();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -226,7 +225,62 @@ export default function ImprovedPlayground() {
     scrollToBottom();
   }, [messages, streamingText]);
 
+  const parseSSE = (text: string) => {
+    const lines = text.split('\n');
+    let content = '';
 
+    for (const line of lines) {
+      if (line.startsWith('data: ')) {
+        const data = line.slice(6);
+        if (data === '[DONE]') continue;
+
+        try {
+          const json = JSON.parse(data);
+          const delta = json.choices?.[0]?.delta?.content;
+          if (delta) content += delta;
+        } catch (e) {
+          // Skip invalid JSON
+        }
+      }
+    }
+    return content;
+  };
+
+  const streamGeneration = async (model: string) => {
+    const startTime = Date.now();
+    let tokenCount = 0;
+
+    const response = await fetch('/api/hf-stream', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: input, model }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Stream failed');
+    }
+
+    const reader = response.body?.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let fullText = '';
+
+    while (true) {
+      const { done, value } = await reader!.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const parsed = parseSSE(buffer);
+      fullText = parsed;
+      tokenCount = Math.ceil(fullText.length / 4); // Rough estimate
+      setStreamingText(fullText);
+    }
+
+    const totalTime = (Date.now() - startTime) / 1000; // seconds
+    const tokensPerSecond = tokenCount / totalTime;
+
+    return { fullText, tokensPerSecond, totalTime, tokenCount };
+  };
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
@@ -239,8 +293,8 @@ export default function ImprovedPlayground() {
 
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
-    // loading state is handled by hook
-    // streamingText state is handled by hook
+    setLoading(true);
+    setStreamingText('');
 
     const newMetrics: PerformanceMetric[] = [];
 
@@ -248,16 +302,8 @@ export default function ImprovedPlayground() {
       if (compareMode) {
         // Compare mode: run all models
         for (const model of MODELS) {
-          const startTime = Date.now();
-          const fullText = await streamGenerate({
-            prompt: userMessage.content,
-            model_id: model.id,
-            strategy: 'top_k' // Default strategy
-          });
-
-          const totalTime = (Date.now() - startTime) / 1000; // seconds
-          const tokenCount = Math.ceil(fullText.length / 4); // Rough estimate
-          const tokensPerSecond = tokenCount / totalTime;
+          setStreamingText('');
+          const { fullText, tokensPerSecond, totalTime, tokenCount } = await streamGeneration(model.id);
 
           setMessages((prev) => [
             ...prev,
@@ -281,17 +327,7 @@ export default function ImprovedPlayground() {
         setPerformanceMetrics(newMetrics);
       } else {
         // Single model
-        const startTime = Date.now();
-        const fullText = await streamGenerate({
-          prompt: userMessage.content,
-          model_id: selectedModel,
-          strategy: 'top_k'
-        });
-
-        const totalTime = (Date.now() - startTime) / 1000; // seconds
-        const tokenCount = Math.ceil(fullText.length / 4); // Rough estimate
-        const tokensPerSecond = tokenCount / totalTime;
-
+        const { fullText, tokensPerSecond, totalTime, tokenCount } = await streamGeneration(selectedModel);
         const modelInfo = MODELS.find((m) => m.id === selectedModel);
 
         setMessages((prev) => [
@@ -324,6 +360,9 @@ export default function ImprovedPlayground() {
           timestamp: new Date(),
         },
       ]);
+    } finally {
+      setLoading(false);
+      setStreamingText('');
     }
   };
 
@@ -376,7 +415,7 @@ export default function ImprovedPlayground() {
                 <div className="pt-1">
                   <strong>Model Guide:</strong>
                   <div className="ml-3 mt-1 space-y-1">
-                    <Tooltip content="Only 2 billion parameters! Fastest response time, lowest latency. Great for quick queries and simple tasks." position="left">
+                    <Tooltip content="Only 2 billion parameters! Fastest response time, lowest latency. Great for testing streaming and simple queries." position="left">
                       <div className="border-b border-dashed border-gray-400 dark:border-gray-500 cursor-help inline-block">
                         ⚡ <strong>Gemma 2B:</strong> Speed demon
                       </div>
@@ -593,8 +632,8 @@ export default function ImprovedPlayground() {
               >
                 <div
                   className={`max-w-[80%] rounded-xl px-3 py-2 ${message.role === 'user'
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
                     }`}
                 >
                   {message.model && (
@@ -612,12 +651,11 @@ export default function ImprovedPlayground() {
                   <div className="prose prose-sm dark:prose-invert max-w-none text-sm">
                     <ReactMarkdown
                       components={{
-                        code({ node, className, children, ...props }: any) {
+                        code({ node, inline, className, children, ...props }) {
                           const match = /language-(\w+)/.exec(className || '');
-                          const inline = props.inline;
                           return !inline && match ? (
                             <SyntaxHighlighter
-                              style={oneDark as any}
+                              style={oneDark}
                               language={match[1]}
                               PreTag="div"
                               {...props}
@@ -758,9 +796,9 @@ export default function ImprovedPlayground() {
             <span>What This Demonstrates</span>
           </h3>
           <div className="grid md:grid-cols-2 gap-2 text-xs text-gray-700 dark:text-gray-300">
-            <Tooltip content="Standard HTTP requests are used to generate text. The server processes the entire prompt and returns the complete response at once." position="left">
+            <Tooltip content="Server-Sent Events (SSE) allow the server to push data to the client in real-time. Watch tokens appear as they're generated, not all at once!" position="left">
               <div className="border-b border-dashed border-gray-400 dark:border-gray-500 cursor-help">
-                <strong>⚡ Generation:</strong> Standard HTTP inference
+                <strong>🔄 Streaming:</strong> Real-time SSE token generation
               </div>
             </Tooltip>
             <Tooltip content="D3.js creates dynamic, interactive data visualizations. This bar chart shows performance metrics using scalable vector graphics (SVG)." position="right">
