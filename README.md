@@ -40,6 +40,14 @@ Visualize the inner workings of a Language Model by seeing the probability distr
 - **Educational Tooltips**
 - [Read more](./app/generation/readme.md)
 
+### 🤖 AI Research Assistant
+An autonomous agent that uses tools to answer questions.
+- **Tool Calling**: See the agent execute Python functions in real-time
+- **Web Search**: Live internet access via DuckDuckGo
+- **ReAct Pattern**: Visualized reasoning and action loop
+- **Streaming UI**: Watch the thought process unfold
+- [Read more](./app/agent/readme.md)
+
 ---
 
 ## 🎯 Why This Project?

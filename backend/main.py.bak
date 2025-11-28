@@ -340,6 +340,148 @@ async def generate_stream(request: GenerationRequest):
 class AgentChatRequest(BaseModel):
     message: str = Field(..., max_length=1000, description="User message")
     max_tokens: int = Field(default=150, le=500)
+    temperature: float = Field(default=0.7, ge=0.1, le=2.0)
+
+# OLD AGENT ENDPOINTS (Not used - Claude agent runs in Next.js)
+# Kept for reference only
+#     schemas = get_tool_schemas()
+#     return {
+#         "tools": schemas,
+#         "metadata": TOOL_METADATA,
+#         "model": AGENT_MODEL_ID if AGENT_MODEL else None
+#     }
+
+# async def agent_chat_generator(request: AgentChatRequest):
+#     ... (commented out - not used)
+
+    """
+    Stream agent responses with tool execution.
+    Removed artificial delays for faster response.
+    """
+    active_model = AGENT_MODEL if AGENT_MODEL else GPT2_MODEL
+    
+    if not active_model:
+        yield json.dumps({"type": "error", "content": "Model not loaded"}) + "\n"
+        return
+    
+    tokenizer = active_model["tokenizer"]
+    model = active_model["model"]
+    device = active_model["device"]
+    
+    # Build prompt with system instructions
+    system_prompt = build_system_prompt()
+    
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": request.message}
+    ]
+    
+    # Apply chat template if available (Qwen has it)
+    if hasattr(tokenizer, "apply_chat_template"):
+        prompt_text = tokenizer.apply_chat_template(
+            messages, 
+            tokenize=False, 
+            add_generation_prompt=True
+        )
+    else:
+        # Fallback for models without chat template
+        prompt_text = f"{system_prompt}\n\nUser: {request.message}\n\nAssistant:"
+    
+    # Tokenize
+    inputs = tokenizer(prompt_text, return_tensors="pt").to(device)
+    curr_input_ids = inputs.input_ids
+    
+    response_text = ""
+    tokens_generated = 0
+    max_iterations = 5  # Allow for multiple tool calls
+    iteration = 0
+    
+    while tokens_generated < request.max_tokens and iteration < max_iterations:
+        iteration += 1
+        segment_text = ""
+        
+        for _ in range(request.max_tokens - tokens_generated):
+            with torch.no_grad():
+                outputs = model(curr_input_ids)
+                next_token_logits = outputs.logits[:, -1, :] / request.temperature
+                
+                # Simple sampling
+                probs = F.softmax(next_token_logits, dim=-1)
+                next_token = torch.multinomial(probs, num_samples=1)
+            
+            # Decode token
+            new_token = tokenizer.decode(next_token[0])
+            segment_text += new_token
+            response_text += new_token
+            tokens_generated += 1
+            
+            # Stream the token immediately - no delay
+            yield json.dumps({"type": "token", "content": new_token}) + "\n"
+            
+            # Update input
+            curr_input_ids = torch.cat([curr_input_ids, next_token], dim=-1)
+            
+            # Check for EOS or specific stop tokens
+            if next_token.item() == tokenizer.eos_token_id or new_token in ["<|im_end|>", "<|endoftext|>"]:
+                break
+            
+            # Check for tool call pattern
+            if "TOOL_CALL:" in response_text:
+                tool_call = parse_tool_call(response_text)
+                
+                if tool_call and tool_call["name"]:
+                    # Get tool metadata for the frontend
+                    tool_meta = TOOL_METADATA.get(tool_call["name"], {})
+                    
+                    # Emit tool call event with metadata
+                    yield json.dumps({
+                        "type": "tool_call",
+                        "tool": tool_call["name"],
+                        "args": tool_call["args"],
+                        "metadata": tool_meta
+                    }) + "\n"
+                    
+                    # Execute tool immediately - no artificial delay
+                    result = execute_tool(tool_call["name"], tool_call["args"])
+                    
+                    # Emit result with source info
+                    yield json.dumps({
+                        "type": "tool_result",
+                        "result": result,
+                        "source": tool_meta.get("source", "Unknown"),
+                        "source_url": tool_meta.get("source_url", "")
+                    }) + "\n"
+                    
+                    # Add result to context and continue
+                    continuation = f"\n\nTool Result: {result}\n\nAssistant:"
+                    cont_inputs = tokenizer(continuation, return_tensors="pt").to(device)
+                    curr_input_ids = torch.cat([curr_input_ids, cont_inputs.input_ids], dim=-1)
+                    
+                    response_text = ""  # Reset for next segment
+                    break
+            
+            # Yield control to event loop without delay
+            await asyncio.sleep(0)
+        
+        # If we finished due to EOS, break
+        if next_token.item() == tokenizer.eos_token_id:
+            break
+            
+        # If no tool call found in this segment, break
+        if "TOOL_CALL:" not in segment_text:
+            break
+    
+    yield json.dumps({"type": "complete"}) + "\n"
+
+@app.post("/api/agent/chat")
+async def agent_chat(request: AgentChatRequest):
+    """Stream agent chat with tool execution."""
+    return StreamingResponse(
+        agent_chat_generator(request),
+        media_type="application/x-ndjson"
+    )
+
+
 # =====LANGCHAIN AGENT ENDPOINT =====
 @app.post("/api/agent/langchain")
 async def langchain_agent_chat(request: AgentChatRequest):

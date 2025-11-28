@@ -12,6 +12,7 @@ const navItems = [
   { name: 'Tokenizer', path: '/tokenizer', enabled: true },
   { name: 'Generation', path: '/generation', enabled: true },
   { name: 'Dashboard', path: '/dashboard', enabled: true },
+  { name: 'Agent', path: '/agent', enabled: true },
   { name: 'Arena', path: '/llm-playground', enabled: true },
 ];
 
