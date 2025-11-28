@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import tiktoken
-from typing import List, Dict
+from typing import List, Dict, Any
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch.nn.functional as F
@@ -91,7 +91,7 @@ TOKENIZERS, TOKENIZER_METADATA = initialize_tokenizers()
 # ===== MODEL INITIALIZATION =====
 def initialize_model(model_id="gpt2"):
     """Initialize a model for generation."""
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = "cuda" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu")
     
     try:
         print(f"🔄 Loading {model_id}...")
@@ -249,9 +249,9 @@ import json
 import asyncio
 
 class GenerationRequest(BaseModel):
-    prompt: str = Field(..., max_length=1000)
+    prompt: str = Field(..., max_length=10000)
     model_id: str = "gpt2"
-    max_new_tokens: int = Field(default=50, le=200)
+    max_new_tokens: int = Field(default=50, le=2000)
     temperature: float = Field(default=0.7, ge=0.1, le=2.0)
     top_k: int = Field(default=50, ge=0)
     top_p: float = Field(default=0.9, ge=0.0, le=1.0)
@@ -305,12 +305,12 @@ async def stream_generator(request: GenerationRequest):
         # Decode token
         new_token_str = tokenizer.decode(next_token[0])
         
-        # Yield result
+        # Yield result in SSE format
         response_data = {
             "token": new_token_str,
             "finished": False
         }
-        yield json.dumps(response_data) + "\n"
+        yield f"data: {json.dumps(response_data)}\n\n"
         
         # Update input for next iteration
         curr_input_ids = torch.cat([curr_input_ids, next_token], dim=-1)
@@ -319,16 +319,16 @@ async def stream_generator(request: GenerationRequest):
         if next_token.item() == tokenizer.eos_token_id:
             break
         
-        # Minimal yield for async - removed artificial delay
+        # Minimal yield for async
         await asyncio.sleep(0)
 
-    yield json.dumps({"token": "", "finished": True}) + "\n"
+    yield f"data: {json.dumps({'token': '', 'finished': True})}\n\n"
 
 @app.post("/api/llm/generate_stream")
 async def generate_stream(request: GenerationRequest):
     return StreamingResponse(
         stream_generator(request),
-        media_type="application/x-ndjson"
+        media_type="text/event-stream"
     )
 
 
@@ -404,14 +404,83 @@ async def agent_status():
     }
 
 
-if __name__ == "__main__":
-    import uvicorn
-    import os
-    port = int(os.environ.get("PORT", 8080))
-    uvicorn.run(
-        app, 
-        host="0.0.0.0", 
-        port=port,
-        timeout_keep_alive=75,
-        limit_concurrency=10
+# ===== ENHANCED LSAT ENDPOINTS =====
+# Add these to main.py after the existing LSAT section (around line 407)
+# Replace the existing LSAT section
+
+from fastapi.responses import StreamingResponse
+from lsat_logic import lsat_service
+
+class LSATQuestionRequest(BaseModel):
+    dataset: str = "lsat-ar"  # Options: lsat-ar, lsat-logic-games, logiqa, local
+    split: str = "train"
+    count: int = Field(default=5, ge=1, le=20)
+
+class LSATAnalyzeRequest(BaseModel):
+    question_data: Dict[str, Any]
+    use_cache: bool = True
+    use_rag: bool = True
+    stream: bool = False
+
+class LSATAddQuestionsRequest(BaseModel):
+    questions: List[Dict[str, Any]]
+    filename: str = "parsed_questions.json"
+
+@app.get("/api/lsat/datasets")
+async def get_available_datasets():
+    """Get list of available LSAT datasets."""
+    return {"datasets": lsat_service.get_available_datasets()}
+
+@app.post("/api/lsat/questions")
+async def get_lsat_questions(request: LSATQuestionRequest):
+    """Fetch random LSAT questions from specified dataset."""
+    questions = lsat_service.fetch_questions(
+        dataset_name=request.dataset,
+        split=request.split,
+        count=request.count
     )
+    return {"questions": questions, "dataset": request.dataset}
+
+@app.post("/api/lsat/questions/add")
+async def add_lsat_questions(request: LSATAddQuestionsRequest):
+    """Add questions to local storage (from parsed PDFs, etc.)."""
+    count = lsat_service.add_local_questions(request.questions, request.filename)
+    return {"added": count, "filename": request.filename}
+
+@app.post("/api/lsat/analyze")
+async def analyze_lsat_question(request: LSATAnalyzeRequest):
+    """Analyze an LSAT question with caching and RAG."""
+    if request.stream:
+        return StreamingResponse(
+            lsat_service.analyze_pattern_stream(
+                request.question_data,
+                use_cache=request.use_cache,
+                use_rag=request.use_rag
+            ),
+            media_type="application/x-ndjson"
+        )
+    else:
+        result = await lsat_service.analyze_pattern(
+            request.question_data,
+            use_cache=request.use_cache,
+            use_rag=request.use_rag
+        )
+        return result
+
+@app.get("/api/lsat/patterns")
+async def get_lsat_patterns():
+    """Get all LSAT pattern types and their information."""
+    return {"patterns": lsat_service.get_patterns()}
+
+@app.get("/api/lsat/patterns/{pattern_type}")
+async def get_lsat_pattern_info(pattern_type: str):
+    """Get information about a specific pattern type."""
+    patterns = lsat_service.get_patterns()
+    if pattern_type in patterns:
+        return patterns[pattern_type]
+    raise HTTPException(status_code=404, detail=f"Pattern '{pattern_type}' not found")
+
+@app.get("/api/lsat/cache/stats")
+async def get_lsat_cache_stats():
+    """Get LSAT cache statistics."""
+    return lsat_service.get_cache_stats()
