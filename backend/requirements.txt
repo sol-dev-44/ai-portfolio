@@ -1,6 +1,38 @@
-fastapi==0.115.0
-uvicorn==0.32.0
-tiktoken==0.8.0
-pydantic==2.9.0
+# backend/requirements.txt
+# Full dependencies for main.py + agent_langchain.py
+
+# FastAPI + Server
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.0.0
+
+# Tokenizers (for existing tokenizer endpoints)
+tiktoken>=0.5.0
+
+# ML Models (for generation visualization)
 torch>=2.0.0
-transformers>=4.30.0
+transformers>=4.35.0
+
+# LangChain ecosystem (for local agent)
+langchain>=0.1.0
+langchain-community>=0.0.20
+
+# =============================================================================
+# SETUP NOTES
+# =============================================================================
+# 
+# 1. For LOCAL development with GPU:
+#    pip install -r requirements.txt
+#
+# 2. For Railway/production (CPU only, smaller footprint):
+#    Consider using torch-cpu or excluding heavy models
+#
+# 3. For Ollama (local LLM):
+#    brew install ollama  (macOS)
+#    ollama serve &
+#    ollama pull llama3
+#
+# 4. The agent has TWO backends:
+#    - Claude: Uses ANTHROPIC_API_KEY via Next.js (no Python deps)
+#    - LangChain: Uses Ollama locally (requires langchain + ollama running)
+# =============================================================================

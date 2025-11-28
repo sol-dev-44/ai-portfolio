@@ -114,25 +114,26 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-wrap gap-4 justify-center pt-8"
           >
-            <Link href="/dashboard">
+            <Link href="/agent">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="group relative px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-bold text-lg shadow-2xl shadow-blue-500/20 overflow-hidden"
+                className="group relative px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl font-bold text-lg shadow-2xl shadow-amber-500/30 overflow-hidden"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-10 transition-opacity" />
-                <span className="flex items-center gap-2">
-                  Explore Studio <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <span className="relative flex items-center gap-2">
+                  <Cpu className="w-5 h-5" />
+                  Try Agent Demo <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </span>
               </motion.button>
             </Link>
-            <Link href="/rag-chat">
+            <Link href="/dashboard">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-800 rounded-2xl font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
-                Chat with AI
+                Explore Studio
               </motion.button>
             </Link>
           </motion.div>
@@ -164,8 +165,67 @@ export default function Home() {
             </Link>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Project 1: Dashboard Studio */}
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Project 1: Tool-Calling Agent - FEATURED */}
+            <Link href="/agent" className="md:col-span-2">
+              <motion.div
+                whileHover={{ y: -10 }}
+                className="group relative h-full bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 dark:from-amber-900/20 dark:via-orange-900/20 dark:to-yellow-900/20 rounded-3xl border border-amber-200 dark:border-amber-800 overflow-hidden hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-300"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-8 md:p-10">
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="p-3 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl text-white shadow-lg shadow-amber-500/30">
+                          <Cpu className="w-8 h-8" />
+                        </div>
+                        <div className="flex gap-2">
+                          <span className="px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold rounded-full">
+                            FEATURED
+                          </span>
+                          <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-full">
+                            Claude
+                          </span>
+                          <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-full">
+                            Open Source
+                          </span>
+                        </div>
+                      </div>
+                      <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                        Tool-Calling Agent
+                      </h3>
+                      <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 max-w-2xl">
+                        Watch AI reasoning in real-time. Compare Claude vs Open Source models as they decide which tools to use,
+                        execute API calls, and synthesize responses. Full pipeline visualization shows exactly what happens under the hood.
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">ReAct Pattern</span>
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Function Calling</span>
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">HuggingFace</span>
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Compare Mode</span>
+                      </div>
+                    </div>
+                    <div className="hidden md:flex flex-col gap-2 text-sm text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center gap-2 p-2 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                        <Globe className="w-4 h-4 text-cyan-500" />
+                        <span>Weather API</span>
+                      </div>
+                      <div className="flex items-center gap-2 p-2 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                        <Globe className="w-4 h-4 text-green-500" />
+                        <span>Web Search</span>
+                      </div>
+                      <div className="flex items-center gap-2 p-2 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                        <Zap className="w-4 h-4 text-purple-500" />
+                        <span>Calculator</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+
+            {/* Project 2: Dashboard Studio */}
             <Link href="/dashboard">
               <motion.div
                 whileHover={{ y: -10 }}
@@ -177,9 +237,6 @@ export default function Home() {
                     <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-2xl text-blue-600 dark:text-blue-400">
                       <Sparkles className="w-8 h-8" />
                     </div>
-                    <span className="px-3 py-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold rounded-full">
-                      NEW
-                    </span>
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     Dashboard Studio
@@ -195,7 +252,7 @@ export default function Home() {
               </motion.div>
             </Link>
 
-            {/* Project 2: LLM Arena */}
+            {/* Project 3: LLM Arena */}
             <Link href="/llm-playground">
               <motion.div
                 whileHover={{ y: -10 }}
@@ -222,7 +279,7 @@ export default function Home() {
               </motion.div>
             </Link>
 
-            {/* Project 3: Tokenizer */}
+            {/* Project 4: Tokenizer */}
             <Link href="/tokenizer">
               <motion.div
                 whileHover={{ y: -10 }}
@@ -244,6 +301,33 @@ export default function Home() {
                   <div className="flex flex-wrap gap-2">
                     <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">NLP</span>
                     <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">TikToken</span>
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+
+            {/* Project 5: RAG Chat */}
+            <Link href="/rag-chat">
+              <motion.div
+                whileHover={{ y: -10 }}
+                className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-teal-500/10 transition-all duration-300"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-8 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="p-3 bg-teal-100 dark:bg-teal-900/30 rounded-2xl text-teal-600 dark:text-teal-400">
+                      <MessageSquare className="w-8 h-8" />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                    RAG Chat
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6 flex-grow">
+                    Chat with an AI that knows about my work. Retrieval-Augmented Generation with Supabase pgvector and semantic search.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">RAG</span>
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">pgvector</span>
                   </div>
                 </div>
               </motion.div>
