@@ -1,0 +1,87 @@
+{
+  "summary": "This commercial lease heavily favors the landlord with multiple high-risk provisions including no early termination rights, harsh default penalties, and unfavorable assignment terms. The tenant faces significant financial exposure with limited flexibility and protection.",
+  "overall_risk_score": 85,
+  "risks": [
+    {
+      "type": "termination",
+      "severity": 9,
+      "location": "Term: 5 years with no early termination option for Tenant",
+      "explanation": "Tenant is locked into a 5-year commitment with no ability to exit early, creating significant business flexibility risk and potential financial liability if circumstances change",
+      "suggested_fix": "Add termination for convenience clause with reasonable notice period",
+      "rewrite_suggestion": "Term: 5 years. Tenant may terminate with 6 months written notice after the second year, with payment of 3 months additional rent as early termination fee."
+    },
+    {
+      "type": "termination",
+      "severity": 10,
+      "location": "Landlord may terminate with 10 days notice for any breach. Tenant remains liable for full remaining lease term upon default",
+      "explanation": "Extremely harsh default provision allows quick termination while maintaining full financial liability for the entire remaining term, creating catastrophic financial risk",
+      "suggested_fix": "Add cure periods, limit liability upon default, and provide graduated remedies",
+      "rewrite_suggestion": "Landlord may terminate with 30 days written notice for material breach, provided Tenant has failed to cure within 15 days of written notice. Upon default termination, Tenant liability limited to 6 months additional rent plus actual damages."
+    },
+    {
+      "type": "liability",
+      "severity": 8,
+      "location": "Tenant responsible for all interior repairs, HVAC maintenance, and any repairs under $5,000",
+      "explanation": "Tenant bears disproportionate maintenance responsibility including expensive HVAC systems, creating unpredictable cost exposure",
+      "suggested_fix": "Limit tenant repair obligations and add caps on annual maintenance costs",
+      "rewrite_suggestion": "Tenant responsible for interior repairs under $1,000 per incident and $5,000 annually. Landlord responsible for HVAC maintenance and all repairs over $1,000."
+    },
+    {
+      "type": "general",
+      "severity": 7,
+      "location": "Tenant may not assign or sublease without consent. Landlord may withhold consent for any reason. If approved, Landlord receives 50% of any sublease profit",
+      "explanation": "Unreasonable assignment restrictions with profit-sharing that eliminates tenant's ability to monetize subleasing and provides landlord absolute discretion",
+      "suggested_fix": "Require reasonable consent standard and reduce or eliminate profit sharing",
+      "rewrite_suggestion": "Tenant may assign or sublease with Landlord's prior written consent, not to be unreasonably withheld. Landlord entitled to 25% of net sublease profits above base rent."
+    },
+    {
+      "type": "general",
+      "severity": 6,
+      "location": "Security Deposit: 3 months rent ($13,500), non-interest bearing, returned within 90 days of lease end minus deductions at Landlord's discretion",
+      "explanation": "Large security deposit with discretionary deductions and no interest creates cash flow burden and potential for arbitrary withholding",
+      "suggested_fix": "Reduce deposit amount, add interest requirement, and limit deduction discretion",
+      "rewrite_suggestion": "Security Deposit: 2 months rent, bearing interest at prevailing savings rate. Returned within 30 days with itemized deductions for actual damages only."
+    },
+    {
+      "type": "general",
+      "severity": 7,
+      "location": "Tenant shall build out space at own expense (~$80,000 estimated). All improvements become Landlord property. Landlord may require restoration to original condition at lease end",
+      "explanation": "Tenant invests significant capital in improvements that become landlord's property, with potential additional restoration costs creating double financial burden",
+      "suggested_fix": "Allow tenant to remove improvements or provide compensation for improvements",
+      "rewrite_suggestion": "Tenant improvements over $25,000 may be removed by Tenant at lease end, or Tenant may elect to leave improvements with no restoration requirement."
+    },
+    {
+      "type": "general",
+      "severity": 5,
+      "location": "Late fee of $250 plus 5% of rent if received after the 5th",
+      "explanation": "High late fees ($475 total on $4,500 rent) may be considered excessive and potentially unenforceable",
+      "suggested_fix": "Reduce late fees to reasonable amounts",
+      "rewrite_suggestion": "Late fee of $150 if rent received after the 5th of the month, with additional 1.5% monthly interest on unpaid amounts."
+    },
+    {
+      "type": "general",
+      "severity": 6,
+      "location": "Any change requires Landlord approval and $2,500 modification fee",
+      "explanation": "High modification fee restricts business flexibility and creates additional cost burden for reasonable business changes",
+      "suggested_fix": "Reduce or eliminate modification fees for reasonable use changes",
+      "rewrite_suggestion": "Related food service uses permitted without fee. Other use changes require approval with $500 administrative fee for reasonable modifications."
+    }
+  ],
+  "missing_clauses": [
+    "Force majeure clause",
+    "Quiet enjoyment guarantee",
+    "Landlord's duty to maintain common areas",
+    "Notice and cure periods for defaults",
+    "Dispute resolution mechanism",
+    "Rent escalation limitations",
+    "Property tax and operating expense caps"
+  ],
+  "key_dates": [
+    "January 1, 2026 - Lease effective date",
+    "5 year term ending December 31, 2030",
+    "Rent due 1st of each month",
+    "Late fees apply after 5th of month",
+    "10 days notice for default termination",
+    "90 days for security deposit return"
+  ]
+}

@@ -4,25 +4,30 @@
 # FastAPI + Server
 fastapi>=0.109.0
 uvicorn[standard]>=0.27.0
-pydantic>=2.0.0
-python-dotenv>=1.0.0
+fastapi==0.115.6
+uvicorn==0.34.0
+pydantic==2.10.4
+python-dotenv==1.0.1
+supabase==2.11.0
+openai==1.58.1
 
 # Tokenizers (for existing tokenizer endpoints)
-tiktoken>=0.5.0
+tiktoken==0.8.0
 
 # ML Models (for generation visualization)
-torch>=2.0.0
-transformers>=4.35.0
+torch==2.5.1
+transformers==4.47.1
 
 # LangChain ecosystem (for local agent)
-langchain>=0.1.0
-langchain-community>=0.0.20
+langchain==0.3.13
+langchain-community==0.3.13
+langchain-anthropic==0.3.3
 
 # Data Fetching
-datasets>=2.14.0
+datasets==3.2.0
 
 # HTTP Client (for LSAT service Claude API calls)
-httpx>=0.25.0
+httpx==0.28.1
 
 # =============================================================================
 # SETUP NOTES

@@ -1,0 +1,44 @@
+{
+  "summary": "This contract fragment presents extremely high risk with heavily one-sided terms favoring the Brand. The indemnification clause is dangerously broad, the termination provisions are severely imbalanced, and the incomplete morality clause suggests additional undefined obligations. These terms create significant financial and legal exposure for the Creator.",
+  "overall_risk_score": 95,
+  "risks": [
+    {
+      "type": "indemnification",
+      "severity": 10,
+      "location": "Creator shall indemnify Brand against all claims arising from Creator's content, including FTC violations, false advertising claims, and intellectual property disputes, even if resulting from Brand-approved talking points.",
+      "explanation": "This is an extremely broad, one-sided indemnification clause that makes Creator liable even for Brand's own negligence and decisions. The phrase 'even if resulting from Brand-approved talking points' means Creator bears liability for Brand's own content direction, which is fundamentally unfair and potentially unenforceable.",
+      "suggested_fix": "Make indemnification mutual, exclude Brand's negligence, add caps, and limit scope to Creator's independent actions",
+      "rewrite_suggestion": "Each party shall indemnify the other against third-party claims arising solely from such party's material breach, negligence, or willful misconduct, excluding any claims arising from the other party's content direction or approval. Total indemnification liability shall not exceed the total contract value."
+    },
+    {
+      "type": "termination",
+      "severity": 9,
+      "location": "Brand may terminate for any reason with 7 days notice, paying only for completed deliverables. Creator may not terminate once initial payment is received.",
+      "explanation": "Severely imbalanced termination rights create a trap for Creator. Brand has complete flexibility while Creator is locked in after initial payment, regardless of Brand's breach or changed circumstances. This creates potential for exploitation and may be unconscionable.",
+      "suggested_fix": "Provide mutual termination rights, allow Creator termination for cause, and ensure fair compensation for work in progress",
+      "rewrite_suggestion": "Either party may terminate for convenience with 30 days written notice. Either party may terminate immediately for material breach after 10 days cure period. Upon termination, Creator shall be compensated for all work completed and approved, plus a pro-rated portion of work in progress."
+    },
+    {
+      "type": "general",
+      "severity": 8,
+      "location": "9. MORALITY CLAUSE",
+      "explanation": "The morality clause section is incomplete but its mere presence suggests undefined behavioral restrictions that could give Brand broad discretionary termination rights or penalty provisions without clear standards.",
+      "suggested_fix": "Either complete the clause with specific, objective standards or remove it entirely",
+      "rewrite_suggestion": "If retained, define specific prohibited conduct objectively: 'Creator agrees to refrain from conduct that would reasonably be considered criminal, fraudulent, or directly harmful to Brand's reputation, as determined by objective industry standards.'"
+    }
+  ],
+  "missing_clauses": [
+    "Liability caps and limitations",
+    "Mutual indemnification provisions",
+    "Survival clause defining post-termination obligations",
+    "Intellectual property ownership clarification",
+    "Payment terms and schedule",
+    "Force majeure provisions",
+    "Dispute resolution mechanism",
+    "Governing law and jurisdiction"
+  ],
+  "key_dates": [
+    "7 days notice for Brand termination",
+    "Initial payment receipt (locks Creator into contract)"
+  ]
+}

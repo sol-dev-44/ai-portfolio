@@ -1,0 +1,67 @@
+{
+  "summary": "This mutual NDA has several significant structural issues that create an imbalanced agreement favoring the Discloser. Key concerns include one-sided attorney fee provisions, jury trial waiver, overly broad confidentiality definitions, and inconsistent mutual language despite being titled as 'mutual.'",
+  "overall_risk_score": 75,
+  "risks": [
+    {
+      "type": "confidentiality",
+      "severity": 7,
+      "location": "\"Confidential Information\" includes all information disclosed by either party, whether oral, written, or electronic, including but not limited to: technical data, trade secrets, business plans, customer lists, financial information, and any information Recipient should reasonably understand to be confidential.",
+      "explanation": "The definition is overly broad and subjective. The phrase 'any information Recipient should reasonably understand to be confidential' creates ambiguity and could encompass virtually any information shared.",
+      "suggested_fix": "Narrow the definition and remove subjective language",
+      "rewrite_suggestion": "\"Confidential Information\" means information that is: (i) clearly marked as confidential, (ii) identified as confidential at the time of oral disclosure, or (iii) would reasonably be considered confidential given its nature and the circumstances of disclosure."
+    },
+    {
+      "type": "confidentiality",
+      "severity": 6,
+      "location": "Maintain strict confidentiality for 7 years following disclosure",
+      "explanation": "Seven years is an unusually long confidentiality period, especially for business discussions that may not result in a deal.",
+      "suggested_fix": "Reduce confidentiality period to standard 3-5 years",
+      "rewrite_suggestion": "Maintain strict confidentiality for 5 years following disclosure"
+    },
+    {
+      "type": "general",
+      "severity": 8,
+      "location": "Recipient shall pay Discloser's attorney fees in any enforcement action.",
+      "explanation": "This creates a one-sided attorney fee provision despite the agreement being titled as 'mutual.' Only the Discloser can recover attorney fees, creating an imbalanced risk profile.",
+      "suggested_fix": "Make attorney fee provision mutual or remove entirely",
+      "rewrite_suggestion": "The prevailing party in any enforcement action shall be entitled to recover reasonable attorney fees and costs from the non-prevailing party."
+    },
+    {
+      "type": "jurisdiction",
+      "severity": 7,
+      "location": "Exclusive jurisdiction in Delaware courts. Recipient waives jury trial.",
+      "explanation": "Jury trial waiver is a significant procedural right to give up, and exclusive Delaware jurisdiction may be inconvenient for the Recipient depending on their location.",
+      "suggested_fix": "Remove jury trial waiver and consider neutral jurisdiction",
+      "rewrite_suggestion": "Any disputes shall be resolved in the state or federal courts located in [neutral location convenient to both parties]."
+    },
+    {
+      "type": "general",
+      "severity": 6,
+      "location": "Agreement structure refers to 'Discloser' and 'Recipient' throughout despite being titled as mutual",
+      "explanation": "The agreement is structured as unidirectional despite being called 'mutual.' This creates confusion about reciprocal obligations and suggests the template wasn't properly adapted for mutual use.",
+      "suggested_fix": "Restructure language to reflect true mutuality",
+      "rewrite_suggestion": "Use 'each party' or 'both parties' language throughout, and ensure all obligations apply equally to both parties when they are disclosing information."
+    },
+    {
+      "type": "confidentiality",
+      "severity": 5,
+      "location": "Not reverse engineer any products or samples provided",
+      "explanation": "Reverse engineering prohibition is reasonable but should include standard exceptions for interoperability and fair use.",
+      "suggested_fix": "Add standard exceptions to reverse engineering prohibition",
+      "rewrite_suggestion": "Not reverse engineer any products or samples provided, except to the extent such restriction is prohibited by applicable law or necessary for interoperability."
+    }
+  ],
+  "missing_clauses": [
+    "Legal disclosure exception (court orders, government requests)",
+    "Mutual indemnification for breach of confidentiality obligations",
+    "Specific carve-out for publicly available information obtained after disclosure",
+    "Force majeure clause",
+    "Amendment procedures requiring written agreement"
+  ],
+  "key_dates": [
+    "Effective Date: December 5, 2025",
+    "7 years confidentiality period from disclosure",
+    "3 years agreement term",
+    "10 business days to return/destroy materials upon request"
+  ]
+}
