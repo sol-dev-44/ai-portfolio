@@ -1,0 +1,20 @@
+{
+  "summary": "This appears to be a corrupted or improperly extracted PDF file containing only PDF metadata and binary data rather than readable contract text. The document shows PDF structure elements, font definitions, and encoded content streams, but no actual contract clauses are visible for analysis. Without readable contract text, a proper legal risk assessment cannot be performed.",
+  "overall_risk_score": 0,
+  "risks": [
+    {
+      "type": "general",
+      "severity": 10,
+      "location": "Entire document - PDF binary data and metadata only",
+      "explanation": "The provided contract text appears to be corrupted PDF data rather than readable contract language. This prevents any meaningful legal analysis and creates significant operational risk as the actual contract terms cannot be reviewed or understood.",
+      "suggested_fix": "Provide the contract in readable text format or ensure proper PDF text extraction",
+      "rewrite_suggestion": "Please re-submit the contract in plain text format or ensure the PDF can be properly parsed to extract the actual contract language for analysis."
+    }
+  ],
+  "missing_clauses": [
+    "Cannot assess - document is unreadable"
+  ],
+  "key_dates": [
+    "Cannot identify - document is unreadable"
+  ]
+}

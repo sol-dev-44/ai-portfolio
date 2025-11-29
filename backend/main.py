@@ -2,10 +2,20 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import tiktoken
-from typing import List, Dict
+from typing import List, Dict, Any
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch.nn.functional as F
+from dotenv import load_dotenv
+import os
+from pathlib import Path
+
+# Load environment variables from root .env.local
+env_path = Path(__file__).parent.parent / '.env.local'
+load_dotenv(dotenv_path=env_path)
+# Fallback to .env if .env.local doesn't exist
+if not os.getenv("ANTHROPIC_API_KEY"):
+    load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
 app = FastAPI(title="AI Portfolio API")
 
@@ -340,6 +350,10 @@ async def generate_stream(request: GenerationRequest):
 class AgentChatRequest(BaseModel):
     message: str = Field(..., max_length=1000, description="User message")
     max_tokens: int = Field(default=150, le=500)
+
+from contract_service import router as contract_router
+app.include_router(contract_router, prefix="/api")
+
 # =====LANGCHAIN AGENT ENDPOINT =====
 @app.post("/api/agent/langchain")
 async def langchain_agent_chat(request: AgentChatRequest):
@@ -402,6 +416,84 @@ async def agent_status():
             "setup_required": not ollama_status["available"]
         }
     }
+
+
+# ===== ENHANCED LSAT ENDPOINTS =====
+from lsat_logic import lsat_service
+
+class LSATQuestionRequest(BaseModel):
+    dataset: str = "lsat-ar"  # Options: lsat-ar, lsat-logic-games, logiqa, local
+    split: str = "train"
+    count: int = Field(default=5, ge=1, le=20)
+
+class LSATAnalyzeRequest(BaseModel):
+    question_data: Dict[str, Any]
+    use_cache: bool = True
+    use_rag: bool = True
+    stream: bool = False
+
+class LSATAddQuestionsRequest(BaseModel):
+    questions: List[Dict[str, Any]]
+    filename: str = "parsed_questions.json"
+
+@app.get("/api/lsat/datasets")
+async def get_available_datasets():
+    """Get list of available LSAT datasets."""
+    return {"datasets": lsat_service.get_available_datasets()}
+
+@app.post("/api/lsat/questions")
+async def get_lsat_questions(request: LSATQuestionRequest):
+    """Fetch random LSAT questions from specified dataset."""
+    questions = lsat_service.fetch_questions(
+        dataset_name=request.dataset,
+        split=request.split,
+        count=request.count
+    )
+    return {"questions": questions, "dataset": request.dataset}
+
+@app.post("/api/lsat/questions/add")
+async def add_lsat_questions(request: LSATAddQuestionsRequest):
+    """Add questions to local storage (from parsed PDFs, etc.)."""
+    count = lsat_service.add_local_questions(request.questions, request.filename)
+    return {"added": count, "filename": request.filename}
+
+@app.post("/api/lsat/analyze")
+async def analyze_lsat_question(request: LSATAnalyzeRequest):
+    """Analyze an LSAT question with caching and RAG."""
+    if request.stream:
+        return StreamingResponse(
+            lsat_service.analyze_pattern_stream(
+                request.question_data,
+                use_cache=request.use_cache,
+                use_rag=request.use_rag
+            ),
+            media_type="application/x-ndjson"
+        )
+    else:
+        result = await lsat_service.analyze_pattern(
+            request.question_data,
+            use_cache=request.use_cache,
+            use_rag=request.use_rag
+        )
+        return result
+
+@app.get("/api/lsat/patterns")
+async def get_lsat_patterns():
+    """Get all LSAT pattern types and their information."""
+    return {"patterns": lsat_service.get_patterns()}
+
+@app.get("/api/lsat/patterns/{pattern_type}")
+async def get_lsat_pattern_info(pattern_type: str):
+    """Get information about a specific pattern type."""
+    patterns = lsat_service.get_patterns()
+    if pattern_type in patterns:
+        return patterns[pattern_type]
+    raise HTTPException(status_code=404, detail=f"Pattern '{pattern_type}' not found")
+
+@app.get("/api/lsat/cache/stats")
+async def get_lsat_cache_stats():
+    """Get LSAT cache statistics."""
+    return lsat_service.get_cache_stats()
 
 
 if __name__ == "__main__":

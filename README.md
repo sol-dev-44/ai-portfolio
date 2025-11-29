@@ -48,6 +48,14 @@ An autonomous agent that uses tools to answer questions.
 - **Streaming UI**: Watch the thought process unfold
 - [Read more](./app/agent/readme.md)
 
+### ⚖️ Contract Auditor
+AI-powered legal document analysis with RAG (Retrieval-Augmented Generation).
+- **Risk Detection**: Identifies 13 types of legal risks with severity scoring
+- **RAG System**: Learns from each analysis and user feedback
+- **AI Rewriting**: Suggests improved clause wording
+- **Educational UI**: Interactive explanations of how RAG works
+- [Read more](./app/contract-auditor/README.md)
+
 ---
 
 ## 🎯 Why This Project?

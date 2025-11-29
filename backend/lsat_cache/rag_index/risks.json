@@ -1,0 +1,224 @@
+[
+  {
+    "id": "indemnification",
+    "type": "risk_definition",
+    "content": "Indemnification: Clauses requiring one party to compensate the other for losses.. Indicators: indemnify, hold harmless, defend against, liable for all claims. Mitigation: Cap the indemnification amount Limit to direct damages only Exclude gross negligence/willful misconduct",
+    "metadata": {
+      "type": "indemnification",
+      "display_name": "Indemnification",
+      "description": "Clauses requiring one party to compensate the other for losses.",
+      "key_indicators": [
+        "indemnify",
+        "hold harmless",
+        "defend against",
+        "liable for all claims"
+      ],
+      "severity_factors": [
+        "Uncapped liability",
+        "Covering third-party claims",
+        "Broad definition of 'Losses'"
+      ],
+      "mitigation_strategy": [
+        "Cap the indemnification amount",
+        "Limit to direct damages only",
+        "Exclude gross negligence/willful misconduct"
+      ]
+    }
+  },
+  {
+    "id": "liability",
+    "type": "risk_definition",
+    "content": "Limitation of Liability: Clauses limiting the amount one party has to pay if they are sued.. Indicators: aggregate liability, consequential damages, lost profits, maximum liability. Mitigation: Ensure mutual limitation Set a reasonable cap (e.g., 12 months fees) Explicitly exclude consequential damages",
+    "metadata": {
+      "type": "liability",
+      "display_name": "Limitation of Liability",
+      "description": "Clauses limiting the amount one party has to pay if they are sued.",
+      "key_indicators": [
+        "aggregate liability",
+        "consequential damages",
+        "lost profits",
+        "maximum liability"
+      ],
+      "severity_factors": [
+        "No cap on liability",
+        "Cap is too high (e.g., > 2x contract value)",
+        "Exclusion of indirect damages missing"
+      ],
+      "mitigation_strategy": [
+        "Ensure mutual limitation",
+        "Set a reasonable cap (e.g., 12 months fees)",
+        "Explicitly exclude consequential damages"
+      ]
+    }
+  },
+  {
+    "id": "termination",
+    "type": "risk_definition",
+    "content": "Termination: Conditions under which the contract can be ended.. Indicators: terminate for convenience, material breach, notice period, automatic renewal. Mitigation: Negotiate right to terminate for convenience Shorten notice periods Require written notice for renewal",
+    "metadata": {
+      "type": "termination",
+      "display_name": "Termination",
+      "description": "Conditions under which the contract can be ended.",
+      "key_indicators": [
+        "terminate for convenience",
+        "material breach",
+        "notice period",
+        "automatic renewal"
+      ],
+      "severity_factors": [
+        "No termination for convenience",
+        "Long notice periods",
+        "Automatic renewal without easy opt-out"
+      ],
+      "mitigation_strategy": [
+        "Negotiate right to terminate for convenience",
+        "Shorten notice periods",
+        "Require written notice for renewal"
+      ]
+    }
+  },
+  {
+    "id": "confidentiality",
+    "type": "risk_definition",
+    "content": "Confidentiality: Obligations to keep shared information secret.. Indicators: confidential information, trade secrets, non-disclosure, proprietary data. Mitigation: Define specific categories of confidential info Set a time limit (e.g., 3-5 years) Standard exceptions (public domain, court order)",
+    "metadata": {
+      "type": "confidentiality",
+      "display_name": "Confidentiality",
+      "description": "Obligations to keep shared information secret.",
+      "key_indicators": [
+        "confidential information",
+        "trade secrets",
+        "non-disclosure",
+        "proprietary data"
+      ],
+      "severity_factors": [
+        "Definition too broad",
+        "Perpetual obligation",
+        "No exceptions for legal requirements"
+      ],
+      "mitigation_strategy": [
+        "Define specific categories of confidential info",
+        "Set a time limit (e.g., 3-5 years)",
+        "Standard exceptions (public domain, court order)"
+      ]
+    }
+  },
+  {
+    "id": "jurisdiction",
+    "type": "risk_definition",
+    "content": "Jurisdiction & Governing Law: Which laws apply and where disputes will be settled.. Indicators: governed by the laws of, exclusive jurisdiction, venue, arbitration. Mitigation: Neutral jurisdiction Home court advantage if possible Allow for mediation before arbitration",
+    "metadata": {
+      "type": "jurisdiction",
+      "display_name": "Jurisdiction & Governing Law",
+      "description": "Which laws apply and where disputes will be settled.",
+      "key_indicators": [
+        "governed by the laws of",
+        "exclusive jurisdiction",
+        "venue",
+        "arbitration"
+      ],
+      "severity_factors": [
+        "Foreign jurisdiction",
+        "Unfavorable governing law",
+        "Mandatory arbitration in remote location"
+      ],
+      "mitigation_strategy": [
+        "Neutral jurisdiction",
+        "Home court advantage if possible",
+        "Allow for mediation before arbitration"
+      ]
+    }
+  },
+  {
+    "id": "payment",
+    "type": "risk_definition",
+    "content": "Payment Terms: When and how payments are made.. Indicators: net 30, net 60, late fees, interest, invoicing. Mitigation: Standard Net 30 terms Cap late fees Dispute resolution mechanism for invoices",
+    "metadata": {
+      "type": "payment",
+      "display_name": "Payment Terms",
+      "description": "When and how payments are made.",
+      "key_indicators": [
+        "net 30",
+        "net 60",
+        "late fees",
+        "interest",
+        "invoicing"
+      ],
+      "severity_factors": [
+        "Long payment terms (> 45 days)",
+        "High late fees",
+        "Right to withhold payment"
+      ],
+      "mitigation_strategy": [
+        "Standard Net 30 terms",
+        "Cap late fees",
+        "Dispute resolution mechanism for invoices"
+      ]
+    }
+  },
+  {
+    "id": "ip_rights",
+    "type": "risk_definition",
+    "content": "Intellectual Property: Ownership of work product and pre-existing IP.. Indicators: work made for hire, assigns all rights, perpetual license, moral rights. Mitigation: Clearly distinguish background IP vs. deliverables Grant license instead of assignment where appropriate Retain rights to generic tools/methods",
+    "metadata": {
+      "type": "ip_rights",
+      "display_name": "Intellectual Property",
+      "description": "Ownership of work product and pre-existing IP.",
+      "key_indicators": [
+        "work made for hire",
+        "assigns all rights",
+        "perpetual license",
+        "moral rights"
+      ],
+      "severity_factors": [
+        "Transfer of background IP",
+        "No license back for vendor",
+        "Broad 'work made for hire' clauses"
+      ],
+      "mitigation_strategy": [
+        "Clearly distinguish background IP vs. deliverables",
+        "Grant license instead of assignment where appropriate",
+        "Retain rights to generic tools/methods"
+      ]
+    }
+  },
+  {
+    "id": "non_compete",
+    "type": "risk_definition",
+    "content": "Non-Compete: Restrictions on working with competitors.. Indicators: non-compete, exclusivity, restrictive covenant, similar business. Mitigation: Remove if possible Narrow scope to specific direct competitors Limit duration to contract term",
+    "metadata": {
+      "type": "non_compete",
+      "display_name": "Non-Compete",
+      "description": "Restrictions on working with competitors.",
+      "key_indicators": [
+        "non-compete",
+        "exclusivity",
+        "restrictive covenant",
+        "similar business"
+      ],
+      "severity_factors": [
+        "Broad geographic scope",
+        "Long duration",
+        "Prevents doing business with other clients"
+      ],
+      "mitigation_strategy": [
+        "Remove if possible",
+        "Narrow scope to specific direct competitors",
+        "Limit duration to contract term"
+      ]
+    }
+  },
+  {
+    "id": "general",
+    "type": "risk_definition",
+    "content": "General Risk: Other potential risks or ambiguous clauses.. Indicators: . Mitigation: ",
+    "metadata": {
+      "type": "general",
+      "display_name": "General Risk",
+      "description": "Other potential risks or ambiguous clauses.",
+      "key_indicators": [],
+      "severity_factors": [],
+      "mitigation_strategy": []
+    }
+  }
+]

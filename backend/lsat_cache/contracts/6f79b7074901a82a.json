@@ -1,0 +1,103 @@
+{
+  "summary": "This contract represents an extremely predatory agreement with catastrophic risk levels across multiple dimensions. The document appears designed to systematically strip the founder of all assets, rights, and future earning capacity while providing minimal consideration. Multiple clauses would likely be unenforceable due to unconscionability, but the litigation costs alone could be ruinous. This contract should be rejected entirely.",
+  "overall_risk_score": 98,
+  "risks": [
+    {
+      "type": "indemnification",
+      "severity": 10,
+      "location": "Personal guarantee including primary residence and retirement... Extends to heirs and estate",
+      "explanation": "Unlimited personal guarantee that extends beyond death to heirs creates catastrophic financial exposure with no caps or limitations",
+      "suggested_fix": "Remove personal guarantees entirely or limit to specific, capped amounts excluding primary residence and retirement accounts",
+      "rewrite_suggestion": "Company's obligations under this agreement shall be limited to Company assets only, with no personal guarantees from founders or officers."
+    },
+    {
+      "type": "liability",
+      "severity": 10,
+      "location": "$5M liquidated damages per violation",
+      "explanation": "Excessive liquidated damages clause that appears punitive rather than compensatory, likely unenforceable but creates litigation risk",
+      "suggested_fix": "Replace with reasonable actual damages calculation or remove entirely",
+      "rewrite_suggestion": "In the event of breach, the non-breaching party shall be entitled to actual damages only, excluding consequential or punitive damages."
+    },
+    {
+      "type": "non_compete",
+      "severity": 10,
+      "location": "15-year non-compete across ALL industries... Can't earn over $50k without permission",
+      "explanation": "Unconscionably broad non-compete covering all industries for excessive duration with income restrictions that would prevent basic livelihood",
+      "suggested_fix": "Limit to specific competing activities for reasonable duration (1-2 years maximum)",
+      "rewrite_suggestion": "Founder agrees not to directly compete with Company's specific business activities for a period of 12 months following termination, limited to the same geographic market."
+    },
+    {
+      "type": "ip_rights",
+      "severity": 10,
+      "location": "Past, present, and future IP \u2014 even personal projects... Even 'ideas not yet reduced to practice'",
+      "explanation": "Impossibly broad IP assignment covering all intellectual property including personal projects and future ideas, likely unenforceable but creates significant litigation exposure",
+      "suggested_fix": "Limit to IP directly related to company business developed during employment",
+      "rewrite_suggestion": "Founder assigns to Company only those intellectual property rights directly related to Company's business and developed using Company resources during the term of this agreement."
+    },
+    {
+      "type": "termination",
+      "severity": 10,
+      "location": "Forfeits all equity if terminated... $1/year salary, can't have other income",
+      "explanation": "Complete forfeiture of equity upon termination combined with below-subsistence compensation creates coercive employment relationship",
+      "suggested_fix": "Provide for vesting schedule and market-rate compensation",
+      "rewrite_suggestion": "Founder's equity shall vest over 4 years with 1-year cliff, and compensation shall be at market rates for similar positions."
+    },
+    {
+      "type": "general",
+      "severity": 10,
+      "location": "Can access founder's bank accounts... Sign legal documents as founder... Survives death",
+      "explanation": "Broad power of attorney that survives death creates unprecedented control over founder's personal and financial affairs",
+      "suggested_fix": "Remove power of attorney provisions entirely",
+      "rewrite_suggestion": "No power of attorney or similar authority is granted to Investor under this agreement."
+    },
+    {
+      "type": "jurisdiction",
+      "severity": 9,
+      "location": "Investor picks and pays arbitrator... Singapore venue... Waives appeals... Founder pays Investor's legal fees win or lose",
+      "explanation": "Completely one-sided dispute resolution that eliminates founder's access to fair proceedings and creates additional financial penalties",
+      "suggested_fix": "Provide for neutral arbitration with mutual selection of arbitrators and standard fee allocation",
+      "rewrite_suggestion": "Disputes shall be resolved through binding arbitration in [neutral location] with arbitrators selected through mutual agreement and each party bearing their own costs."
+    },
+    {
+      "type": "general",
+      "severity": 9,
+      "location": "51% of current AND future companies for 10 years... Irrevocable voting proxy on remaining shares... Unlimited dilution rights",
+      "explanation": "Excessive equity grab with control mechanisms that extend to future ventures, creating perpetual servitude",
+      "suggested_fix": "Limit equity participation to current company only with standard minority investor protections",
+      "rewrite_suggestion": "Investor shall receive [reasonable percentage] equity in Company only, with standard minority shareholder rights and no control over future ventures."
+    },
+    {
+      "type": "general",
+      "severity": 8,
+      "location": "BVI entity... Retroactive effective date",
+      "explanation": "Use of secrecy jurisdiction combined with retroactive terms suggests intent to avoid regulatory oversight and create confusion about obligations",
+      "suggested_fix": "Use transparent jurisdiction and prospective effective date",
+      "rewrite_suggestion": "This agreement shall be effective as of the date of execution and governed by the laws of [transparent jurisdiction]."
+    },
+    {
+      "type": "general",
+      "severity": 8,
+      "location": "'Up to $500k' but only $25k binds the founder to everything... Investor has no actual funding obligation",
+      "explanation": "Misleading investment terms that create binding obligations on founder while investor retains complete discretion",
+      "suggested_fix": "Require binding commitment from investor with clear funding milestones",
+      "rewrite_suggestion": "Investor commits to provide $[specific amount] in exchange for [specific equity percentage] with defined funding schedule and milestones."
+    }
+  ],
+  "missing_clauses": [
+    "Mutual termination rights",
+    "Standard representations and warranties",
+    "Material adverse change provisions",
+    "Founder vesting schedule",
+    "Standard minority shareholder protections",
+    "Reasonable compensation provisions",
+    "Limitation of liability caps",
+    "Force majeure provisions",
+    "Confidentiality with standard exceptions",
+    "Dispute escalation procedures before arbitration"
+  ],
+  "key_dates": [
+    "10-year control period over future companies",
+    "15-year non-compete restriction",
+    "Retroactive effective date (specific date not provided in excerpt)"
+  ]
+}

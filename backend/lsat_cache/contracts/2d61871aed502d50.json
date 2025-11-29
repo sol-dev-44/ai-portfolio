@@ -1,0 +1,120 @@
+{
+  "summary": "This contract presents extremely high risk for the Developer with heavily one-sided terms that favor the Client. The agreement contains multiple severe risks including uncapped liability, liquidated damages, broad IP assignment, unreasonable payment terms, and an overly broad non-compete clause. The contract lacks standard protective provisions and gives the Client excessive control while providing minimal protections for the Developer.",
+  "overall_risk_score": 95,
+  "risks": [
+    {
+      "type": "indemnification",
+      "severity": 10,
+      "location": "Developer shall indemnify and hold harmless Client against any and all claims, damages, losses, and expenses arising from the work product, regardless of fault. There is no cap on Developer's liability.",
+      "explanation": "This creates unlimited liability for the Developer regardless of fault, which could result in financial ruin for claims far exceeding the contract value.",
+      "suggested_fix": "Add mutual indemnification with caps and fault-based liability",
+      "rewrite_suggestion": "Each party shall indemnify the other for third-party claims arising from their gross negligence or willful misconduct, with liability capped at the total contract value."
+    },
+    {
+      "type": "liability",
+      "severity": 10,
+      "location": "There is no cap on Developer's liability. Client's liability under this Agreement shall not exceed $100.",
+      "explanation": "Extremely asymmetrical liability allocation with unlimited exposure for Developer while Client's liability is capped at a nominal $100.",
+      "suggested_fix": "Implement mutual liability caps at reasonable amounts",
+      "rewrite_suggestion": "Each party's total liability under this Agreement shall not exceed the total contract value ($45,000), excluding liability for gross negligence or willful misconduct."
+    },
+    {
+      "type": "payment",
+      "severity": 9,
+      "location": "Payment shall be made within 90 days of Client's acceptance of the final deliverable. Client reserves sole discretion to determine acceptance.",
+      "explanation": "90-day payment terms are excessive, and giving Client sole discretion over acceptance creates risk of non-payment or indefinite delays.",
+      "suggested_fix": "Reduce payment terms and add objective acceptance criteria",
+      "rewrite_suggestion": "Payment shall be made within 30 days of delivery. Acceptance shall be deemed to occur if Client does not provide written objections within 10 business days of delivery."
+    },
+    {
+      "type": "general",
+      "severity": 9,
+      "location": "For each day beyond the deadline, Developer shall pay Client liquidated damages of $500 per day, uncapped.",
+      "explanation": "Uncapped liquidated damages of $500/day could exceed the entire contract value within 90 days and may be unenforceable as a penalty.",
+      "suggested_fix": "Cap liquidated damages and make them reasonable",
+      "rewrite_suggestion": "For delays caused by Developer, liquidated damages shall be $100 per day, capped at 10% of the total contract value."
+    },
+    {
+      "type": "ip_rights",
+      "severity": 8,
+      "location": "All work product, including but not limited to code, designs, documentation, ideas discussed, and derivative works, shall be the exclusive property of Client in perpetuity throughout the universe. Developer assigns all moral rights and waives any claim to attribution.",
+      "explanation": "Overly broad IP assignment including 'ideas discussed' and waiver of moral rights could prevent Developer from using general knowledge and methods in future work.",
+      "suggested_fix": "Limit IP assignment to specific deliverables and preserve Developer's background IP",
+      "rewrite_suggestion": "Client shall own deliverables specifically created for this project. Developer retains ownership of pre-existing IP, general knowledge, and methodologies."
+    },
+    {
+      "type": "non_compete",
+      "severity": 8,
+      "location": "Developer shall not work for any competitor of Client, defined as any company in the technology sector, for 3 years following termination.",
+      "explanation": "Defining competitors as 'any company in the technology sector' for 3 years is overly broad and likely unenforceable, potentially preventing Developer from working in their field.",
+      "suggested_fix": "Narrow the scope and reduce duration",
+      "rewrite_suggestion": "Developer shall not work directly for Client's direct competitors in the CRM software space for 12 months following termination."
+    },
+    {
+      "type": "general",
+      "severity": 8,
+      "location": "Developer warrants that all deliverables shall be completely free of defects and shall function perfectly under all conditions. Developer shall provide unlimited free support and bug fixes for 5 years following delivery.",
+      "explanation": "Perfect performance warranty is unrealistic and creates unlimited ongoing obligations for 5 years without additional compensation.",
+      "suggested_fix": "Provide reasonable warranties with limited support period",
+      "rewrite_suggestion": "Developer warrants deliverables will substantially conform to specifications. Developer will provide bug fixes for material defects for 90 days at no charge."
+    },
+    {
+      "type": "termination",
+      "severity": 8,
+      "location": "Client may terminate this Agreement at any time, for any reason, with no notice required. Upon termination, Developer shall return all payments received and deliver all work completed to date. Developer may not terminate this Agreement.",
+      "explanation": "Completely one-sided termination rights with requirement to return payments creates significant financial risk for Developer.",
+      "suggested_fix": "Provide mutual termination rights and fair payment for work completed",
+      "rewrite_suggestion": "Either party may terminate with 30 days written notice. Developer shall be paid for all work completed and accepted prior to termination."
+    },
+    {
+      "type": "jurisdiction",
+      "severity": 7,
+      "location": "Any disputes shall be resolved through binding arbitration in a location of Client's choosing, under rules selected by Client. Developer waives right to jury trial and class action participation. Client shall select the arbitrator.",
+      "explanation": "Client controls all aspects of dispute resolution including location, rules, and arbitrator selection, creating an unfair advantage.",
+      "suggested_fix": "Establish neutral dispute resolution process",
+      "rewrite_suggestion": "Disputes shall be resolved through binding arbitration under AAA Commercial Rules, with arbitrator selected jointly by the parties or by AAA if parties cannot agree."
+    },
+    {
+      "type": "general",
+      "severity": 7,
+      "location": "Client may modify any terms of this Agreement at any time by providing written notice to Developer. Continued performance constitutes acceptance of modified terms.",
+      "explanation": "Unilateral modification rights allow Client to change any terms without Developer's consent, undermining the entire agreement.",
+      "suggested_fix": "Require mutual consent for modifications",
+      "rewrite_suggestion": "This Agreement may only be modified by written agreement signed by both parties."
+    },
+    {
+      "type": "general",
+      "severity": 6,
+      "location": "Specific features, timelines, and deliverables shall be determined by Client on an ongoing basis throughout the engagement.",
+      "explanation": "Undefined scope creates risk of scope creep and disputes over what constitutes completion.",
+      "suggested_fix": "Define specific deliverables and change order process",
+      "rewrite_suggestion": "Detailed specifications are attached as Exhibit A. Any changes require written change orders with adjusted timeline and compensation."
+    },
+    {
+      "type": "confidentiality",
+      "severity": 5,
+      "location": "Developer shall maintain strict confidentiality of all Client information for a period of 10 years following termination.",
+      "explanation": "10-year confidentiality period is longer than typical 3-5 year terms and lacks standard exceptions.",
+      "suggested_fix": "Reduce term and add standard exceptions",
+      "rewrite_suggestion": "Developer shall maintain confidentiality for 5 years, except for information that becomes public through no fault of Developer or is required to be disclosed by law."
+    }
+  ],
+  "missing_clauses": [
+    "Force majeure clause",
+    "Severability clause",
+    "Notice provisions",
+    "Definition of material breach",
+    "Limitation of consequential damages",
+    "Data protection/privacy provisions",
+    "Source code escrow provisions",
+    "Mutual representations and warranties"
+  ],
+  "key_dates": [
+    "Effective Date: November 15, 2025",
+    "Completion deadline: 8 weeks from November 15, 2025 (January 10, 2026)",
+    "Payment due: 90 days after Client acceptance",
+    "Support obligation: 5 years from delivery",
+    "Confidentiality period: 10 years from termination",
+    "Non-compete period: 3 years from termination"
+  ]
+}

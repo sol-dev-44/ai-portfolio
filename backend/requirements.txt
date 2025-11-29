@@ -1,10 +1,11 @@
 # backend/requirements.txt
-# Full dependencies for main.py + agent_langchain.py
+# Full dependencies for main.py + agent_langchain.py + lsat_service.py
 
 # FastAPI + Server
 fastapi>=0.109.0
 uvicorn[standard]>=0.27.0
 pydantic>=2.0.0
+python-dotenv>=1.0.0
 
 # Tokenizers (for existing tokenizer endpoints)
 tiktoken>=0.5.0
@@ -16,6 +17,12 @@ transformers>=4.35.0
 # LangChain ecosystem (for local agent)
 langchain>=0.1.0
 langchain-community>=0.0.20
+
+# Data Fetching
+datasets>=2.14.0
+
+# HTTP Client (for LSAT service Claude API calls)
+httpx>=0.25.0
 
 # =============================================================================
 # SETUP NOTES
@@ -35,4 +42,9 @@ langchain-community>=0.0.20
 # 4. The agent has TWO backends:
 #    - Claude: Uses ANTHROPIC_API_KEY via Next.js (no Python deps)
 #    - LangChain: Uses Ollama locally (requires langchain + ollama running)
+#
+# 5. LSAT Service:
+#    - Run standalone: uvicorn lsat_service:app --port 8001
+#    - Or integrate endpoints into main.py
+#    - Uses httpx for async Claude API streaming
 # =============================================================================

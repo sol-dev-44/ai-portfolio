@@ -75,6 +75,39 @@ Get next-token probabilities for visualization.
 }
 ```
 
+### Contract Analysis
+
+#### `POST /api/contract/analyze`
+Analyze contract text for legal risks using RAG.
+```json
+{
+  "text": "CONTRACT TEXT HERE",
+  "use_cache": true,
+  "use_rag": true
+}
+```
+
+#### `POST /api/contract/rewrite`
+Generate improved clause wording.
+```json
+{
+  "clause_text": "The Company shall be liable for all damages.",
+  "risk_type": "liability",
+  "context": "Commercial services agreement"
+}
+```
+
+#### `GET /api/contract/stats`
+Get RAG knowledge base statistics.
+
+### LSAT Analysis
+
+#### `POST /api/lsat/questions`
+Fetch LSAT questions from HuggingFace datasets.
+
+#### `POST /api/lsat/analyze`
+Analyze LSAT questions with pattern recognition.
+
 ## 🏗️ Architecture
 
 ```

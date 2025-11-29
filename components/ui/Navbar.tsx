@@ -3,17 +3,29 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import ThemeToggle from './ThemeToggle';
+import { useState } from 'react';
 
-const navItems = [
-  { name: 'Home', path: '/', enabled: true },
-  { name: 'Tokenizer', path: '/tokenizer', enabled: true },
-  { name: 'Generation', path: '/generation', enabled: true },
-  { name: 'Dashboard', path: '/dashboard', enabled: true },
-  { name: 'Agent', path: '/agent', enabled: true },
-  { name: 'Arena', path: '/llm-playground', enabled: true },
+const navGroups = [
+  {
+    name: 'Tools',
+    items: [
+      { name: 'Dashboard Studio', path: '/dashboard' },
+      { name: 'Contract Auditor', path: '/contract-auditor' },
+      { name: 'Tokenizer', path: '/tokenizer' },
+    ]
+  },
+  {
+    name: 'Demos',
+    items: [
+      { name: 'Agent', path: '/agent' },
+      { name: 'LLM Arena', path: '/llm-playground' },
+      { name: 'RAG Chat', path: '/rag-chat' },
+      { name: 'Generation', path: '/generation' },
+    ]
+  }
 ];
 
 export function Navbar() {
@@ -51,30 +63,33 @@ export function Navbar() {
           </Link>
 
           {/* Nav Items */}
-          <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
-              const isActive = pathname === item.path;
+          <div className="hidden md:flex items-center gap-6">
+            {navGroups.map((group) => (
+              <div key={group.name} className="relative group/menu">
+                <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                  {group.name}
+                  <ChevronDown className="w-4 h-4" />
+                </button>
 
-              return (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  className={`relative px-4 py-2 rounded-full text-sm font-medium transition-colors ${isActive
-                    ? 'text-gray-900 dark:text-white'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-                    }`}
-                >
-                  {isActive && (
-                    <motion.div
-                      layoutId="navbar-active"
-                      className="absolute inset-0 bg-gray-200/50 dark:bg-gray-800/50 rounded-full"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                  <span className="relative z-10">{item.name}</span>
-                </Link>
-              );
-            })}
+                {/* Dropdown */}
+                <div className="absolute top-full left-0 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto transition-all duration-200">
+                  <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 p-2 min-w-[200px]">
+                    {group.items.map((item) => (
+                      <Link
+                        key={item.path}
+                        href={item.path}
+                        className={`block px-4 py-2 rounded-lg text-sm transition-colors ${pathname === item.path
+                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                          }`}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* CTA Button */}

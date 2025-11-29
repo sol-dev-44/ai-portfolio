@@ -1,0 +1,83 @@
+{
+  "summary": "This employment offer letter contains several significant risks, particularly around broad non-compete restrictions, unlimited company discretion over compensation changes, and lack of severance protections. The at-will employment structure combined with broad company rights creates an imbalanced agreement favoring the employer.",
+  "overall_risk_score": 72,
+  "risks": [
+    {
+      "type": "non_compete",
+      "severity": 8,
+      "location": "you agree that, during the term of your employment with the Company, you will not engage in any other employment, occupation, consulting, or other business activity directly related to the business in which the Company is now involved or becomes involved during the term of your employment",
+      "explanation": "Extremely broad non-compete clause that could prevent the employee from working in any related field or even consulting work during employment. The phrase 'becomes involved' creates unlimited scope.",
+      "suggested_fix": "Narrow the restriction to direct competitors only and remove consulting prohibition",
+      "rewrite_suggestion": "During your employment, you will not provide services to direct competitors of the Company in the same specific market segment as your role, defined as [specific competitor list or narrow market definition]."
+    },
+    {
+      "type": "general",
+      "severity": 7,
+      "location": "The Company reserves the right to make personnel decisions regarding your employment, including but not limited to decisions regarding any transfers or other changes in duties or assignments, changes in your salary and other compensation, changes in benefits",
+      "explanation": "Gives the company unlimited discretion to change salary, benefits, and job duties without employee consent, potentially allowing constructive dismissal.",
+      "suggested_fix": "Add limitations on material changes and require written notice",
+      "rewrite_suggestion": "The Company may make reasonable changes to your role and responsibilities. Material changes to compensation (>10% reduction) or benefits require 30 days written notice and mutual agreement."
+    },
+    {
+      "type": "termination",
+      "severity": 6,
+      "location": "either you or the Company can terminate your employment at any time for any reason, with or without cause and with or without notice, without liability",
+      "explanation": "Pure at-will employment with no severance protection or notice period, leaving employee vulnerable to immediate termination without compensation.",
+      "suggested_fix": "Add notice period and severance provisions for termination without cause",
+      "rewrite_suggestion": "Either party may terminate this agreement with 30 days written notice. If Company terminates without cause, Employee will receive [X weeks] severance pay."
+    },
+    {
+      "type": "ip_rights",
+      "severity": 6,
+      "location": "assignment of patent rights to any invention made during your employment at the Company",
+      "explanation": "Broad assignment of all inventions during employment without limitation to work-related inventions or company resources.",
+      "suggested_fix": "Limit assignment to work-related inventions using company resources",
+      "rewrite_suggestion": "Employee assigns rights to inventions that (a) relate to Company's business, (b) are developed using Company resources, or (c) are developed during work hours."
+    },
+    {
+      "type": "general",
+      "severity": 5,
+      "location": "the Company in its sole discretion may amend or terminate any such bonus plans at any time",
+      "explanation": "Company can eliminate bonus plans at any time without notice, making the stated 10% target bonus meaningless.",
+      "suggested_fix": "Add protection for current performance period bonuses",
+      "rewrite_suggestion": "Company may modify future bonus plans with 90 days notice, but bonuses earned for completed performance periods remain payable."
+    },
+    {
+      "type": "general",
+      "severity": 5,
+      "location": "Our company exercises a standard 90-day probationary period for new hires",
+      "explanation": "Probationary period is mentioned but not clearly defined in terms of different termination rights or evaluation criteria.",
+      "suggested_fix": "Clarify probationary period terms and evaluation process",
+      "rewrite_suggestion": "During the initial 90 days, performance will be evaluated against [specific criteria]. Either party may terminate with 2 weeks notice during this period."
+    },
+    {
+      "type": "jurisdiction",
+      "severity": 4,
+      "location": "governed by the laws of the State of North Carolina, without giving effect to the principles of conflict of laws. You and the Company consent to the exclusive jurisdiction of, and venue in, the state or federal courts in North Carolina",
+      "explanation": "Forces employee to litigate in North Carolina courts regardless of where they reside, which could be inconvenient if working remotely from another state.",
+      "suggested_fix": "Allow for alternative dispute resolution or consider employee's location",
+      "rewrite_suggestion": "Disputes will be resolved through binding arbitration in the state where Employee primarily works, or if remote, through virtual proceedings."
+    },
+    {
+      "type": "confidentiality",
+      "severity": 4,
+      "location": "non-disclosure of the Company's proprietary information",
+      "explanation": "References a separate Proprietary Information Agreement that is not provided, making it impossible to assess the scope of confidentiality obligations.",
+      "suggested_fix": "Include the confidentiality terms in this agreement or provide the referenced document",
+      "rewrite_suggestion": "Confidentiality obligations should be clearly defined in this agreement rather than referenced in a separate document."
+    }
+  ],
+  "missing_clauses": [
+    "Severance provisions for termination without cause",
+    "Notice period requirements",
+    "Specific confidentiality terms (referenced but not included)",
+    "Dispute resolution procedures",
+    "Protection against material adverse changes to role",
+    "Vacation/PTO policy details"
+  ],
+  "key_dates": [
+    "Employment start date: January 2, 2024",
+    "Offer expiration: December 1, 2023",
+    "90-day probationary period (through April 2, 2024)"
+  ]
+}
