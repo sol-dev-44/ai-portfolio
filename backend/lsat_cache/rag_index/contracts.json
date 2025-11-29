@@ -710,5 +710,90 @@
         "January 1, 2025 (retroactive effective date)"
       ]
     }
+  },
+  {
+    "id": "90ca6b28391b3d76",
+    "type": "analyzed_contract",
+    "text_preview": "# FREELANCE CONSULTING AGREEMENT\n\n**Effective Date:** December 1, 2025\n\n**Between:**\n- **Company:** Brightline Marketing Solutions Inc. (\"Company\")\n- **Consultant:** Sarah Chen (\"Consultant\")\n\n---\n\n## 1. SERVICES\n\nConsultant shall provide digital marketing strategy consulting services, including campaign planning, analytics review, and optimization recommendations. Specific deliverables will be outlined in Statements of Work (\"SOWs\") attached hereto.\n\nInitial engagement: Q1 2026 product launch c",
+    "risks_found": [
+      "payment",
+      "ip_rights",
+      "termination",
+      "liability",
+      "indemnification",
+      "general"
+    ],
+    "overall_score": 65,
+    "full_analysis": {
+      "summary": "This freelance consulting agreement has moderate risk exposure with several areas requiring attention. Key concerns include extended payment terms (45 days), broad 'work for hire' language that could capture background IP, and asymmetric liability caps. The contract includes reasonable confidentiality and non-compete provisions, but lacks mutual termination rights and has some ambiguous termination language.",
+      "overall_risk_score": 65,
+      "risks": [
+        {
+          "type": "payment",
+          "severity": 6,
+          "location": "Payment due within 45 days of invoice receipt... Pre-approved expenses reimbursed within 60 days",
+          "explanation": "45-day payment terms are longer than industry standard (Net 30) and create cash flow risk. 60-day expense reimbursement is excessive.",
+          "suggested_fix": "Negotiate shorter payment terms and expense reimbursement periods",
+          "rewrite_suggestion": "Payment due within 30 days of invoice receipt. Pre-approved expenses reimbursed within 30 days with receipts."
+        },
+        {
+          "type": "ip_rights",
+          "severity": 7,
+          "location": "All work product created under this Agreement shall be considered 'work for hire' and owned exclusively by Company",
+          "explanation": "Broad 'work for hire' language could inadvertently transfer consultant's background IP and general methodologies to the company.",
+          "suggested_fix": "Clarify that only specific deliverables are work for hire, not general knowledge or pre-existing IP",
+          "rewrite_suggestion": "Deliverables specifically created for Company under SOWs shall be owned by Company. Consultant retains ownership of general knowledge, experience, and pre-existing methodologies."
+        },
+        {
+          "type": "termination",
+          "severity": 6,
+          "location": "Company may terminate immediately for cause, defined at Company's reasonable discretion... No payment for work-in-progress that cannot be reasonably utilized",
+          "explanation": "Asymmetric termination rights favor Company. 'Reasonable discretion' for cause is vague. Risk of non-payment for work-in-progress.",
+          "suggested_fix": "Define specific causes for termination and ensure payment for all work performed",
+          "rewrite_suggestion": "Either party may terminate immediately for material breach after 5 days written notice to cure. Consultant shall be paid for all work completed through termination date."
+        },
+        {
+          "type": "liability",
+          "severity": 5,
+          "location": "Consultant's total liability shall not exceed fees paid in the 6 months preceding the claim. Company's liability shall not exceed $50,000",
+          "explanation": "Asymmetric liability caps - Company's cap is fixed while Consultant's varies with fees paid, potentially creating imbalance.",
+          "suggested_fix": "Make liability caps mutual and proportional",
+          "rewrite_suggestion": "Each party's total liability shall not exceed the lesser of $50,000 or fees paid in the 12 months preceding the claim."
+        },
+        {
+          "type": "indemnification",
+          "severity": 4,
+          "location": "Consultant shall indemnify Company against third-party claims arising from Consultant's gross negligence, willful misconduct, or breach of the IP representations",
+          "explanation": "Indemnification clause is reasonably limited to gross negligence and willful misconduct, but lacks a liability cap.",
+          "suggested_fix": "Add liability cap to indemnification obligations",
+          "rewrite_suggestion": "Consultant shall indemnify Company against third-party claims arising from Consultant's gross negligence, willful misconduct, or breach of IP representations, subject to the liability limitations in Section 10."
+        },
+        {
+          "type": "general",
+          "severity": 4,
+          "location": "Either party may terminate with 14 days written notice",
+          "explanation": "Short notice period creates business continuity risk for both parties",
+          "suggested_fix": "Extend notice period to 30 days",
+          "rewrite_suggestion": "Either party may terminate with 30 days written notice."
+        }
+      ],
+      "missing_clauses": [
+        "Force majeure clause",
+        "Data protection/privacy compliance clause",
+        "Specific definition of 'material breach'",
+        "Right to cure provision for non-material breaches"
+      ],
+      "key_dates": [
+        "Effective Date: December 1, 2025",
+        "Initial engagement: Q1 2026",
+        "12-month term",
+        "14 days termination notice",
+        "45 days payment terms",
+        "60 days expense reimbursement",
+        "3 years confidentiality period",
+        "12 months non-solicitation period",
+        "6 months non-compete period"
+      ]
+    }
   }
 ]
