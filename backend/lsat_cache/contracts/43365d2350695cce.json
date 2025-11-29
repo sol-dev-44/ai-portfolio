@@ -1,0 +1,72 @@
+{
+  "summary": "This website development agreement presents moderate to high risk with several problematic clauses that heavily favor the developer. Key concerns include tied hosting requirements, broad liability limitations, vague warranty terms, and missing standard protective clauses. The overall structure creates potential for disputes and leaves the client exposed to various risks.",
+  "overall_risk_score": 72,
+  "risks": [
+    {
+      "type": "payment",
+      "severity": 7,
+      "location": "Client delays extend timeline but not final payment deadline",
+      "explanation": "This creates an unfair payment obligation where the client must pay the final 50% even if the project is delayed due to their actions, potentially before receiving the completed work",
+      "suggested_fix": "Tie final payment to actual delivery and acceptance of the completed website",
+      "rewrite_suggestion": "Final payment due within 30 days of project completion and client acceptance. Client delays extend timeline proportionally."
+    },
+    {
+      "type": "general",
+      "severity": 8,
+      "location": "Client must use Developer's recommended hosting ($50/month) for 24 months to maintain warranty",
+      "explanation": "This creates a problematic tied arrangement that forces the client into a 24-month hosting commitment as a condition of warranty coverage, potentially constituting an unfair business practice",
+      "suggested_fix": "Remove hosting requirement from warranty terms or make it optional",
+      "rewrite_suggestion": "Warranty coverage is independent of hosting choice. Developer may recommend hosting providers but client retains full discretion in hosting selection."
+    },
+    {
+      "type": "liability",
+      "severity": 9,
+      "location": "Developer not liable for security breaches, data loss, downtime, or SEO performance. Maximum liability capped at fees paid.",
+      "explanation": "Extremely broad liability exclusions that disclaim responsibility for fundamental website functions and security, leaving client exposed to significant risks",
+      "suggested_fix": "Limit liability exclusions to reasonable scope and exclude gross negligence",
+      "rewrite_suggestion": "Developer's liability is limited to the fees paid under this agreement, except for damages caused by Developer's gross negligence or willful misconduct. This limitation does not apply to Developer's obligations regarding code quality and initial functionality."
+    },
+    {
+      "type": "general",
+      "severity": 6,
+      "location": "Warranty void if Client or third party modifies code",
+      "explanation": "This warranty voiding provision is overly broad and could eliminate warranty protection for minor modifications or necessary updates",
+      "suggested_fix": "Limit warranty voiding to substantial modifications that directly cause the issue",
+      "rewrite_suggestion": "Warranty coverage continues unless modifications directly cause the specific malfunction being claimed. Minor updates, security patches, and content changes do not void warranty."
+    },
+    {
+      "type": "ip_rights",
+      "severity": 5,
+      "location": "Developer retains ownership of all code, plugins, and frameworks and grants Client a license to use. Developer may reuse code components in other projects.",
+      "explanation": "While not uncommon, this IP arrangement could create dependency issues and limits client's control over their website",
+      "suggested_fix": "Clarify license terms and ensure client has perpetual usage rights",
+      "rewrite_suggestion": "Developer grants Client a perpetual, non-exclusive license to use all custom code developed specifically for this project. Developer may reuse general code components and methodologies but not client-specific customizations."
+    },
+    {
+      "type": "general",
+      "severity": 4,
+      "location": "Developer may feature project in portfolio and marketing materials",
+      "explanation": "No confidentiality protection or client approval requirement for portfolio usage",
+      "suggested_fix": "Require client consent for portfolio usage",
+      "rewrite_suggestion": "Developer may feature project in portfolio and marketing materials with Client's prior written consent, which shall not be unreasonably withheld."
+    }
+  ],
+  "missing_clauses": [
+    "Entire agreement/integration clause",
+    "Amendment procedures requiring written consent",
+    "Dispute resolution mechanism (mediation/arbitration)",
+    "Force majeure provisions",
+    "Termination rights and procedures",
+    "Confidentiality/non-disclosure provisions",
+    "Project acceptance criteria and testing procedures",
+    "Data backup and recovery responsibilities"
+  ],
+  "key_dates": [
+    "December 15, 2025 - Effective Date",
+    "8 weeks from deposit receipt - Project completion timeline",
+    "50% due upfront - Initial payment",
+    "50% due at launch - Final payment",
+    "30 days post-launch - Warranty period",
+    "24 months - Required hosting commitment period"
+  ]
+}

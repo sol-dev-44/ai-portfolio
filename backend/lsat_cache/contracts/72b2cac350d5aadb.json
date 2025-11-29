@@ -1,0 +1,60 @@
+{
+  "summary": "This employment contract presents moderate to high risk with several problematic clauses that heavily favor the employer. Key concerns include an overly broad 12-month non-compete, extensive IP assignment rights covering off-hours work, mandatory arbitration with class action waiver, and an 18-month clawback provision. The at-will nature provides some protection but is offset by restrictive post-employment obligations.",
+  "overall_risk_score": 72,
+  "risks": [
+    {
+      "type": "non_compete",
+      "severity": 8,
+      "location": "For 12 months following termination, Employee shall not work for competitors listed in Appendix A or solicit company employees or customers.",
+      "explanation": "12-month non-compete period is excessive and could severely limit career opportunities. The scope includes both competitor work restrictions and non-solicitation without geographic limitations or carve-outs.",
+      "suggested_fix": "Reduce duration to 6 months, add geographic limitations, and include carve-outs for existing relationships",
+      "rewrite_suggestion": "For 6 months following termination, Employee shall not work for direct competitors in the same product category within 50 miles of company offices, provided Employee receives severance pay during restriction period. This does not apply to existing professional relationships or general industry employment."
+    },
+    {
+      "type": "ip_rights",
+      "severity": 7,
+      "location": "All inventions, ideas, and work product created during employment or using company resources belong exclusively to Company, including those conceived outside work hours.",
+      "explanation": "IP assignment clause is overly broad, claiming ownership of all inventions even those created outside work hours without using company resources, which may not be enforceable in many states.",
+      "suggested_fix": "Limit IP assignment to work-related inventions and those using company resources",
+      "rewrite_suggestion": "Company owns inventions and work product that (a) relate to company's business or research, (b) are developed using company time, equipment, or confidential information, or (c) result from work performed for company. Employee retains rights to inventions developed entirely on own time without company resources and unrelated to company business."
+    },
+    {
+      "type": "general",
+      "severity": 6,
+      "location": "All employment disputes subject to binding arbitration under AAA rules. Employee waives right to jury trial and class action participation.",
+      "explanation": "Mandatory arbitration with class action waiver limits employee's legal remedies and may prevent joining with other employees for systemic issues.",
+      "suggested_fix": "Make arbitration mutual, allow opt-out period, or exclude certain claims",
+      "rewrite_suggestion": "Employment disputes may be resolved through binding arbitration under AAA rules, provided both parties agree. Either party may opt out of arbitration within 30 days of signing. Arbitration requirement does not apply to claims for unpaid wages, discrimination, or harassment."
+    },
+    {
+      "type": "payment",
+      "severity": 6,
+      "location": "Signing bonus of $10,000 (included in first paycheck) must be repaid in full if Employee voluntarily resigns within 18 months.",
+      "explanation": "18-month clawback period is lengthy and creates financial disincentive to leave, potentially trapping employee in unfavorable employment situation.",
+      "suggested_fix": "Reduce clawback period to 12 months and consider pro-rated repayment",
+      "rewrite_suggestion": "Signing bonus of $10,000 must be repaid on a pro-rated basis if Employee voluntarily resigns within 12 months (e.g., 50% if leaving after 6 months, 25% if leaving after 9 months)."
+    },
+    {
+      "type": "confidentiality",
+      "severity": 4,
+      "location": "Employee shall sign standard CIIA (Confidential Information and Invention Assignment) agreement as condition of employment.",
+      "explanation": "Reference to separate CIIA agreement without providing terms creates uncertainty about additional obligations being imposed.",
+      "suggested_fix": "Provide CIIA terms for review or incorporate key terms into main agreement",
+      "rewrite_suggestion": "Employee shall sign company's standard Confidential Information and Invention Assignment agreement, a copy of which is attached as Exhibit B and incorporated herein."
+    }
+  ],
+  "missing_clauses": [
+    "Severance pay provisions",
+    "Notice period for termination",
+    "Return of company property clause",
+    "Survival clause for post-employment obligations",
+    "Governing law specification",
+    "Severability clause"
+  ],
+  "key_dates": [
+    "December 1, 2025 - Contract date",
+    "January 15, 2026 - Start date",
+    "18 months from start - Clawback period ends",
+    "12 months post-termination - Non-compete period"
+  ]
+}
