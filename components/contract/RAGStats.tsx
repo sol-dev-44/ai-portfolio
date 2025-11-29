@@ -86,8 +86,8 @@ export default function RAGStats({ stats }: RAGStatsProps) {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isExpanded
-                                ? "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                                : "bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-md hover:shadow-lg"
+                            ? "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                            : "bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-md hover:shadow-lg"
                             }`}
                     >
                         {isExpanded ? (
@@ -390,3 +390,4 @@ export default function RAGStats({ stats }: RAGStatsProps) {
         </div>
     );
 }
+// TODO: Add stats for contract risks
