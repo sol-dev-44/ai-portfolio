@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe } from 'lucide-react';
+import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe, FileText } from 'lucide-react';
 import { useRef } from 'react';
 
 const techStack = [
@@ -225,7 +225,37 @@ export default function Home() {
               </motion.div>
             </Link>
 
-            {/* Project 2: Dashboard Studio */}
+            {/* Project 2: Contract Auditor - NEW */}
+            <Link href="/contract-auditor">
+              <motion.div
+                whileHover={{ y: -10 }}
+                className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-8 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-2xl text-blue-600 dark:text-blue-400">
+                      <FileText className="w-8 h-8" />
+                    </div>
+                    <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold rounded-full">
+                      NEW
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    Contract Auditor
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6 flex-grow">
+                    AI-powered legal risk analysis. Uses RAG to learn from feedback and identify risky clauses with severity scoring.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">RAG</span>
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">Legal Tech</span>
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+
+            {/* Project 3: Dashboard Studio */}
             <Link href="/dashboard">
               <motion.div
                 whileHover={{ y: -10 }}
@@ -390,6 +420,6 @@ export default function Home() {
           <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-yellow-400 dark:text-yellow-600 opacity-0 group-hover:opacity-100 transition-opacity" />
         </motion.button>
       </Link>
-    </main>
+    </main >
   );
 }

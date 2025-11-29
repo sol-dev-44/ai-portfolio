@@ -1,84 +1,193 @@
-Great project idea! The LSAT's logical reasoning and reading comprehension sections do align well with LLM pattern recognition. Let me search for available resources.This is great research. Let me compile what I've found into a comprehensive overview for you.
+# LSAT Study App
 
----
+## Overview
 
-## LSAT Study App: Open Source Data & APIs Overview
+An LSAT (Law School Admission Test) study tool that uses RAG (Retrieval-Augmented Generation) to help students understand logical reasoning patterns and improve their test-taking skills.
 
-You're in luck—there's a solid ecosystem of open-source LSAT and logical reasoning datasets that could power your RAG architecture. Here's what's available:
+## Features
 
----
+### 📚 **Question Database**
+- Access to multiple LSAT datasets from HuggingFace
+- Analytical Reasoning (Logic Games)
+- Logical Reasoning
+- Reading Comprehension
 
-### **Primary LSAT Datasets (HuggingFace)**
+### 🧠 **Pattern Recognition**
+- Identifies question types (sequencing, grouping, assumption, strengthen/weaken, etc.)
+- Provides pattern-specific solving strategies
+- Shows common traps and how to avoid them
 
-| Dataset | Description | Size | Link |
-|---------|-------------|------|------|
-| **tasksource/lsat-ar** | Analytical Reasoning (Logic Games) from 1991-2016 | ~500 questions | [HuggingFace](https://huggingface.co/datasets/tasksource/lsat-ar) |
-| **tasksource/lsat-rc** | Reading Comprehension section | Available | [HuggingFace](https://huggingface.co/datasets/tasksource/lsat-rc) |
-| **hails/agieval-lsat-lr** | Logical Reasoning from AGIEval benchmark | Available | [HuggingFace](https://huggingface.co/datasets/hails/agieval-lsat-lr) |
-| **saumyamalik/lsat_logic_games** | All publicly available logic games with difficulty metadata | ~Full coverage | [HuggingFace](https://huggingface.co/datasets/saumyamalik/lsat_logic_games-analytical_reasoning) |
+### 📊 **RAG-Powered Analysis**
+- Retrieves similar questions and patterns from knowledge base
+- Provides detailed breakdowns of correct answers
+- Explains why incorrect answers fail
 
----
+### 📈 **Continuous Learning**
+- Indexes analyzed questions
+- Improves pattern recognition over time
+- Builds knowledge base of solving strategies
 
-### **Related Logical Reasoning Datasets**
+## Available Datasets
 
-These aren't LSAT-specific but train the same reasoning patterns:
+| Dataset | Description | Size | Source |
+|---------|-------------|------|--------|
+| **tasksource/lsat-ar** | Analytical Reasoning (Logic Games) 1991-2016 | ~500 questions | [HuggingFace](https://huggingface.co/datasets/tasksource/lsat-ar) |
+| **tasksource/lsat-rc** | Reading Comprehension | Available | [HuggingFace](https://huggingface.co/datasets/tasksource/lsat-rc) |
+| **hails/agieval-lsat-lr** | Logical Reasoning from AGIEval | Available | [HuggingFace](https://huggingface.co/datasets/hails/agieval-lsat-lr) |
+| **LogiQA 2.0** | Similar reasoning patterns | 15,708 questions | Research dataset |
 
-| Dataset | Source | Size | Use Case |
-|---------|--------|------|----------|
-| **ReClor** | Graduate admission exams (LSAT/GMAT) | ~6,000 questions | Reading comprehension + logical reasoning |
-| **LogiQA 2.0** | Chinese Civil Service Exam | 15,708 MRC + 35k NLI pairs | Deductive reasoning, multiple types |
-| **AR-LSAT** | Research dataset | Questions 1991-2016 | Analytical reasoning benchmarking |
+## Pattern Types
 
----
+The system recognizes these LSAT question patterns:
 
-### **Research Papers to Inform Your Architecture**
+### Analytical Reasoning (Logic Games)
+- **Sequencing**: Arranging elements in order
+- **Grouping**: Distributing elements into categories
+- **Matching**: Pairing elements together
+- **Hybrid**: Combination of multiple patterns
 
-1. **AR-LSAT** (2021) introduces a dataset from the Law School Admission Test spanning 1991-2016 and proposes both Transformer-based methods and an "Analytical Reasoning Machine" that extracts symbolic knowledge like participants, facts, and logical functions to deduce solutions.
+### Logical Reasoning
+- **Strengthen**: Supporting an argument
+- **Weaken**: Undermining an argument
+- **Assumption**: Finding unstated premises
+- **Inference**: Drawing valid conclusions
+- **Flaw**: Identifying reasoning errors
+- **Parallel**: Matching argument structures
+- **Principle**: Applying general rules
+- **Resolve**: Explaining apparent contradictions
+- **Evaluate**: Determining what information is needed
 
-2. **ReClor** is extracted from standardized graduate admission examinations. The researchers identified that models exploit dataset biases, so they separated data into EASY and HARD sets—state-of-the-art models struggle on the HARD set with performance near random guess.
+## API Endpoints
 
-3. **LogiQA** consists of 8,678 QA instances covering multiple types of deductive reasoning, sourced from expert-written questions. State-of-the-art neural models perform far worse than the human ceiling.
+### Get Available Datasets
+```http
+GET /api/lsat/datasets
+```
 
----
+### Fetch Questions
+```http
+POST /api/lsat/questions
+Content-Type: application/json
 
-### **LLM APIs for Your Backend**
+{
+  "dataset": "lsat-ar",
+  "split": "train",
+  "count": 5
+}
+```
 
-For the reasoning engine, you have several options:
+### Analyze Question
+```http
+POST /api/lsat/analyze
+Content-Type: application/json
 
-| Provider | Best Model for Reasoning | Notes |
-|----------|-------------------------|-------|
-| **Anthropic** | Claude Sonnet 4 / Opus 4.5 | Strong logical reasoning, good at chain-of-thought |
-| **OpenAI** | o1 / GPT-4o | o1 specifically designed for reasoning tasks |
-| **LiteLLM** | Unified API gateway | Call 100+ LLMs with one interface—great for A/B testing models |
+{
+  "question_data": {...},
+  "use_cache": true,
+  "use_rag": true,
+  "stream": false
+}
+```
 
----
+**Response**:
+```json
+{
+  "pattern_type": "sequencing",
+  "confidence": 0.95,
+  "breakdown": {
+    "setup": "...",
+    "question_stem": "...",
+    "key_constraints": [...],
+    "logical_chain": [...]
+  },
+  "correct_answer": {
+    "letter": "C",
+    "explanation": "...",
+    "key_insight": "..."
+  },
+  "incorrect_answers": [...],
+  "pattern_recognition_tips": [...],
+  "difficulty": "medium",
+  "time_estimate_seconds": 120
+}
+```
 
-### **Free Official LSAT Prep Content**
+### Get Pattern Information
+```http
+GET /api/lsat/patterns
+GET /api/lsat/patterns/{pattern_type}
+```
 
-Khan Academy and LSAC provided free LSAT prep since June 2018, helping hundreds of thousands of test takers. As of June 2024, these resources (lessons, videos, articles, practice exercises, question explanations) have transitioned to LSAC's LawHub platform.
+### Get Cache Statistics
+```http
+GET /api/lsat/cache/stats
+```
 
-LawHub now includes more than 20 Drill Sets containing about 260 Logical Reasoning and Reading Comprehension questions for free.
+## Architecture
 
----
+### Backend
+```
+backend/
+├── lsat_service.py       # FastAPI routes and question fetching
+├── lsat_logic.py          # Pattern definitions and prompt building
+└── lsat_rag_utils.py      # RAG system for pattern retrieval
+```
 
-### **Suggested Architecture Approach**
+### Frontend
+```
+app/lsat/
+├── page.tsx               # Main LSAT study interface
+├── quick/page.tsx         # Quick practice mode
+└── layout.tsx             # LSAT-specific layout
 
-Given your fullstack TS/React/Next background:
+components/lsat/
+└── QuestionCard.tsx       # Question display component
 
-1. **Data Layer**: Combine multiple HuggingFace datasets (lsat-ar, lsat-rc, lsat-lr, ReClor, LogiQA)
-2. **Embedding/Vector Store**: Use Pinecone, Weaviate, or Chroma to store question patterns + explanations
-3. **RAG Pipeline**: On question input, retrieve similar patterns → feed to LLM with pattern-specific prompts
-4. **Pattern Recognition Module**: Tag questions by reasoning type (categorical, conditional, sequencing, grouping, etc.)
-5. **Explanation Generator**: Have the LLM break down WHY an answer is correct using retrieved similar examples
+store/
+├── lsatSlice.ts           # Redux state management
+└── api/lsatApi.ts         # RTK Query API definitions
+```
 
----
+## Usage Example
 
-### **For Your Law School Application**
+```typescript
+import { useGetLsatQuestionsQuery, useAnalyzeLsatQuestionMutation } from '@/store/api/lsatApi';
 
-This project would demonstrate:
-- Technical proficiency (full-stack + AI/ML integration)
-- Understanding of legal reasoning patterns
-- Initiative in making legal education more accessible
-- Practical application of emerging tech to law
+function LSATComponent() {
+  const { data: questions } = useGetLsatQuestionsQuery({
+    dataset: 'lsat-ar',
+    count: 5
+  });
 
-Want me to dive deeper into any of these datasets, sketch out a specific architecture, or explore the reasoning type taxonomies used in these benchmarks?
+  const [analyzeQuestion] = useAnalyzeLsatQuestionMutation();
+
+  const handleAnalyze = async (question) => {
+    const result = await analyzeQuestion({
+      question_data: question,
+      use_rag: true
+    }).unwrap();
+
+    console.log('Pattern:', result.pattern_type);
+    console.log('Explanation:', result.correct_answer.explanation);
+  };
+}
+```
+
+## Related Research
+
+- **AR-LSAT** (2021): Transformer-based methods for analytical reasoning
+- **ReClor**: Reading comprehension from graduate admission exams
+- **LogiQA**: Deductive reasoning from civil service exams
+
+## Future Enhancements
+
+- [ ] Personalized study plans based on weak areas
+- [ ] Timed practice mode
+- [ ] Progress tracking and analytics
+- [ ] Spaced repetition algorithm
+- [ ] Mobile-optimized interface
+- [ ] Export study notes and explanations
+
+## License
+
+This is a portfolio demonstration project showcasing RAG implementation for LSAT preparation.

@@ -6,6 +6,16 @@ from typing import List, Dict, Any
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch.nn.functional as F
+from dotenv import load_dotenv
+import os
+from pathlib import Path
+
+# Load environment variables from root .env.local
+env_path = Path(__file__).parent.parent / '.env.local'
+load_dotenv(dotenv_path=env_path)
+# Fallback to .env if .env.local doesn't exist
+if not os.getenv("ANTHROPIC_API_KEY"):
+    load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
 app = FastAPI(title="AI Portfolio API")
 
@@ -91,7 +101,7 @@ TOKENIZERS, TOKENIZER_METADATA = initialize_tokenizers()
 # ===== MODEL INITIALIZATION =====
 def initialize_model(model_id="gpt2"):
     """Initialize a model for generation."""
-    device = "cuda" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu")
+    device = "cuda" if torch.cuda.is_available() else "cpu"
     
     try:
         print(f"🔄 Loading {model_id}...")
@@ -249,9 +259,9 @@ import json
 import asyncio
 
 class GenerationRequest(BaseModel):
-    prompt: str = Field(..., max_length=10000)
+    prompt: str = Field(..., max_length=1000)
     model_id: str = "gpt2"
-    max_new_tokens: int = Field(default=50, le=2000)
+    max_new_tokens: int = Field(default=50, le=200)
     temperature: float = Field(default=0.7, ge=0.1, le=2.0)
     top_k: int = Field(default=50, ge=0)
     top_p: float = Field(default=0.9, ge=0.0, le=1.0)
@@ -305,12 +315,12 @@ async def stream_generator(request: GenerationRequest):
         # Decode token
         new_token_str = tokenizer.decode(next_token[0])
         
-        # Yield result in SSE format
+        # Yield result
         response_data = {
             "token": new_token_str,
             "finished": False
         }
-        yield f"data: {json.dumps(response_data)}\n\n"
+        yield json.dumps(response_data) + "\n"
         
         # Update input for next iteration
         curr_input_ids = torch.cat([curr_input_ids, next_token], dim=-1)
@@ -319,16 +329,16 @@ async def stream_generator(request: GenerationRequest):
         if next_token.item() == tokenizer.eos_token_id:
             break
         
-        # Minimal yield for async
+        # Minimal yield for async - removed artificial delay
         await asyncio.sleep(0)
 
-    yield f"data: {json.dumps({'token': '', 'finished': True})}\n\n"
+    yield json.dumps({"token": "", "finished": True}) + "\n"
 
 @app.post("/api/llm/generate_stream")
 async def generate_stream(request: GenerationRequest):
     return StreamingResponse(
         stream_generator(request),
-        media_type="text/event-stream"
+        media_type="application/x-ndjson"
     )
 
 
@@ -340,6 +350,10 @@ async def generate_stream(request: GenerationRequest):
 class AgentChatRequest(BaseModel):
     message: str = Field(..., max_length=1000, description="User message")
     max_tokens: int = Field(default=150, le=500)
+
+from contract_service import router as contract_router
+app.include_router(contract_router, prefix="/api")
+
 # =====LANGCHAIN AGENT ENDPOINT =====
 @app.post("/api/agent/langchain")
 async def langchain_agent_chat(request: AgentChatRequest):
@@ -405,10 +419,6 @@ async def agent_status():
 
 
 # ===== ENHANCED LSAT ENDPOINTS =====
-# Add these to main.py after the existing LSAT section (around line 407)
-# Replace the existing LSAT section
-
-from fastapi.responses import StreamingResponse
 from lsat_logic import lsat_service
 
 class LSATQuestionRequest(BaseModel):
@@ -484,3 +494,16 @@ async def get_lsat_pattern_info(pattern_type: str):
 async def get_lsat_cache_stats():
     """Get LSAT cache statistics."""
     return lsat_service.get_cache_stats()
+
+
+if __name__ == "__main__":
+    import uvicorn
+    import os
+    port = int(os.environ.get("PORT", 8080))
+    uvicorn.run(
+        app, 
+        host="0.0.0.0", 
+        port=port,
+        timeout_keep_alive=75,
+        limit_concurrency=10
+    )

@@ -1,0 +1,102 @@
+{
+  "summary": "This is an extremely predatory contract that appears designed to exploit and control the founder through unconscionable terms. It contains multiple provisions that would likely be unenforceable in most jurisdictions due to their oppressive nature, including personal guarantees of unlimited liability, 15-year non-compete restrictions, assignment of all future IP, and irrevocable powers of attorney. The overall structure resembles a debt bondage arrangement rather than a legitimate investment agreement.",
+  "overall_risk_score": 100,
+  "risks": [
+    {
+      "type": "indemnification",
+      "severity": 10,
+      "location": "Founder shall indemnify and defend Investor against any claims, damages, losses, costs, and expenses of any kind, arising from any cause, without limitation, including Investor's own negligence, fraud, or intentional misconduct.",
+      "explanation": "Unlimited indemnification covering even the investor's own fraud and intentional misconduct is unconscionable and likely unenforceable.",
+      "suggested_fix": "Limit indemnification to founder's breach of contract, cap at contract value, exclude gross negligence/willful misconduct",
+      "rewrite_suggestion": "Founder shall indemnify Investor for direct damages arising solely from Founder's material breach of this Agreement, capped at the total investment amount received, excluding any claims arising from Investor's negligence or misconduct."
+    },
+    {
+      "type": "liability",
+      "severity": 10,
+      "location": "Founder personally guarantees all company obligations, debts, and liabilities, present and future. This guarantee survives termination, bankruptcy, or dissolution and extends to Founder's heirs and estate.",
+      "explanation": "Unlimited personal guarantee extending to heirs creates potentially infinite liability that could destroy the founder's family financially.",
+      "suggested_fix": "Remove personal guarantee entirely or limit to specific, capped amounts",
+      "rewrite_suggestion": "Remove this clause entirely. Investment should be limited to company assets only."
+    },
+    {
+      "type": "non_compete",
+      "severity": 10,
+      "location": "For a period of 15 years following termination (for any reason), Founder shall not: Start, join, advise, or invest in any business in any industry",
+      "explanation": "15-year global non-compete preventing any business activity is likely unenforceable as it prevents the founder from earning a living.",
+      "suggested_fix": "Limit to 1-2 years, specific industry only, reasonable geographic scope",
+      "rewrite_suggestion": "For 12 months following termination, Founder shall not directly compete with the Company's specific business within the same geographic market."
+    },
+    {
+      "type": "ip_rights",
+      "severity": 10,
+      "location": "Founder assigns to Investor all intellectual property created by Founder at any time \u2014 past, present, or future \u2014 whether or not related to the company",
+      "explanation": "Assignment of all past and future IP, including personal projects, is grossly overreaching and likely unenforceable.",
+      "suggested_fix": "Limit to IP created for the company during employment",
+      "rewrite_suggestion": "Founder assigns to the Company only intellectual property created specifically for Company business during the term of employment."
+    },
+    {
+      "type": "termination",
+      "severity": 10,
+      "location": "Investor may terminate Founder's employment at any time. Upon termination, Founder forfeits all equity, vested and unvested",
+      "explanation": "At-will termination with complete forfeiture of equity creates perverse incentives and is likely unconscionable.",
+      "suggested_fix": "Require cause for termination, protect vested equity",
+      "rewrite_suggestion": "Either party may terminate with 30 days notice. Founder retains all vested equity upon termination."
+    },
+    {
+      "type": "general",
+      "severity": 10,
+      "location": "Founder grants Investor irrevocable power of attorney to: Sign documents on Founder's behalf for any purpose related to this Agreement; Access and manage Founder's financial accounts",
+      "explanation": "Irrevocable power of attorney over personal finances creates potential for abuse and financial exploitation.",
+      "suggested_fix": "Remove entirely or limit to specific corporate actions with clear boundaries",
+      "rewrite_suggestion": "Remove this clause entirely. Any required signatures should be handled through normal corporate governance."
+    },
+    {
+      "type": "jurisdiction",
+      "severity": 9,
+      "location": "This Agreement is governed by the laws of the British Virgin Islands. Founder consents to jurisdiction in BVI courts",
+      "explanation": "BVI jurisdiction with secrecy laws makes it difficult for founder to seek legal recourse and may indicate attempt to avoid regulatory oversight.",
+      "suggested_fix": "Use neutral jurisdiction with established business law",
+      "rewrite_suggestion": "This Agreement shall be governed by the laws of [founder's home state/country] and disputes resolved in courts of competent jurisdiction there."
+    },
+    {
+      "type": "general",
+      "severity": 10,
+      "location": "Violation triggers liquidated damages of $5,000,000 per occurrence",
+      "explanation": "Excessive liquidated damages that bear no relationship to actual harm are punitive and likely unenforceable.",
+      "suggested_fix": "Remove or set reasonable amount based on actual potential damages",
+      "rewrite_suggestion": "Liquidated damages shall not exceed the actual investment amount and must be reasonably related to anticipated harm."
+    },
+    {
+      "type": "general",
+      "severity": 10,
+      "location": "51% equity in Founder's current company and any future companies founded by Founder for 10 years",
+      "explanation": "Control over future companies for 10 years is an unreasonable restraint on the founder's future business activities.",
+      "suggested_fix": "Limit to current company only",
+      "rewrite_suggestion": "Investment applies only to the current company identified in this Agreement."
+    },
+    {
+      "type": "general",
+      "severity": 9,
+      "location": "signature in blood acceptable",
+      "explanation": "This bizarre provision appears designed to intimidate and suggests the contract is not intended to be a legitimate business agreement.",
+      "suggested_fix": "Remove entirely and use standard signature requirements",
+      "rewrite_suggestion": "Standard written or electronic signature required in accordance with applicable law."
+    }
+  ],
+  "missing_clauses": [
+    "Mutual termination rights",
+    "Founder protection against dilution",
+    "Information rights for founder",
+    "Standard representations and warranties from investor",
+    "Dispute resolution with neutral arbitrator",
+    "Reasonable limitation of liability",
+    "Protection of founder's pre-existing IP",
+    "Fair compensation structure",
+    "Standard confidentiality with mutual obligations"
+  ],
+  "key_dates": [
+    "Effective Date: Upon signature (retroactive to January 1, 2025)",
+    "15-year non-compete period",
+    "10-year control over future companies"
+  ]
+}

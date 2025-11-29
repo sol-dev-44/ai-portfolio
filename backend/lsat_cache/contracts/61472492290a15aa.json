@@ -1,0 +1,121 @@
+{
+  "summary": "This SaaS agreement is extremely one-sided in favor of the Provider, with multiple high-severity risks including uncapped customer liability, perpetual data rights grants, non-refundable fees, and automatic renewals with excessive notice requirements. The contract lacks standard customer protections and contains several potentially unenforceable clauses.",
+  "overall_risk_score": 95,
+  "risks": [
+    {
+      "type": "indemnification",
+      "severity": 10,
+      "location": "CUSTOMER'S LIABILITY TO PROVIDER IS UNCAPPED AND INCLUDES INDEMNIFICATION FOR ANY THIRD-PARTY CLAIMS ARISING FROM CUSTOMER'S USE OF THE PLATFORM",
+      "explanation": "Customer has unlimited indemnification liability with no caps or exclusions, creating potentially catastrophic financial exposure",
+      "suggested_fix": "Cap indemnification at 12 months of fees and exclude Provider's gross negligence",
+      "rewrite_suggestion": "Customer's indemnification liability shall be capped at twelve (12) months of fees paid and shall exclude claims arising from Provider's gross negligence, willful misconduct, or breach of this Agreement."
+    },
+    {
+      "type": "indemnification",
+      "severity": 9,
+      "location": "Customer shall indemnify Provider against any regulatory fines, penalties, or enforcement actions, including those arising from Provider's processing of Customer data",
+      "explanation": "Customer must indemnify Provider even for Provider's own regulatory violations in data processing",
+      "suggested_fix": "Limit indemnification to Customer's own compliance violations, not Provider's processing",
+      "rewrite_suggestion": "Customer shall indemnify Provider only for regulatory violations arising solely from Customer's non-compliant data or instructions, excluding Provider's processing methods or security failures."
+    },
+    {
+      "type": "liability",
+      "severity": 8,
+      "location": "PROVIDER'S TOTAL LIABILITY SHALL NOT EXCEED THE FEES PAID IN THE 3 MONTHS PRECEDING THE CLAIM",
+      "explanation": "Provider's liability cap is extremely low (3 months vs. standard 12 months) and non-mutual",
+      "suggested_fix": "Increase cap to 12 months and make limitation mutual",
+      "rewrite_suggestion": "Each party's total liability shall not exceed the fees paid in the twelve (12) months preceding the claim, except for breaches of confidentiality, IP infringement, or gross negligence."
+    },
+    {
+      "type": "termination",
+      "severity": 9,
+      "location": "Agreement automatically renews for successive 24-month periods unless Customer provides written cancellation notice 180 days prior to renewal. Early termination requires payment of all remaining fees for the full term",
+      "explanation": "Excessive 180-day notice requirement and penalty for early termination creates vendor lock-in",
+      "suggested_fix": "Reduce notice to 30-60 days and allow termination for convenience without penalty",
+      "rewrite_suggestion": "Agreement renews for successive one-year periods unless either party provides sixty (60) days written notice. Either party may terminate for convenience with ninety (90) days notice without penalty."
+    },
+    {
+      "type": "payment",
+      "severity": 8,
+      "location": "Fees are non-refundable under any circumstances, including service outages, early termination, or Provider's breach. Provider may increase fees at any time with 15 days written notice",
+      "explanation": "No refunds even for Provider's breach and unilateral fee increases with minimal notice",
+      "suggested_fix": "Allow pro-rata refunds for unused services and require reasonable notice for fee increases",
+      "rewrite_suggestion": "Fees are refundable on a pro-rata basis for unused services in case of early termination for cause. Fee increases require ninety (90) days notice and cannot exceed 10% annually."
+    },
+    {
+      "type": "ip_rights",
+      "severity": 10,
+      "location": "Customer grants Provider a perpetual, irrevocable, worldwide license to use, modify, aggregate, and commercialize all data uploaded to the Platform, including for training machine learning models and resale to third parties",
+      "explanation": "Customer loses all rights to their own data permanently, including for commercial resale",
+      "suggested_fix": "Limit data use to service provision only, with anonymization requirements",
+      "rewrite_suggestion": "Provider may use Customer data solely to provide the Platform services. Any aggregated analytics must be anonymized and cannot identify Customer. No resale or commercialization rights granted."
+    },
+    {
+      "type": "ip_rights",
+      "severity": 8,
+      "location": "Any feedback, suggestions, or feature requests submitted by Customer become Provider's exclusive property. Provider may implement, patent, and commercialize such ideas without compensation",
+      "explanation": "Customer loses rights to their own ideas and feedback without compensation",
+      "suggested_fix": "Limit to non-exclusive license for feedback, exclude patentable inventions",
+      "rewrite_suggestion": "Customer grants Provider a non-exclusive license to use feedback for Platform improvements only. Customer retains ownership of any patentable inventions or proprietary methods."
+    },
+    {
+      "type": "confidentiality",
+      "severity": 7,
+      "location": "Customer acknowledges that data may be processed in any jurisdiction and stored with third-party subprocessors selected at Provider's discretion",
+      "explanation": "No data location controls or subprocessor approval rights, creating compliance risks",
+      "suggested_fix": "Require Customer approval for subprocessors and data location restrictions",
+      "rewrite_suggestion": "Provider shall obtain Customer's prior written consent for subprocessors handling Customer data and shall not transfer data outside [specified jurisdictions] without Customer approval."
+    },
+    {
+      "type": "general",
+      "severity": 8,
+      "location": "Provider targets 95% monthly uptime but this is an aspirational goal, not a commitment. No credits or remedies are available for downtime",
+      "explanation": "No enforceable service level commitments or remedies for poor performance",
+      "suggested_fix": "Include binding SLA with service credits for downtime",
+      "rewrite_suggestion": "Provider commits to 99.5% monthly uptime. For each full percentage point below this threshold, Customer receives a 5% service credit for that month."
+    },
+    {
+      "type": "general",
+      "severity": 7,
+      "location": "Provider is not responsible for data breaches, unauthorized access, or data loss. Customer is solely responsible for the security of login credentials",
+      "explanation": "Provider disclaims all security responsibility even for their own negligence",
+      "suggested_fix": "Allocate security responsibilities appropriately between parties",
+      "rewrite_suggestion": "Provider is responsible for Platform security measures and shall notify Customer of any data breaches within 24 hours. Customer is responsible for user access controls and credential management."
+    },
+    {
+      "type": "jurisdiction",
+      "severity": 6,
+      "location": "This Agreement is governed by Delaware law. Disputes shall be resolved exclusively in Delaware state courts. Customer waives any objection to venue or personal jurisdiction",
+      "explanation": "Forces Customer to litigate in Provider's home jurisdiction, potentially inconvenient and expensive",
+      "suggested_fix": "Allow for alternative dispute resolution or neutral venue",
+      "rewrite_suggestion": "Disputes shall first be subject to mediation, then binding arbitration in a location mutually agreed upon by the parties or conducted virtually."
+    },
+    {
+      "type": "general",
+      "severity": 7,
+      "location": "Provider may modify Platform features, pricing, or these terms at any time. Material changes will be posted to Provider's website. Continued use after 30 days constitutes acceptance",
+      "explanation": "Unilateral modification rights without meaningful consent mechanism",
+      "suggested_fix": "Require Customer consent for material changes with opt-out rights",
+      "rewrite_suggestion": "Material changes require ninety (90) days advance notice and Customer's written consent. Customer may terminate without penalty if it objects to material changes."
+    }
+  ],
+  "missing_clauses": [
+    "Data breach notification procedures",
+    "Business continuity and disaster recovery commitments",
+    "Customer data export/portability rights",
+    "Mutual confidentiality obligations",
+    "Force majeure clause",
+    "Severability clause",
+    "Professional liability insurance requirements",
+    "Audit rights for security and compliance",
+    "Data retention and deletion policies"
+  ],
+  "key_dates": [
+    "Effective Date: December 1, 2025",
+    "Initial term: 36 months",
+    "Auto-renewal: 24-month periods",
+    "Cancellation notice: 180 days prior to renewal",
+    "Fee increase notice: 15 days",
+    "Material changes acceptance: 30 days"
+  ]
+}
