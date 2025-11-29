@@ -1,0 +1,16 @@
+{
+  "summary": "The provided contract text appears to be incomplete or corrupted, containing only system loading messages and error traces rather than actual contract content. No meaningful contract analysis can be performed on this text.",
+  "overall_risk_score": 0,
+  "risks": [
+    {
+      "type": "general",
+      "severity": 10,
+      "location": "\ud83d\udd04 Loading gpt2... [backend] \u2705 gpt2 loaded on cpu [backend] \ud83d\udd04 Loading Qwen/Qwen2.5-1.5B-Instruct... [backend] \u2705 Qwen/Qwen2.5-1.5B-Instruct loaded on cpu [backend] Traceback (most recent call last): File \"/Users/alan_campbell_precedent/ai-portfolio/backend/main.py\", line 354, in <module> from contract_service import router as contract_router File \"/Users/alan_campbell_precedent/ai-portfolio/backend/contract_service.py\", line 10, in <module> from contract_rag_utils import contract_rag, contract_cache, ContractCacheManager File \"/Users/alan_campbell_precedent/ai-portfolio/backend/contract_rag_utils.py\", line 5, in <module> from supabase import create_client, Client ModuleNotFoundError: No module named 'supabase' [backend] npm run dev:backend exited with code 1",
+      "explanation": "The provided text contains system error messages and loading traces instead of contract content. This indicates either a technical error in document processing or the wrong content was submitted for analysis.",
+      "suggested_fix": "Please provide the actual contract text for analysis. Ensure the document is properly formatted and contains legal contract language rather than system logs.",
+      "rewrite_suggestion": "N/A - Please submit actual contract content for analysis"
+    }
+  ],
+  "missing_clauses": [],
+  "key_dates": []
+}

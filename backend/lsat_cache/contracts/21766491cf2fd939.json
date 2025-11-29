@@ -1,0 +1,89 @@
+{
+  "summary": "This influencer marketing contract heavily favors the Brand with numerous high-risk clauses for the Creator. Major concerns include unlimited indemnification, perpetual content usage rights, broad non-compete restrictions, one-sided termination rights, and subjective morality clauses. The overall risk profile is very high for the Creator.",
+  "overall_risk_score": 85,
+  "risks": [
+    {
+      "type": "indemnification",
+      "severity": 9,
+      "location": "Creator shall indemnify Brand against all claims arising from Creator's content, including FTC violations, false advertising claims, and intellectual property disputes, even if resulting from Brand-approved talking points.",
+      "explanation": "Unlimited indemnification with no caps, covering claims even when Brand approves the content. This creates unlimited liability exposure for the Creator.",
+      "suggested_fix": "Cap indemnification amount and exclude claims arising from Brand-provided content or instructions",
+      "rewrite_suggestion": "Creator shall indemnify Brand against claims arising solely from Creator's unauthorized modifications to Brand-approved content, with total liability capped at the compensation amount paid under this agreement."
+    },
+    {
+      "type": "ip_rights",
+      "severity": 8,
+      "location": "Creator grants Brand an exclusive, perpetual, worldwide, royalty-free license to use, edit, and repurpose all content across any media, including paid advertising, packaging, and sublicensing to retail partners. Brand may use Creator's name, likeness, and voice indefinitely.",
+      "explanation": "Extremely broad IP transfer giving Brand perpetual, unlimited rights to Creator's content, name, and likeness without additional compensation.",
+      "suggested_fix": "Limit usage rights to specific purposes and time periods, require additional compensation for extended use",
+      "rewrite_suggestion": "Creator grants Brand a non-exclusive, 2-year license to use content for social media marketing only. Any use in paid advertising or packaging requires separate agreement and additional compensation."
+    },
+    {
+      "type": "non_compete",
+      "severity": 7,
+      "location": "Creator shall not promote any supplements, energy drinks, or fitness nutrition products from other brands for 12 months following campaign completion.",
+      "explanation": "Overly broad 12-month non-compete restriction covering entire fitness nutrition category, potentially limiting Creator's income significantly.",
+      "suggested_fix": "Narrow to direct competitors only and reduce duration",
+      "rewrite_suggestion": "Creator shall not promote pre-workout supplements that directly compete with ElectraBoost for 3 months following campaign completion."
+    },
+    {
+      "type": "termination",
+      "severity": 8,
+      "location": "Brand may terminate for any reason with 7 days notice, paying only for completed deliverables. Creator may not terminate once initial payment is received.",
+      "explanation": "Completely one-sided termination rights. Brand can terminate at will while Creator is locked in after initial payment.",
+      "suggested_fix": "Provide mutual termination rights with appropriate notice periods",
+      "rewrite_suggestion": "Either party may terminate with 14 days written notice. Upon termination, Brand pays for all work completed to date plus a kill fee of 25% of remaining compensation."
+    },
+    {
+      "type": "general",
+      "severity": 9,
+      "location": "Brand may terminate immediately and recover all payments if Creator engages in conduct that, in Brand's sole opinion, damages Brand's reputation or public image.",
+      "explanation": "Subjective morality clause gives Brand unlimited discretion to terminate and clawback payments based on their opinion alone.",
+      "suggested_fix": "Define specific prohibited conduct and remove payment recovery provision",
+      "rewrite_suggestion": "Brand may terminate if Creator is convicted of a felony or engages in conduct that materially damages Brand's reputation, as determined by reasonable business standards. No payment recovery required."
+    },
+    {
+      "type": "payment",
+      "severity": 6,
+      "location": "Brand shall pay Creator $3,000 total, payable 50% upon signing and 50% within 60 days of final deliverable.",
+      "explanation": "60-day payment terms are longer than industry standard and create cash flow issues for Creator.",
+      "suggested_fix": "Shorten final payment terms to 30 days maximum",
+      "rewrite_suggestion": "Brand shall pay Creator $3,000 total, payable 50% upon signing and 50% within 30 days of final deliverable approval."
+    },
+    {
+      "type": "general",
+      "severity": 7,
+      "location": "Brand may request unlimited revisions until satisfied.",
+      "explanation": "Unlimited revision clause with no time limits could lead to scope creep and indefinite work requirements.",
+      "suggested_fix": "Limit revisions to a reasonable number with defined criteria",
+      "rewrite_suggestion": "Brand may request up to 2 rounds of revisions per deliverable, with specific feedback provided within 3 business days of submission."
+    },
+    {
+      "type": "general",
+      "severity": 6,
+      "location": "Creator may not delete posted content without Brand approval for 2 years.",
+      "explanation": "Long-term restriction on Creator's ability to manage their own social media content.",
+      "suggested_fix": "Reduce time period and allow deletion for legitimate reasons",
+      "rewrite_suggestion": "Creator may not delete posted content for 6 months without Brand approval, except for platform policy violations or legal requirements."
+    }
+  ],
+  "missing_clauses": [
+    "Limitation of liability clause",
+    "Force majeure provision",
+    "Dispute resolution mechanism",
+    "Governing law and jurisdiction",
+    "Definition of material breach",
+    "Confidentiality provisions",
+    "Creator's right to use content in portfolio"
+  ],
+  "key_dates": [
+    "December 10, 2025 (Effective Date)",
+    "January 2026 (Campaign Period)",
+    "5 business days before posting (Content approval deadline)",
+    "60 days after final deliverable (Final payment due)",
+    "6 months before/after campaign (Competitor mention restriction)",
+    "12 months following completion (Non-compete period)",
+    "2 years (Content deletion restriction)",
+    "7 days (Brand termination notice period)"
+  ]
+}
