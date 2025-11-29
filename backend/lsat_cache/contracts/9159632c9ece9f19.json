@@ -1,0 +1,76 @@
+{
+  "summary": "This equipment rental contract presents extremely high risk to the renter with heavily one-sided terms. The contract contains unlimited liability exposure, broad indemnification clauses, complete liability waivers, and lacks standard protective provisions. The overall structure heavily favors the owner while exposing the renter to potentially catastrophic financial risk far exceeding the equipment value.",
+  "overall_risk_score": 92,
+  "risks": [
+    {
+      "type": "liability",
+      "severity": 10,
+      "location": "Renter liable for all damage, loss, or theft regardless of cause, including acts of God, third-party actions, or theft from locked vehicle.",
+      "explanation": "This creates unlimited strict liability for the renter regardless of fault, including uncontrollable events like natural disasters and criminal acts by third parties. The $18,000 equipment value could result in total loss liability.",
+      "suggested_fix": "Cap liability at equipment replacement value and exclude force majeure events and criminal acts by third parties",
+      "rewrite_suggestion": "Renter's liability for damage, loss, or theft shall not exceed the replacement value of $18,000, excluding damage caused by acts of God, force majeure events, or criminal acts by third parties beyond Renter's reasonable control."
+    },
+    {
+      "type": "indemnification",
+      "severity": 9,
+      "location": "Renter indemnifies Owner against any claims arising from Renter's use of equipment, including personal injury to third parties.",
+      "explanation": "Broad indemnification clause with no limitations creates unlimited exposure for the renter to defend and pay claims against the owner, potentially including the owner's own negligence.",
+      "suggested_fix": "Limit indemnification to renter's negligent acts and exclude owner's negligence",
+      "rewrite_suggestion": "Renter agrees to indemnify Owner only for claims directly resulting from Renter's negligent use of the equipment, excluding any claims arising from Owner's negligence, defective equipment, or failure to maintain equipment."
+    },
+    {
+      "type": "general",
+      "severity": 8,
+      "location": "Renter waives all claims against Owner for equipment malfunction, injury, or project delays.",
+      "explanation": "Complete waiver of all claims eliminates renter's right to recover damages even for owner's negligence or defective equipment, which may not be enforceable in all jurisdictions.",
+      "suggested_fix": "Limit waiver to exclude gross negligence and intentional misconduct",
+      "rewrite_suggestion": "Renter waives claims against Owner for equipment malfunction or project delays, except for damages caused by Owner's gross negligence, intentional misconduct, or failure to disclose known defects."
+    },
+    {
+      "type": "payment",
+      "severity": 7,
+      "location": "Owner may charge Renter's card on file for any amounts exceeding deposit without additional authorization.",
+      "explanation": "Gives owner unlimited authority to charge renter's payment method without consent or dispute process, creating potential for abuse and unauthorized charges.",
+      "suggested_fix": "Require written notice and opportunity to dispute before charging additional amounts",
+      "rewrite_suggestion": "Owner may charge additional amounts only after providing written notice of damages with supporting documentation and allowing Renter 5 business days to dispute the charges."
+    },
+    {
+      "type": "termination",
+      "severity": 6,
+      "location": "Late returns charged at 1.5x daily rate per day or partial day.",
+      "explanation": "Penalty rate of 150% for late returns may be considered excessive and potentially unenforceable as a penalty rather than liquidated damages.",
+      "suggested_fix": "Use reasonable late fees that reflect actual damages",
+      "rewrite_suggestion": "Late returns will incur additional rental charges at the standard daily rate plus a $50 administrative fee per day or partial day late."
+    },
+    {
+      "type": "general",
+      "severity": 6,
+      "location": "Renter's personal insurance is primary; Owner's insurance is not available to Renter.",
+      "explanation": "Places entire insurance burden on renter while explicitly excluding owner's insurance coverage, potentially leaving gaps in coverage.",
+      "suggested_fix": "Clarify insurance requirements and allow for coordination of coverage",
+      "rewrite_suggestion": "Renter shall maintain adequate insurance coverage for the equipment. In the event of a covered loss, Renter's insurance shall be primary, with Owner's insurance serving as excess coverage if available."
+    },
+    {
+      "type": "jurisdiction",
+      "severity": 4,
+      "location": "Small claims court in Owner's county for disputes under $10,000.",
+      "explanation": "Limits dispute resolution to owner's preferred venue and small claims court, which may be inconvenient for renter and inappropriate for complex disputes.",
+      "suggested_fix": "Allow for alternative dispute resolution and neutral venue selection",
+      "rewrite_suggestion": "Disputes shall be resolved through binding arbitration in a mutually agreed location, with small claims court available for disputes under $5,000."
+    }
+  ],
+  "missing_clauses": [
+    "Force majeure clause protecting both parties",
+    "Equipment warranty or fitness for purpose disclaimer",
+    "Insurance requirements specification",
+    "Dispute resolution procedures",
+    "Limitation of consequential damages",
+    "Right to inspect equipment before acceptance",
+    "Notice requirements for claims",
+    "Severability clause"
+  ],
+  "key_dates": [
+    "December 20-23, 2025 (rental period)",
+    "Business hours: 9am-5pm (pickup/return window)"
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "summary": "This wedding photography contract heavily favors the photographer with numerous one-sided clauses that create significant financial and legal risks for the client. The contract contains excessive liability limitations, broad usage rights grants, and restrictive terms that could expose the client to substantial losses without adequate recourse.",
+  "overall_risk_score": 85,
+  "risks": [
+    {
+      "type": "liability",
+      "severity": 9,
+      "location": "Photographer's maximum liability is refund of fees paid. Photographer not liable for missed moments, unflattering images, or failure to capture specific shots.",
+      "explanation": "This creates an extreme liability cap that could leave clients with no recourse for catastrophic failures. Wedding photography is irreplaceable, and limiting liability to just a refund is grossly inadequate for such a unique, one-time event.",
+      "suggested_fix": "Establish reasonable liability limits with exceptions for gross negligence and willful misconduct",
+      "rewrite_suggestion": "Photographer's liability shall not exceed three times the contract amount, except in cases of gross negligence or willful misconduct. This limitation does not apply to Photographer's failure to appear or deliver any images."
+    },
+    {
+      "type": "payment",
+      "severity": 8,
+      "location": "Client cancellation forfeits all payments made.",
+      "explanation": "Complete forfeiture of all payments regardless of timing or circumstances is unconscionable and likely unenforceable. This creates severe financial risk for clients who may need to cancel due to legitimate reasons.",
+      "suggested_fix": "Implement a graduated cancellation policy based on timing and circumstances",
+      "rewrite_suggestion": "Cancellation more than 90 days before event: 50% refund. 30-90 days: 25% refund. Less than 30 days: no refund. Retainer is non-refundable in all cases."
+    },
+    {
+      "type": "ip_rights",
+      "severity": 8,
+      "location": "Photographer may use images for portfolio, social media, advertising, print competitions, and licensing to third parties including stock photo agencies.",
+      "explanation": "This grants extremely broad commercial usage rights without compensation or meaningful consent. Client's wedding photos could be sold commercially or used in ways they never intended.",
+      "suggested_fix": "Limit usage to portfolio and marketing with client approval for commercial licensing",
+      "rewrite_suggestion": "Photographer may use images for portfolio, website, and social media marketing. Any commercial licensing to third parties requires written client consent and revenue sharing."
+    },
+    {
+      "type": "general",
+      "severity": 7,
+      "location": "Client grants Photographer perpetual right to use Client's likeness in marketing without compensation or further consent.",
+      "explanation": "Perpetual likeness rights without compensation or ability to revoke is overly broad and potentially problematic for privacy and future commercial use.",
+      "suggested_fix": "Limit likeness rights to reasonable marketing purposes with opt-out provisions",
+      "rewrite_suggestion": "Client grants Photographer a 5-year license to use Client's likeness for marketing purposes. Client may revoke this license with 30 days written notice."
+    },
+    {
+      "type": "general",
+      "severity": 7,
+      "location": "Client shall not hire additional photographers or videographers without Photographer's consent, as additional shooters may interfere with Photographer's work.",
+      "explanation": "This exclusivity clause is overly restrictive and could prevent clients from having family members take photos or hiring videographers, which is unreasonable for a wedding.",
+      "suggested_fix": "Limit restriction to professional photographers during key moments only",
+      "rewrite_suggestion": "Client may hire additional professional photographers/videographers but must coordinate with Photographer to ensure no interference during key ceremony moments."
+    },
+    {
+      "type": "general",
+      "severity": 6,
+      "location": "Client may not publicly criticize delivery timeline.",
+      "explanation": "This appears to be an attempt to restrict free speech and legitimate criticism, which is likely unenforceable and problematic.",
+      "suggested_fix": "Remove this clause entirely",
+      "rewrite_suggestion": "Remove this clause. Clients have the right to provide honest feedback about services received."
+    },
+    {
+      "type": "general",
+      "severity": 6,
+      "location": "Client may not apply filters or edits to images without permission.",
+      "explanation": "This restriction on how clients can use their own wedding photos for personal use is overly controlling and unreasonable.",
+      "suggested_fix": "Allow personal editing while restricting commercial use",
+      "rewrite_suggestion": "Client may edit images for personal use but may not alter images used for commercial purposes or when crediting Photographer."
+    },
+    {
+      "type": "payment",
+      "severity": 5,
+      "location": "If event is rescheduled, Client pays $500 rebooking fee subject to availability.",
+      "explanation": "Charging a rebooking fee even when rescheduling is due to force majeure events beyond client control is unreasonable.",
+      "suggested_fix": "Waive rebooking fees for force majeure events",
+      "rewrite_suggestion": "If event is rescheduled due to force majeure, no rebooking fee applies. For voluntary rescheduling, a $250 administrative fee applies subject to availability."
+    }
+  ],
+  "missing_clauses": [
+    "Dispute resolution/arbitration clause",
+    "Governing law and jurisdiction",
+    "Equipment backup requirements",
+    "Specific deliverable guarantees",
+    "Data protection and privacy provisions",
+    "Professional liability insurance requirements",
+    "Clear definition of force majeure events",
+    "Client approval process for image selection"
+  ],
+  "key_dates": [
+    "Effective Date: December 8, 2025",
+    "Wedding Date: March 15, 2026",
+    "Payment Due: January 15, 2026",
+    "Final Payment: 7 days before event (March 8, 2026)",
+    "Image Delivery: 8-12 weeks after event (May 10 - June 7, 2026)"
+  ]
+}
