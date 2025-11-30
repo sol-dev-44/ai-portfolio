@@ -2,10 +2,13 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe, FileText, Heart } from 'lucide-react';
+import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe, FileText, Heart, Bot, Palette } from 'lucide-react';
 import { useRef } from 'react';
 
 const techStack = [
+  { name: 'Three.js', icon: '🧊' },
+  { name: 'OpenAI', icon: '🤖' },
+  { name: 'Supabase', icon: '⚡' },
   { name: 'TypeScript', icon: '⚡' },
   { name: 'React', icon: '⚛️' },
   { name: 'Next.js', icon: '▲' },
@@ -388,6 +391,82 @@ export default function Home() {
                   <div className="flex flex-wrap gap-2">
                     <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">RAG</span>
                     <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">pgvector</span>
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Creative Lab Section */}
+      <section className="py-24 px-4 bg-gray-100 dark:bg-gray-900/50 border-y border-gray-200 dark:border-gray-800 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] dark:opacity-[0.05]" />
+        <div className="max-w-7xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6"
+          >
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg text-pink-600 dark:text-pink-400">
+                  <Palette className="w-6 h-6" />
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
+                  Creative Lab
+                </h2>
+              </div>
+              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-xl">
+                Experimental interfaces, 3D interactions, and "artsy fartsy" AI demos.
+              </p>
+            </div>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Robot Project */}
+            <Link href="/robot" className="md:col-span-2">
+              <motion.div
+                whileHover={{ y: -10 }}
+                className="group relative h-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20 rounded-3xl border border-purple-200 dark:border-purple-800 overflow-hidden hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-8 md:p-10">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="p-3 bg-gradient-to-br from-blue-500 to-pink-500 rounded-2xl text-white shadow-lg shadow-purple-500/30">
+                          <Bot className="w-8 h-8" />
+                        </div>
+                        <div className="flex gap-2">
+                          <span className="px-3 py-1 bg-gradient-to-r from-blue-500 to-pink-500 text-white text-xs font-bold rounded-full">
+                            INTERACTIVE
+                          </span>
+                          <span className="px-3 py-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-bold rounded-full border border-gray-200 dark:border-gray-700">
+                            Three.js
+                          </span>
+                        </div>
+                      </div>
+                      <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                        Interactive 3D Robot
+                      </h3>
+                      <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 max-w-2xl">
+                        A friendly 3D robot you can control with your voice. Built with React Three Fiber and OpenAI for natural language command parsing.
+                        "Make him dance happily!" 💃
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Web Speech API</span>
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">3D Animation</span>
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Generative UI</span>
+                      </div>
+                    </div>
+
+                    {/* Visual Preview / Mini Scene */}
+                    <div className="relative w-full md:w-64 h-48 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/50 dark:border-gray-700/50 backdrop-blur-sm flex items-center justify-center overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-pink-500/10" />
+                      <div className="text-6xl animate-bounce">🤖</div>
+                    </div>
                   </div>
                 </div>
               </motion.div>

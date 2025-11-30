@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Sparkles, ChevronDown } from 'lucide-react';
+import { Sparkles, ChevronDown, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import ThemeToggle from './ThemeToggle';
 import { useState } from 'react';
@@ -22,6 +22,7 @@ const navGroups = [
     name: 'Demos',
     items: [
       { name: 'Agent', path: '/agent' },
+      { name: 'Robot', path: '/robot' },
       { name: 'LLM Arena', path: '/llm-playground' },
       { name: 'RAG Chat', path: '/rag-chat' },
       { name: 'Generation', path: '/generation' },
@@ -31,6 +32,7 @@ const navGroups = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <motion.nav
@@ -63,7 +65,7 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Nav Items */}
+          {/* Desktop Nav Items */}
           <div className="hidden md:flex items-center gap-6">
             {navGroups.map((group) => (
               <div key={group.name} className="relative group/menu">
@@ -93,10 +95,10 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* CTA Button */}
+          {/* CTA Button & Mobile Toggle */}
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <Link href="/rag-chat">
+            <Link href="/rag-chat" className="hidden sm:block">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -106,9 +108,58 @@ export function Navbar() {
                 <span className="hidden sm:inline">Ask AI</span>
               </motion.button>
             </Link>
+
+            {/* Mobile Menu Toggle */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          className="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
+        >
+          <div className="px-4 py-6 space-y-6">
+            {navGroups.map((group) => (
+              <div key={group.name} className="space-y-3">
+                <h3 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                  {group.name}
+                </h3>
+                <div className="grid grid-cols-1 gap-2">
+                  {group.items.map((item) => (
+                    <Link
+                      key={item.path}
+                      href={item.path}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors ${pathname === item.path
+                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                        }`}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+            <Link href="/rag-chat" onClick={() => setIsMobileMenuOpen(false)} className="block">
+              <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold text-sm shadow-lg">
+                <Sparkles className="w-4 h-4" />
+                Ask AI Assistant
+              </button>
+            </Link>
+          </div>
+        </motion.div>
+      )}
     </motion.nav>
   );
 }
