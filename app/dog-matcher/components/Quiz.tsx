@@ -29,7 +29,7 @@ const QUESTIONS = [
         options: [
             { value: 'apartment', label: 'Apartment', emoji: '🏢' },
             { value: 'house-small-yard', label: 'House with small yard', emoji: '🏡' },
-            { value: 'house-large-yard', label: 'House with large yard', emoji: '🏘️' },
+            { value: 'house-large-yard', label: 'House with large yard', emoji: '🏠' },
             { value: 'farm', label: 'Farm / Acreage', emoji: '🌾' }
         ]
     },
@@ -73,7 +73,7 @@ const QUESTIONS = [
             { value: '15min', label: '15-30 minutes', emoji: '⏱️' },
             { value: '30-60min', label: '30-60 minutes', emoji: '⏰' },
             { value: '60-120min', label: '1-2 hours', emoji: '🕐' },
-            { value: '2plus-hours', label: '2+ hours', emoji: '🕒' }
+            { value: '2plus-hours', label: '2+ hours', emoji: '🕑' }
         ]
     },
     {
