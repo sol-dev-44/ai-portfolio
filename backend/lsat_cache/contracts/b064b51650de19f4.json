@@ -1,0 +1,88 @@
+{
+  "summary": "This contract contains two separate agreements with significantly different risk profiles. The Mobile App Development Agreement has moderate risks primarily around delivery acceptance criteria and IP ownership clarity. The Gym Membership Agreement presents high risks with extremely broad liability waivers, harsh termination terms, and one-sided indemnification clauses that heavily favor the facility.",
+  "overall_risk_score": 78,
+  "risks": [
+    {
+      "type": "delivery",
+      "severity": 7,
+      "location": "Developer warrants the application will substantially conform to specifications for 60 days post-launch",
+      "explanation": "Vague acceptance criteria using 'substantially conform' creates dispute risk. No objective acceptance process or deemed acceptance clause.",
+      "suggested_fix": "Define specific, objective acceptance criteria with clear testing procedures and deemed acceptance timeline",
+      "rewrite_suggestion": "Client shall have 10 business days to test deliverables against specifications in Exhibit A. Acceptance deemed granted if no written rejection with specific defects is provided within this period. Rejection must identify specific non-conformance with objective specifications."
+    },
+    {
+      "type": "payment",
+      "severity": 6,
+      "location": "Late payments accrue 2% monthly interest and pause all development",
+      "explanation": "While payment terms are generally clear, the automatic work stoppage for late payment could create project delays and disputes",
+      "suggested_fix": "Add grace period before work stoppage and define restart procedures",
+      "rewrite_suggestion": "Late payments accrue 2% monthly interest. If payment remains outstanding 15 days after due date, Developer may suspend work with 5 days written notice. Work resumes within 2 business days of payment receipt."
+    },
+    {
+      "type": "ip_rights",
+      "severity": 5,
+      "location": "Developer retains ownership of: Underlying frameworks and reusable code libraries, Third-party components and SDKs, Backend architecture patterns",
+      "explanation": "IP ownership division could create future disputes about what constitutes 'reusable code' versus custom development",
+      "suggested_fix": "More precisely define retained IP categories with specific examples",
+      "rewrite_suggestion": "Developer retains ownership of: (a) pre-existing code libraries and frameworks developed prior to this Agreement, (b) third-party open source components, and (c) general programming techniques and methodologies. All custom code written specifically for Client's application requirements shall be owned by Client."
+    },
+    {
+      "type": "liability",
+      "severity": 9,
+      "location": "Member releases and waives all claims against Facility... for any injury, illness, death, or property damage... including claims arising from: Equipment malfunction or defect, Negligence of staff or other members",
+      "explanation": "Extremely broad liability waiver attempting to cover facility's own negligence, which may not be enforceable in many jurisdictions and creates significant risk exposure for the member",
+      "suggested_fix": "Limit waiver to inherent risks of exercise, exclude gross negligence and intentional misconduct",
+      "rewrite_suggestion": "Member acknowledges the inherent risks of physical exercise and waives claims for injuries arising from such inherent risks, provided that this waiver does not extend to claims arising from Facility's gross negligence, willful misconduct, or violation of applicable safety regulations."
+    },
+    {
+      "type": "indemnification",
+      "severity": 8,
+      "location": "Member shall indemnify and hold Facility harmless from any claims brought by Member's guests, family members, or any third party arising from Member's use of the facility",
+      "explanation": "One-sided indemnification clause requiring member to defend facility against all third-party claims, even those caused by facility's negligence",
+      "suggested_fix": "Limit indemnification to member's own misconduct or negligence",
+      "rewrite_suggestion": "Member shall indemnify Facility only for third-party claims directly caused by Member's willful misconduct or material breach of facility rules, provided Facility was not negligent or at fault."
+    },
+    {
+      "type": "termination",
+      "severity": 8,
+      "location": "Early termination requires payment of $299 buyout fee plus 50% of remaining monthly dues... Member may cancel after initial term with 60 days written notice sent via certified mail to corporate headquarters",
+      "explanation": "Extremely harsh early termination penalties and burdensome cancellation procedures that heavily favor the facility",
+      "suggested_fix": "Reduce penalties and simplify cancellation process",
+      "rewrite_suggestion": "Member may cancel with 30 days written notice (email acceptable). Early termination within first 12 months requires $150 processing fee. No additional penalties apply."
+    },
+    {
+      "type": "general",
+      "severity": 7,
+      "location": "All disputes shall be resolved through binding arbitration in facility's home county. Member waives right to jury trial, class action participation, and punitive damages",
+      "explanation": "Mandatory arbitration with class action waiver may limit member's legal remedies and access to justice",
+      "suggested_fix": "Make arbitration mutual and allow small claims court option",
+      "rewrite_suggestion": "Disputes under $5,000 may be resolved in small claims court. Other disputes subject to binding arbitration, with arbitrator and venue selected by mutual agreement or AAA rules."
+    },
+    {
+      "type": "general",
+      "severity": 6,
+      "location": "Facility may increase monthly dues once per calendar year with 30 days notice. Increases typically range from $5-15/month",
+      "explanation": "Unilateral price increase authority without caps or member termination rights creates ongoing financial risk",
+      "suggested_fix": "Cap increases and provide termination right for significant increases",
+      "rewrite_suggestion": "Monthly dues may increase once per year by no more than 5% or $10, whichever is less, with 60 days notice. Member may terminate without penalty if increase exceeds $10."
+    }
+  ],
+  "missing_clauses": [
+    "Force majeure clause in app development agreement",
+    "Data protection and privacy provisions for both agreements",
+    "Dispute resolution process for app development agreement",
+    "Confidentiality provisions for app development",
+    "Limitation of facility's liability for gross negligence (gym agreement)",
+    "Member's right to cure payment defaults before termination"
+  ],
+  "key_dates": [
+    "January 5, 2026 - App development effective date",
+    "16 weeks - Estimated app delivery timeline",
+    "60 days - App warranty period",
+    "December 1, 2025 - Gym membership enrollment date",
+    "24 months - Initial gym membership term",
+    "60 days - Required notice for gym cancellation",
+    "10 business days - App development payment terms",
+    "5 business days - Client feedback timeline for app milestones"
+  ]
+}

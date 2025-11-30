@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe, FileText } from 'lucide-react';
+import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe, FileText, Heart } from 'lucide-react';
 import { useRef } from 'react';
 
 const techStack = [
@@ -255,7 +255,37 @@ export default function Home() {
               </motion.div>
             </Link>
 
-            {/* Project 3: Dashboard Studio */}
+            {/* Project 3: Dog Matcher - NEW */}
+            <Link href="/dog-matcher">
+              <motion.div
+                whileHover={{ y: -10 }}
+                className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-pink-500/10 transition-all duration-300"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-8 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="p-3 bg-pink-100 dark:bg-pink-900/30 rounded-2xl text-pink-600 dark:text-pink-400">
+                      <Heart className="w-8 h-8" />
+                    </div>
+                    <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold rounded-full">
+                      NEW
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">
+                    Dog Breed Matcher
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6 flex-grow">
+                    Find your perfect dog using semantic search. RAG-powered matching with OpenAI embeddings and Supabase pgvector.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">RAG</span>
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">Embeddings</span>
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+
+            {/* Project 4: Dashboard Studio */}
             <Link href="/dashboard">
               <motion.div
                 whileHover={{ y: -10 }}

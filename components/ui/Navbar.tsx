@@ -13,6 +13,7 @@ const navGroups = [
     name: 'Tools',
     items: [
       { name: 'Dashboard Studio', path: '/dashboard' },
+      { name: 'Dog Matcher', path: '/dog-matcher' },
       { name: 'Contract Auditor', path: '/contract-auditor' },
       { name: 'Tokenizer', path: '/tokenizer' },
     ]
@@ -79,8 +80,8 @@ export function Navbar() {
                         key={item.path}
                         href={item.path}
                         className={`block px-4 py-2 rounded-lg text-sm transition-colors ${pathname === item.path
-                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
                           }`}
                       >
                         {item.name}

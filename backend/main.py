@@ -354,6 +354,9 @@ class AgentChatRequest(BaseModel):
 from contract_service import router as contract_router
 app.include_router(contract_router, prefix="/api")
 
+from dog_matcher_service import router as dog_matcher_router
+app.include_router(dog_matcher_router, prefix="/api")
+
 # =====LANGCHAIN AGENT ENDPOINT =====
 @app.post("/api/agent/langchain")
 async def langchain_agent_chat(request: AgentChatRequest):

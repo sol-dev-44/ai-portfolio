@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
+import StrategyPanel from '@/components/lsat/StrategyPanel';
 import {
     Brain,
     Database,
@@ -260,8 +261,8 @@ function DifficultyBadge({ difficulty }: { difficulty: 'easy' | 'medium' | 'hard
 function CacheIndicator({ fromCache, cacheKey }: { fromCache: boolean; cacheKey?: string }) {
     return (
         <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs ${fromCache
-                ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+            : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
             }`}>
             {fromCache ? (
                 <>
@@ -294,8 +295,8 @@ function QuestionCard({
             layout
             onClick={onSelect}
             className={`p-4 rounded-lg border cursor-pointer transition-all ${selected
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
         >
             <div className="flex items-start justify-between gap-2">
@@ -330,13 +331,15 @@ function AnalysisPanel({
     rawText,
     loading,
     fromCache,
-    question
+    question,
+    onGetStrategy
 }: {
     analysis: PatternAnalysis | null;
     rawText: string;
     loading: boolean;
     fromCache: boolean;
     question: LSATQuestion | null;
+    onGetStrategy?: (questionType: string) => void;
 }) {
     const [expandedSections, setExpandedSections] = useState<Set<string>>(
         new Set(['breakdown', 'correct', 'tips'])
@@ -405,6 +408,17 @@ function AnalysisPanel({
                     </div>
                 </div>
             </div>
+
+            {/* Get Strategy Button */}
+            {onGetStrategy && (
+                <button
+                    onClick={() => onGetStrategy(analysis.pattern_type)}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-lg hover:from-indigo-600 hover:to-purple-600 shadow-md hover:shadow-lg transition-all"
+                >
+                    <BookOpen className="w-5 h-5" />
+                    <span className="font-semibold">📚 Get Strategy for {PATTERN_STYLES[analysis.pattern_type.toLowerCase()]?.label || analysis.pattern_type}</span>
+                </button>
+            )}
 
             {/* Breakdown Section */}
             <div className="border rounded-lg dark:border-gray-700 overflow-hidden">
@@ -565,7 +579,7 @@ function AnalysisPanel({
                     )}
                 </AnimatePresence>
             </div>
-        </div>
+        </div >
     );
 }
 
@@ -575,15 +589,15 @@ function StatsBar({ stats, onRefresh }: { stats: CacheStats | null; onRefresh: (
             <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                 <div className="flex items-center gap-1">
                     <Database className="w-4 h-4" />
-                    <span>Cache: {stats?.pattern_analyses_cached ?? stats?.cached_analyses ?? stats?.local_cache_size ?? 0}</span>
+                    <span>Cache: {stats?.pattern_analyses_cached ?? stats?.local_cache_size ?? 0}</span>
                 </div>
                 <div className="flex items-center gap-1">
                     <Brain className="w-4 h-4" />
-                    <span>RAG Patterns: {stats?.patterns_indexed ?? stats?.rag_patterns_indexed ?? 0}</span>
+                    <span>RAG Patterns: {stats?.rag_patterns_indexed ?? 0}</span>
                 </div>
                 <div className="flex items-center gap-1">
                     <FileJson className="w-4 h-4" />
-                    <span>Examples: {stats?.examples_indexed ?? stats?.rag_examples_indexed ?? 0}</span>
+                    <span>Examples: {stats?.rag_examples_indexed ?? 0}</span>
                 </div>
             </div>
             <button
@@ -611,6 +625,8 @@ export default function LSATAnalyzer() {
     const [fromCache, setFromCache] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [questionCount, setQuestionCount] = useState(5);
+    const [showStrategy, setShowStrategy] = useState(false);
+    const [strategyType, setStrategyType] = useState<string | undefined>();
 
     // Fetch stats on mount
     useEffect(() => {
@@ -770,6 +786,10 @@ export default function LSATAnalyzer() {
                             loading={analyzing}
                             fromCache={fromCache}
                             question={selectedQuestion}
+                            onGetStrategy={(type) => {
+                                setStrategyType(type);
+                                setShowStrategy(true);
+                            }}
                         />
                     </div>
                 </div>
@@ -817,6 +837,14 @@ export default function LSATAnalyzer() {
                             </div>
                         </div>
                     </div>
+                )}
+
+                {/* Strategy Panel Modal */}
+                {showStrategy && (
+                    <StrategyPanel
+                        questionType={strategyType}
+                        onClose={() => setShowStrategy(false)}
+                    />
                 )}
             </div>
         </div>
