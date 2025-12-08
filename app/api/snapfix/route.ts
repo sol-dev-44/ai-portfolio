@@ -25,9 +25,17 @@ export interface DiagnosisResponse {
     resources: { title: string; url: string }[];
 }
 
+// Helper to get absolute URL for internal API calls
+function getBaseUrl() {
+    if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL;
+    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+    return 'http://localhost:3000';
+}
+
 export async function POST(req: NextRequest) {
     const startTime = Date.now();
     const encoder = new TextEncoder();
+    const API_BASE_URL = getBaseUrl();
 
     try {
         const formData = await req.formData();
@@ -38,7 +46,7 @@ export async function POST(req: NextRequest) {
             return Response.json({ error: 'Image is required' }, { status: 400 });
         }
 
-        console.log('[SnapFix Orchestrator] Starting multi-agent diagnosis...');
+        console.log(`[SnapFix Orchestrator] Starting diagnosis. Base URL: ${API_BASE_URL}`);
 
         // Create streaming response
         const stream = new ReadableStream({
@@ -62,7 +70,7 @@ export async function POST(req: NextRequest) {
                     if (userPrompt) visionFormData.append('prompt', userPrompt);
 
                     const visionResponse = await fetch(
-                        `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/snapfix/analyze`,
+                        `${API_BASE_URL}/api/snapfix/analyze`,
                         {
                             method: 'POST',
                             body: visionFormData
@@ -88,7 +96,7 @@ export async function POST(req: NextRequest) {
 
                     const [knowledgeData, searchData, estimateData] = await Promise.allSettled([
                         // Knowledge Agent
-                        fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/snapfix/knowledge`, {
+                        fetch(`${API_BASE_URL}/api/snapfix/knowledge`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -99,7 +107,7 @@ export async function POST(req: NextRequest) {
                         }).then(r => r.json()),
 
                         // Web Search Agent
-                        fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/snapfix/search`, {
+                        fetch(`${API_BASE_URL}/api/snapfix/search`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -109,7 +117,7 @@ export async function POST(req: NextRequest) {
                         }).then(r => r.json()),
 
                         // Estimation Agent
-                        fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/snapfix/estimate`, {
+                        fetch(`${API_BASE_URL}/api/snapfix/estimate`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -204,7 +212,7 @@ Symptoms: ${analysis.symptoms.join(', ')}
 Advice: ${fullResponse}`;
 
                     // Fire-and-forget training call (don't block response too long, but ensure execution)
-                    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/snapfix/train`, {
+                    fetch(`${API_BASE_URL}/api/snapfix/train`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
