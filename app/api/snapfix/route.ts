@@ -10,6 +10,9 @@ import type { RepairEstimate } from './estimate/route';
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
 
+// Allow longer execution for Vercel Serverless (max 60s for Hobby)
+export const maxDuration = 60;
+
 export interface DiagnosisResponse {
     diagnosis: string;
     confidence: 'high' | 'medium' | 'low';
@@ -28,8 +31,15 @@ export interface DiagnosisResponse {
 // Helper to get absolute URL for internal API calls
 function getBaseUrl() {
     if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL;
+
+    // Railway public domain (HTTPS)
+    if (process.env.RAILWAY_PUBLIC_DOMAIN) return `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`;
+
+    // Vercel fallback
     if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-    return 'http://localhost:3000';
+
+    // Localhost with dynamic port (default for container internals)
+    return `http://localhost:${process.env.PORT || 3000}`;
 }
 
 export async function POST(req: NextRequest) {
