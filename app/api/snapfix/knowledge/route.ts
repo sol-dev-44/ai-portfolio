@@ -20,6 +20,47 @@ export interface KnowledgeResult {
     source?: string;
 }
 
+export async function searchKnowledge(query: string, category: string, limit: number = 5): Promise<KnowledgeResult[]> {
+    console.log(`[SnapFix Knowledge] Searching for: "${query}" (category: ${category || 'any'})`);
+
+    // Generate embedding for query
+    const embeddingResponse = await openai.embeddings.create({
+        model: 'text-embedding-3-small',
+        input: query,
+    });
+
+    const queryEmbedding = embeddingResponse.data[0].embedding;
+
+    // Search repair guides table
+    // Fetch more candidates (3x limit) to allow for filtering by app context
+    const { data: results, error: searchError } = await supabase.rpc('match_documents', {
+        query_embedding: queryEmbedding,
+        match_threshold: 0.3,
+        match_count: limit * 3,
+    });
+
+    if (searchError) {
+        console.error('[SnapFix Knowledge] Search error:', searchError);
+        throw searchError;
+    }
+
+    // Filter for SnapFix-specific knowledge to avoid pollution from other apps
+    const appSpecificResults = (results || []).filter((doc: any) =>
+        doc.metadata?.app === 'snapfix'
+    );
+
+    const knowledgeResults: KnowledgeResult[] = appSpecificResults.map((doc: any) => ({
+        title: doc.title,
+        content: doc.content,
+        category: doc.metadata?.category || 'general',
+        similarity: doc.similarity,
+        source: doc.url || doc.metadata?.source
+    })).slice(0, limit); // Enforce original limit after filtering
+
+    console.log(`[SnapFix Knowledge] Found ${knowledgeResults.length} relevant guides`);
+    return knowledgeResults;
+}
+
 export async function POST(req: NextRequest) {
     try {
         const { query, category, limit = 5 } = await req.json();
@@ -28,43 +69,7 @@ export async function POST(req: NextRequest) {
             return Response.json({ error: 'Query is required' }, { status: 400 });
         }
 
-        console.log(`[SnapFix Knowledge] Searching for: "${query}" (category: ${category || 'any'})`);
-
-        // Generate embedding for query
-        const embeddingResponse = await openai.embeddings.create({
-            model: 'text-embedding-3-small',
-            input: query,
-        });
-
-        const queryEmbedding = embeddingResponse.data[0].embedding;
-
-        // Search repair guides table
-        // Fetch more candidates (3x limit) to allow for filtering by app context
-        const { data: results, error: searchError } = await supabase.rpc('match_documents', {
-            query_embedding: queryEmbedding,
-            match_threshold: 0.3,
-            match_count: limit * 3,
-        });
-
-        if (searchError) {
-            console.error('[SnapFix Knowledge] Search error:', searchError);
-            throw searchError;
-        }
-
-        // Filter for SnapFix-specific knowledge to avoid pollution from other apps
-        const appSpecificResults = (results || []).filter((doc: any) =>
-            doc.metadata?.app === 'snapfix'
-        );
-
-        const knowledgeResults: KnowledgeResult[] = appSpecificResults.map((doc: any) => ({
-            title: doc.title,
-            content: doc.content,
-            category: doc.metadata?.category || 'general',
-            similarity: doc.similarity,
-            source: doc.url || doc.metadata?.source
-        })).slice(0, limit); // Enforce original limit after filtering
-
-        console.log(`[SnapFix Knowledge] Found ${knowledgeResults.length} relevant guides`);
+        const knowledgeResults = await searchKnowledge(query, category, limit);
 
         return Response.json({
             success: true,
