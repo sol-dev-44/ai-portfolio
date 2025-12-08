@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe, FileText, Heart, Bot, Palette } from 'lucide-react';
+import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe, FileText, Heart, Bot, Palette, Wrench } from 'lucide-react';
 import { useRef } from 'react';
 
 const techStack = [
@@ -169,7 +169,51 @@ export default function Home() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Project 1: Tool-Calling Agent - FEATURED */}
+            {/* Project 1: SnapFix - FEATURED CAPSTONE */}
+            <Link href="/snapfix" className="md:col-span-2">
+              <motion.div
+                whileHover={{ y: -10 }}
+                className="group relative h-full bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50 dark:from-indigo-900/20 dark:via-blue-900/20 dark:to-cyan-900/20 rounded-3xl border border-indigo-200 dark:border-indigo-800 overflow-hidden hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-8 md:p-10">
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="p-3 bg-gradient-to-br from-indigo-500 to-cyan-500 rounded-2xl text-white shadow-lg shadow-indigo-500/30">
+                          <Wrench className="w-8 h-8" />
+                        </div>
+                        <div className="flex gap-2">
+                          <span className="px-3 py-1 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold rounded-full">
+                            FEATURED
+                          </span>
+                          <span className="px-3 py-1 bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-xs font-bold rounded-full">
+                            CAPSTONE
+                          </span>
+                          <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-full">
+                            Multi-Agent
+                          </span>
+                        </div>
+                      </div>
+                      <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                        SnapFix AI Diagnostic
+                      </h3>
+                      <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 max-w-2xl">
+                        Upload a photo of any repair problem and get instant AI-powered diagnosis. Multi-agent system with vision analysis (GPT-4o), Cyclical-Learning Knowledge Base, web search, cost estimation, and Claude synthesis.
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Vision AI</span>
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Cyclical RAG</span>
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Web Search</span>
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Streaming</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+
+            {/* Project 2: Tool-Calling Agent */}
             <Link href="/agent" className="md:col-span-2">
               <motion.div
                 whileHover={{ y: -10 }}
@@ -184,9 +228,6 @@ export default function Home() {
                           <Cpu className="w-8 h-8" />
                         </div>
                         <div className="flex gap-2">
-                          <span className="px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold rounded-full">
-                            FEATURED
-                          </span>
                           <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-full">
                             Claude
                           </span>
@@ -200,13 +241,12 @@ export default function Home() {
                       </h3>
                       <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 max-w-2xl">
                         Watch AI reasoning in real-time. Compare Claude vs Open Source models as they decide which tools to use,
-                        execute API calls, and synthesize responses. Full pipeline visualization shows exactly what happens under the hood.
+                        execute API calls, and synthesize responses.
                       </p>
                       <div className="flex flex-wrap gap-2">
                         <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">ReAct Pattern</span>
                         <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Function Calling</span>
                         <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">HuggingFace</span>
-                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Compare Mode</span>
                       </div>
                     </div>
                     <div className="hidden md:flex flex-col gap-2 text-sm text-gray-500 dark:text-gray-400">
@@ -228,7 +268,7 @@ export default function Home() {
               </motion.div>
             </Link>
 
-            {/* Project 2: Contract Auditor - NEW */}
+            {/* Project 3: Contract Auditor - NEW */}
             <Link href="/contract-auditor">
               <motion.div
                 whileHover={{ y: -10 }}

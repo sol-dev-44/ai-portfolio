@@ -99,37 +99,34 @@ def initialize_tokenizers():
 TOKENIZERS, TOKENIZER_METADATA = initialize_tokenizers()
 
 # ===== MODEL INITIALIZATION =====
-def initialize_model(model_id="gpt2"):
-    """Initialize a model for generation."""
+# ===== MODEL INITIALIZATION =====
+from llm_engine import initialize_local_model, get_local_model
+
+# Initialize models
+# GPT2 is still used for specific visualization endpoints, keeping it separate for now or could move to engine
+def initialize_gpt2():
+    """Initialize GPT-2 for visualization."""
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    
     try:
-        print(f"🔄 Loading {model_id}...")
-        tokenizer = AutoTokenizer.from_pretrained(model_id)
-        model = AutoModelForCausalLM.from_pretrained(model_id).to(device)
+        print(f"🔄 Loading gpt2...")
+        tokenizer = AutoTokenizer.from_pretrained("gpt2")
+        model = AutoModelForCausalLM.from_pretrained("gpt2").to(device)
         model.eval()
-        
-        print(f"✅ {model_id} loaded on {device}")
+        print(f"✅ gpt2 loaded on {device}")
         return {
             "tokenizer": tokenizer,
             "model": model,
             "device": device,
-            "id": model_id
+            "id": "gpt2"
         }
     except Exception as e:
-        print(f"❌ Could not load {model_id}: {e}")
+        print(f"❌ Could not load gpt2: {e}")
         return None
 
-# Initialize models
-GPT2_MODEL = initialize_model("gpt2")
+GPT2_MODEL = initialize_gpt2()
 
-# Use a capable instruction-tuned model for the agent
-# Qwen2.5-1.5B-Instruct is good for CPU, but consider these alternatives:
-# - For better tool-calling: "microsoft/Phi-3-mini-4k-instruct" (3.8B params, better instruction following)
-# - For speed: "TinyLlama/TinyLlama-1.1B-Chat-v1.0" (faster but less capable)
-# - If you have GPU: "mistralai/Mistral-7B-Instruct-v0.2" (excellent tool-calling)
-AGENT_MODEL_ID = "Qwen/Qwen2.5-1.5B-Instruct"
-AGENT_MODEL = initialize_model(AGENT_MODEL_ID)
+# Initialize Agent Model (Local Qwen) via Engine
+AGENT_MODEL = initialize_local_model()
 
 # ===== BASIC ROUTES =====
 @app.get("/")
@@ -356,6 +353,9 @@ app.include_router(contract_router, prefix="/api")
 
 from dog_matcher_service import router as dog_matcher_router
 app.include_router(dog_matcher_router, prefix="/api")
+
+from reasoning.routes import router as reasoning_router
+app.include_router(reasoning_router, prefix="/api")
 
 # =====LANGCHAIN AGENT ENDPOINT =====
 @app.post("/api/agent/langchain")

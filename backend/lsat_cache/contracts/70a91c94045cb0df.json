@@ -1,0 +1,45 @@
+{
+  "summary": "This appears to be an incomplete or placeholder contract consisting only of informal greeting text 'hey you'. This represents an extremely high risk as it lacks all essential contract elements including parties, consideration, terms, obligations, and legal structure.",
+  "overall_risk_score": 100,
+  "risks": [
+    {
+      "type": "general",
+      "severity": 10,
+      "location": "hey you",
+      "explanation": "This text does not constitute a valid contract as it lacks all essential elements: offer, acceptance, consideration, capacity, and legality. It appears to be informal communication rather than a legal agreement.",
+      "suggested_fix": "Replace with a complete contract that includes proper legal structure, defined parties, clear terms, and enforceable obligations.",
+      "rewrite_suggestion": "This document requires complete replacement with a properly structured contract including: party identification, recitals, definitions, terms and conditions, representations and warranties, termination provisions, and signature blocks."
+    },
+    {
+      "type": "general",
+      "severity": 10,
+      "location": "Entire document",
+      "explanation": "Complete absence of party identification makes it impossible to determine who has rights and obligations under any potential agreement.",
+      "suggested_fix": "Add proper party identification section with full legal names, addresses, and capacity to contract.",
+      "rewrite_suggestion": "PARTIES: This Agreement is entered into between [Party A Name], a [entity type] organized under the laws of [jurisdiction] ('Party A'), and [Party B Name], a [entity type] organized under the laws of [jurisdiction] ('Party B')."
+    },
+    {
+      "type": "general",
+      "severity": 10,
+      "location": "Entire document",
+      "explanation": "No consideration or exchange of value is specified, which is required for contract enforceability.",
+      "suggested_fix": "Define what each party will provide or receive under the agreement.",
+      "rewrite_suggestion": "CONSIDERATION: In consideration of the mutual covenants and agreements contained herein, and for other good and valuable consideration, the receipt and sufficiency of which are hereby acknowledged, the parties agree as follows:"
+    }
+  ],
+  "missing_clauses": [
+    "Party identification and signatures",
+    "Consideration clause",
+    "Terms and conditions",
+    "Termination provisions",
+    "Governing law and jurisdiction",
+    "Dispute resolution mechanism",
+    "Force majeure clause",
+    "Entire agreement clause",
+    "Amendment procedures",
+    "Notice provisions",
+    "Severability clause",
+    "Counterpart execution clause"
+  ],
+  "key_dates": []
+}
