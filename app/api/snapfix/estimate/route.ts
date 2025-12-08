@@ -16,21 +16,11 @@ export interface RepairEstimate {
     reasoning: string;
 }
 
-export async function POST(req: NextRequest) {
-    try {
-        const { category, symptoms, hypothesis, safety_concerns } = await req.json();
+export async function estimateRepair(category: string, symptoms: string[], hypothesis: string, safety_concerns: string[]): Promise<RepairEstimate> {
+    console.log(`[SnapFix Estimate] Estimating repair for ${category}: "${hypothesis}"`);
 
-        if (!category || !hypothesis) {
-            return Response.json(
-                { error: 'Category and hypothesis are required' },
-                { status: 400 }
-            );
-        }
-
-        console.log(`[SnapFix Estimate] Estimating repair for ${category}: "${hypothesis}"`);
-
-        // Build context for estimation
-        const prompt = `Analyze this repair problem and provide a realistic estimate:
+    // Build context for estimation
+    const prompt = `Analyze this repair problem and provide a realistic estimate:
 
 Category: ${category}
 Problem: ${hypothesis}
@@ -52,79 +42,93 @@ IMPORTANT:
 - Consider skill level needed
 - Account for special tools or equipment`;
 
-        const response = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You are an expert repair estimator. Be realistic and prioritize safety. Provide balanced assessments of time, cost, and difficulty.'
-                },
-                {
-                    role: 'user',
-                    content: prompt
-                }
-            ],
-            response_format: {
-                type: 'json_schema',
-                json_schema: {
-                    name: 'repair_estimate',
-                    strict: true,
-                    schema: {
-                        type: 'object',
-                        properties: {
-                            difficulty: {
-                                type: 'string',
-                                enum: ['easy', 'moderate', 'hard', 'call_a_pro']
-                            },
-                            estimated_time: {
-                                type: 'string'
-                            },
-                            estimated_cost: {
-                                type: 'string'
-                            },
-                            tools_needed: {
-                                type: 'array',
-                                items: { type: 'string' }
-                            },
-                            parts_needed: {
-                                type: 'array',
-                                items: { type: 'string' }
-                            },
-                            professional_recommendation: {
-                                type: 'boolean'
-                            },
-                            reasoning: {
-                                type: 'string'
-                            }
-                        },
-                        required: [
-                            'difficulty',
-                            'estimated_time',
-                            'estimated_cost',
-                            'tools_needed',
-                            'parts_needed',
-                            'professional_recommendation',
-                            'reasoning'
-                        ],
-                        additionalProperties: false
-                    }
-                }
+    const response = await openai.chat.completions.create({
+        model: 'gpt-4o-mini',
+        messages: [
+            {
+                role: 'system',
+                content: 'You are an expert repair estimator. Be realistic and prioritize safety. Provide balanced assessments of time, cost, and difficulty.'
             },
-            max_tokens: 800
-        });
+            {
+                role: 'user',
+                content: prompt
+            }
+        ],
+        response_format: {
+            type: 'json_schema',
+            json_schema: {
+                name: 'repair_estimate',
+                strict: true,
+                schema: {
+                    type: 'object',
+                    properties: {
+                        difficulty: {
+                            type: 'string',
+                            enum: ['easy', 'moderate', 'hard', 'call_a_pro']
+                        },
+                        estimated_time: {
+                            type: 'string'
+                        },
+                        estimated_cost: {
+                            type: 'string'
+                        },
+                        tools_needed: {
+                            type: 'array',
+                            items: { type: 'string' }
+                        },
+                        parts_needed: {
+                            type: 'array',
+                            items: { type: 'string' }
+                        },
+                        professional_recommendation: {
+                            type: 'boolean'
+                        },
+                        reasoning: {
+                            type: 'string'
+                        }
+                    },
+                    required: [
+                        'difficulty',
+                        'estimated_time',
+                        'estimated_cost',
+                        'tools_needed',
+                        'parts_needed',
+                        'professional_recommendation',
+                        'reasoning'
+                    ],
+                    additionalProperties: false
+                }
+            }
+        },
+        max_tokens: 800
+    });
 
-        const estimate: RepairEstimate = JSON.parse(
-            response.choices[0].message.content || '{}'
-        );
+    const estimate: RepairEstimate = JSON.parse(
+        response.choices[0].message.content || '{}'
+    );
 
-        console.log(`[SnapFix Estimate] Difficulty: ${estimate.difficulty}, Professional: ${estimate.professional_recommendation}`);
+    console.log(`[SnapFix Estimate] Difficulty: ${estimate.difficulty}, Professional: ${estimate.professional_recommendation}`);
+    return estimate;
+}
+
+export async function POST(req: NextRequest) {
+    try {
+        const { category, symptoms, hypothesis, safety_concerns } = await req.json();
+
+        if (!category || !hypothesis) {
+            return Response.json(
+                { error: 'Category and hypothesis are required' },
+                { status: 400 }
+            );
+        }
+
+        const estimate = await estimateRepair(category, symptoms, hypothesis, safety_concerns);
 
         return Response.json({
             success: true,
             estimate,
             metadata: {
-                model: 'gpt-4o-mini',
-                tokens_used: response.usage?.total_tokens
+                model: 'gpt-4o-mini'
             }
         });
 

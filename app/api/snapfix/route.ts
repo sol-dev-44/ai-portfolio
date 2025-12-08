@@ -3,10 +3,11 @@
 
 import { NextRequest } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
-import type { VisionAnalysis } from './analyze/route';
-import type { KnowledgeResult } from './knowledge/route';
-import type { SearchResult } from './search/route';
-import type { RepairEstimate } from './estimate/route';
+import { analyzeImage, type VisionAnalysis } from './analyze/route';
+import { searchKnowledge, type KnowledgeResult } from './knowledge/route';
+import { searchWeb, type SearchResult } from './search/route';
+import { estimateRepair, type RepairEstimate } from './estimate/route';
+import { trainSystem } from './train/route';
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
 
@@ -28,24 +29,9 @@ export interface DiagnosisResponse {
     resources: { title: string; url: string }[];
 }
 
-// Helper to get absolute URL for internal API calls
-function getBaseUrl() {
-    if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL;
-
-    // Railway public domain (HTTPS)
-    if (process.env.RAILWAY_PUBLIC_DOMAIN) return `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`;
-
-    // Vercel fallback
-    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-
-    // Localhost with dynamic port (default for container internals)
-    return `http://localhost:${process.env.PORT || 3000}`;
-}
-
 export async function POST(req: NextRequest) {
     const startTime = Date.now();
     const encoder = new TextEncoder();
-    const API_BASE_URL = getBaseUrl();
 
     try {
         const formData = await req.formData();
@@ -56,7 +42,7 @@ export async function POST(req: NextRequest) {
             return Response.json({ error: 'Image is required' }, { status: 400 });
         }
 
-        console.log(`[SnapFix Orchestrator] Starting diagnosis. Base URL: ${API_BASE_URL}`);
+        console.log(`[SnapFix Orchestrator] Starting diagnosis (Internal Direct Calls)`);
 
         // Create streaming response
         const stream = new ReadableStream({
@@ -75,23 +61,8 @@ export async function POST(req: NextRequest) {
                     sendProgress('vision', 'analyzing');
                     console.log('[SnapFix] Stage 1: Vision Analysis');
 
-                    const visionFormData = new FormData();
-                    visionFormData.append('image', image);
-                    if (userPrompt) visionFormData.append('prompt', userPrompt);
+                    const analysis = await analyzeImage(image, userPrompt);
 
-                    const visionResponse = await fetch(
-                        `${API_BASE_URL}/api/snapfix/analyze`,
-                        {
-                            method: 'POST',
-                            body: visionFormData
-                        }
-                    );
-
-                    if (!visionResponse.ok) {
-                        throw new Error('Vision analysis failed');
-                    }
-
-                    const { analysis }: { analysis: VisionAnalysis } = await visionResponse.json();
                     sendProgress('vision', 'complete');
 
                     controller.enqueue(
@@ -106,46 +77,34 @@ export async function POST(req: NextRequest) {
 
                     const [knowledgeData, searchData, estimateData] = await Promise.allSettled([
                         // Knowledge Agent
-                        fetch(`${API_BASE_URL}/api/snapfix/knowledge`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                query: `${analysis.category} repair: ${analysis.hypothesis}`,
-                                category: analysis.category,
-                                limit: 3
-                            })
-                        }).then(r => r.json()),
+                        searchKnowledge(
+                            `${analysis.category} repair: ${analysis.hypothesis}`,
+                            analysis.category,
+                            3
+                        ),
 
                         // Web Search Agent
-                        fetch(`${API_BASE_URL}/api/snapfix/search`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                query: `how to fix ${analysis.hypothesis} DIY tutorial`,
-                                limit: 5
-                            })
-                        }).then(r => r.json()),
+                        searchWeb(
+                            `how to fix ${analysis.hypothesis} DIY tutorial`,
+                            5
+                        ),
 
                         // Estimation Agent
-                        fetch(`${API_BASE_URL}/api/snapfix/estimate`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                category: analysis.category,
-                                symptoms: analysis.symptoms,
-                                hypothesis: analysis.hypothesis,
-                                safety_concerns: analysis.safety_concerns
-                            })
-                        }).then(r => r.json())
+                        estimateRepair(
+                            analysis.category,
+                            analysis.symptoms,
+                            analysis.hypothesis,
+                            analysis.safety_concerns
+                        )
                     ]);
 
                     //Extract results (graceful degradation)
                     const knowledgeResults: KnowledgeResult[] =
-                        knowledgeData.status === 'fulfilled' ? knowledgeData.value.results || [] : [];
+                        knowledgeData.status === 'fulfilled' ? knowledgeData.value || [] : [];
                     const searchResults: SearchResult[] =
-                        searchData.status === 'fulfilled' ? searchData.value.results || [] : [];
+                        searchData.status === 'fulfilled' ? searchData.value || [] : [];
                     const estimate: RepairEstimate | null =
-                        estimateData.status === 'fulfilled' ? estimateData.value.estimate : null;
+                        estimateData.status === 'fulfilled' ? estimateData.value : null;
 
                     sendProgress('agents', 'complete');
 
@@ -222,14 +181,8 @@ Symptoms: ${analysis.symptoms.join(', ')}
 Advice: ${fullResponse}`;
 
                     // Fire-and-forget training call (don't block response too long, but ensure execution)
-                    fetch(`${API_BASE_URL}/api/snapfix/train`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            type: 'text',
-                            content: trainingContent
-                        })
-                    }).then(() => console.log('[SnapFix] Auto-training trigger sent'))
+                    trainSystem('text', trainingContent)
+                        .then(() => console.log('[SnapFix] Auto-training trigger sent'))
                         .catch(e => console.error('[SnapFix] Auto-training failed:', e));
 
                     controller.close();
