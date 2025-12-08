@@ -9,6 +9,10 @@ import dashboardReducer from './dashboardSlice';
 import lsatReducer from './lsatSlice';
 import contractReducer from './contractSlice';
 import { contractApi } from './api/contractApi';
+import { artApi } from './api/artApi';
+import artReducer from './artSlice';
+import { reasoningApi } from './api/reasoningApi';
+import { snapfixApi } from './api/snapfixApi';
 
 export const store = configureStore({
   reducer: {
@@ -18,9 +22,13 @@ export const store = configureStore({
     [agentApi.reducerPath]: agentApi.reducer,
     [lsatApi.reducerPath]: lsatApi.reducer,
     [contractApi.reducerPath]: contractApi.reducer,
+    [artApi.reducerPath]: artApi.reducer,
+    [reasoningApi.reducerPath]: reasoningApi.reducer,
+    [snapfixApi.reducerPath]: snapfixApi.reducer,
     dashboard: dashboardReducer,
     lsat: lsatReducer,
     contract: contractReducer,
+    art: artReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -29,7 +37,10 @@ export const store = configureStore({
       dashboardApi.middleware,
       agentApi.middleware,
       lsatApi.middleware,
-      contractApi.middleware
+      contractApi.middleware,
+      artApi.middleware,
+      reasoningApi.middleware,
+      snapfixApi.middleware
     ),
 });
 
