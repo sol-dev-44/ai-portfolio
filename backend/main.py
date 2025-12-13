@@ -126,7 +126,9 @@ def initialize_gpt2():
 GPT2_MODEL = initialize_gpt2()
 
 # Initialize Agent Model (Local Qwen) via Engine
-AGENT_MODEL = initialize_local_model()
+# REMOVED: Not used by frontend - saves 2-3GB memory
+# AGENT_MODEL = initialize_local_model()
+AGENT_MODEL = None  # Disabled to reduce memory usage
 
 # ===== BASIC ROUTES =====
 @app.get("/")
@@ -358,46 +360,45 @@ from reasoning.routes import router as reasoning_router
 app.include_router(reasoning_router, prefix="/api")
 
 # =====LANGCHAIN AGENT ENDPOINT =====
-@app.post("/api/agent/langchain")
-async def langchain_agent_chat(request: AgentChatRequest):
-    """Stream agent chat using LangChain + Ollama (local Llama3)."""
-    from agent_langchain import stream_langchain_response, check_ollama_status
-    
-    # Check if Ollama is available
-    status = check_ollama_status()
-    if not status["available"]:
-        from fastapi.responses import JSONResponse
-        return JSONResponse(
-            status_code=503,
-            content={
-                "error": "Ollama not available",
-                "message": status["message"],
-                "setup_instructions": "Install Ollama: `brew install ollama` then start: `ollama serve` and pull model: `ollama pull llama3`"
-            }
-        )
-    
-    if not status.get("has_llama3"):
-        from fastapi.responses import JSONResponse
-        return JSONResponse(
-            status_code=503,
-            content={
-                "error": "Llama3 model not found",
-                "message": "Run: `ollama pull llama3`"
-            }
-        )
-    
-    return StreamingResponse(
-        stream_langchain_response(request.message),
-        media_type="application/x-ndjson"
-    )
+# REMOVED: Not used by frontend - saves memory by not requiring Ollama/Llama3
+# @app.post("/api/agent/langchain")
+# async def langchain_agent_chat(request: AgentChatRequest):
+#     """Stream agent chat using LangChain + Ollama (local Llama3)."""
+#     from agent_langchain import stream_langchain_response, check_ollama_status
+#     
+#     # Check if Ollama is available
+#     status = check_ollama_status()
+#     if not status["available"]:
+#         from fastapi.responses import JSONResponse
+#         return JSONResponse(
+#             status_code=503,
+#             content={
+#                 "error": "Ollama not available",
+#                 "message": status["message"],
+#                 "setup_instructions": "Install Ollama: `brew install ollama` then start: `ollama serve` and pull model: `ollama pull llama3`"
+#             }
+#         )
+#     
+#     if not status.get("has_llama3"):
+#         from fastapi.responses import JSONResponse
+#         return JSONResponse(
+#             status_code=503,
+#             content={
+#                 "error": "Llama3 model not found",
+#                 "message": "Run: `ollama pull llama3`"
+#             }
+#         )
+#     
+#     return StreamingResponse(
+#         stream_langchain_response(request.message),
+#         media_type="application/x-ndjson"
+#     )
 
 
 @app.get("/api/agent/status")
 async def agent_status():
     """Get status of all available agent backends."""
-    from agent_langchain import check_ollama_status
-    
-    ollama_status = check_ollama_status()
+    # Removed Ollama check - local models disabled to reduce memory usage
     
     return {
         "claude": {
@@ -409,14 +410,14 @@ async def agent_status():
             "privacy": "Data sent to Anthropic"
         },
         "langchain": {
-            "available": ollama_status["available"],
+            "available": False,
             "type": "local",
-            "model": "Llama 3 (via Ollama)",
-            "cost_per_query": "$0 (free)",
-            "speed": "Slower (local inference)",
-            "privacy": "100% private (runs locally)",
-            "message": ollama_status.get("message", ""),
-            "setup_required": not ollama_status["available"]
+            "model": "Disabled (memory optimization)",
+            "cost_per_query": "N/A",
+            "speed": "N/A",
+            "privacy": "N/A",
+            "message": "Local models disabled to reduce memory usage from 10GB to 2GB",
+            "setup_required": False
         }
     }
 

@@ -1,0 +1,47 @@
+ALAN CAMPBELL
+Truckee, CA | alancampbell4444@gmail.com | 406-270-6256
+LinkedIn | AI Portfolio | GitHub
+PROFESSIONAL SUMMARY
+Full-Stack Staff Engineer with 10+ years architecting scalable, high-performance web applications. Expertise in AI/ML integration, frontend architecture, and emerging Web3 technologies. Proven track record building AI-powered platforms with multi-agent systems, RAG pipelines, and LLM integrations. Led platform modernization initiatives delivering $100K+ cost savings per client, reduced API infrastructure load by 50%, and accelerated development velocity by 30%. Experienced leading cross-functional teams of 15+ engineers, shipping to Fortune 500 insurance carriers and top law firms.
+TECHNICAL EXPERTISE
+AI/ML & Intelligent Systems: LLM Integration (OpenAI, Claude, HuggingFace), RAG Pipelines, Multi-Agent Systems, Vector Databases (pgvector, Supabase), Document Processing, Prompt Engineering, PyTorch, TensorFlow, FastAPI
+Frontend Architecture: React 19, Next.js, TypeScript, Redux/RTK Query, React Query, Material UI, Tailwind CSS, Three.js/React Three Fiber, Framer Motion, Storybook, Micro-frontends
+Backend & Infrastructure: Node.js, Deno, Python, Express, Fresh, AWS (Lambda, API Gateway, S3, Amplify, Cognito), Supabase, PostgreSQL, Docker, Terraform, GraphQL, Serverless Architecture
+Emerging Technologies: Web3/Blockchain Development, Solana, Smart Contracts, DeFi Protocols
+PROFESSIONAL EXPERIENCE
+Staff Engineer | Precedent | Remote | January 2024 - Present
+Leading full-stack development with frontend architecture specialization for AI-enhanced insurance claim mediation platform serving top law firms and Fortune 500 insurance carriers.
+Platform Architecture & Innovation:
+•	Architected Claim Companion application ground-up, delivering complete greenfield product establishing modern development patterns (RTK Query, React Final Form, Yup validation) serving as template for future applications
+•	Delivered $100K+ cost savings per firm by replacing legacy Quickbase subscriptions with modern, integrated solution
+•	Led React 19 & Material UI 7 platform modernization, managing 280+ dependency updates with zero production incidents
+•	Integrated AI-powered medical case analysis directly into demand editing workflow with real-time bounding box navigation
+Performance & Technical Leadership:
+•	Implemented RTK Query revolutionizing API integration—reduced infrastructure load by 50%, decreased feature development time by 30%, eliminated 60% of data fetching boilerplate
+•	Merged 340+ pull requests and completed 282 tasks in 2024; influenced team of 15 engineers through mentoring and architectural guidance
+•	Built end-to-end Clio integration platform enabling seamless document import, reducing case setup time from hours to minutes
+Staff Engineer | CSAA Insurance Group (AAA) | Remote | June 2020 - January 2024
+•	Lead frontend developer for multi-product insurance quoting application serving multiple states with React, TypeScript, Redux, and AWS
+•	Architected and shipped production application to multiple states, establishing state management patterns and design systems
+•	Led frontend architecture strategy implementing React Hooks, React Query, and Storybook for component-driven development
+Software Engineer | American Express | Remote | December 2018 - June 2020
+•	Full-stack developer on MYCA team building internal and client-facing account management portals using Node.js, React, Redux, PostgreSQL
+•	Contributed to robust micro-frontend architecture enabling independent feature deployment with enhanced flexibility
+Lead Frontend Architect | Sierra Telecom | Hybrid | September 2017 - December 2018
+•	Architected commercial-scale IoT monitoring dashboard managing devices and visualizing real-time sensor data for enterprise clients
+•	Visualized millions of real-time data points using D3, Highcharts, and integrated Google Maps/Leaflet.js for interactive device management
+Full-Stack Developer | Freelance | October 2015 - September 2017
+•	Sole developer on contracted full-stack SPAs leveraging AWS Lambda, API Gateway, S3 for scalable serverless architecture
+AI/ML PROJECTS
+SnapFix AI Diagnostic: Multi-agent system with GPT-4o vision analysis, cyclical-learning RAG knowledge base, web search integration, and Claude synthesis for instant repair diagnosis
+Dashboard Studio: Generative UI platform powered by Claude Sonnet—describe interfaces in natural language and watch them build in real-time
+Tool-Calling Agent: ReAct pattern implementation comparing Claude vs open-source models with real-time reasoning visualization and function calling
+RAG Chat & Contract Auditor: Retrieval-Augmented Generation systems with Supabase pgvector, semantic search, and legal risk analysis with severity scoring
+LLM Arena: Side-by-side comparison of 5 language models with D3.js performance visualization and token generation analysis
+EDUCATION
+ByteByteAI | AI Engineering Cohort | 2025
+Fullstack Academy of Code | Software Engineering Immersive | 2015-2016
+Bellevue University | Bachelor of Business Administration | 4.0 GPA, Summa Cum Laude
+LEADERSHIP & CERTIFICATIONS
+USCG Licensed Master Captain (100-ton) | U.S. Coast Guard
+20+ years maritime command experience developing systems thinking, crisis management, and team leadership skills translating directly to technical architecture and cross-functional engineering leadership
