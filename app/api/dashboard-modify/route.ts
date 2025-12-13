@@ -46,6 +46,8 @@ MODIFICATION RULES:
 6. Use string concatenation for D3 transforms: 'translate(' + x + ',' + y + ')'
 7. All className values must be valid Tailwind CSS classes
 8. Keep all animations smooth and performant
+9. BE CONCISE. Avoid huge static data arrays if possible (use generators or smaller samples).
+10. Ensure the code is COMPLETE and ends with a closing brace '}'.
 
 EXAMPLES OF CORRECT PATTERNS:
 
@@ -91,8 +93,8 @@ Now modify the component based on: "${userPrompt}"`;
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4096,
+        model: 'claude-sonnet-4-20250514', // Use latest model for best code gen
+        max_tokens: 8192, // Increased limit for complex components
         messages: [
           {
             role: 'user',
@@ -118,7 +120,7 @@ Now modify the component based on: "${userPrompt}"`;
 
     // Strip markdown code blocks if present
     newCode = newCode.replace(/```tsx\n?/g, '').replace(/```\n?/g, '').trim();
-    
+
     // Remove any "use client" directives (not needed in sandbox)
     newCode = newCode.replace(/'use client';?\n?/g, '').replace(/"use client";?\n?/g, '').trim();
 
@@ -135,7 +137,23 @@ Now modify the component based on: "${userPrompt}"`;
     if (newCode.includes('import ') && newCode.indexOf('import ') < 50) {
       console.warn('⚠️ Code contains import statements - stripping them');
       // Remove import statements from the beginning
-      newCode = newCode.split('\n').filter(line => !line.trim().startsWith('import ')).join('\n').trim();
+      newCode = newCode.split('\n').filter((line: string) => !line.trim().startsWith('import ')).join('\n').trim();
+    }
+
+    // Check for truncation (must end with })
+    if (!newCode.trim().endsWith('}')) {
+      console.warn('⚠️ Code appears to be truncated. Attempting to autoclose or fail.');
+      // If it looks like it was cut off inside the return statement, it's risky to auto-fix.
+      // But we can try to append '}' if it's just the final brace missing.
+      // Better strategy: Return an error so the user knows to retry with a simpler prompt.
+
+      return NextResponse.json(
+        {
+          error: 'Generated code was truncated due to complexity. Please try a simpler request.',
+          details: 'Token limit exceeded'
+        },
+        { status: 422 } // Unprocessable Entity
+      );
     }
 
     return NextResponse.json({
@@ -154,7 +172,7 @@ Now modify the component based on: "${userPrompt}"`;
 }
 
 export async function GET() {
-  return NextResponse.json({ 
+  return NextResponse.json({
     status: 'ok',
     message: 'Dashboard modification API',
     claudeConfigured: !!ANTHROPIC_API_KEY

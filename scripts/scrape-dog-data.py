@@ -103,7 +103,7 @@ async def fetch_breed_images(session: aiohttp.ClientSession, breed_name: str, ma
         url = f"{DOGCEO_BASE}/breed/{variant}/images/random/{max_images}"
         
         try:
-            async with session.get(url, timeout=aiohttp.ClientTimeout(total=5)) as response:
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=30)) as response:
                 if response.status == 200:
                     data = await response.json()
                     if data.get('status') == 'success':

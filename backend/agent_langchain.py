@@ -27,7 +27,7 @@ def check_ollama_status() -> Dict[str, Any]:
             f"{OLLAMA_BASE_URL}/api/tags",
             headers={"Accept": "application/json"}
         )
-        with urllib.request.urlopen(req, timeout=3) as response:
+        with urllib.request.urlopen(req, timeout=30) as response:
             data = json.loads(response.read().decode())
         
         models = data.get("models", [])
@@ -63,7 +63,7 @@ def tool_get_weather(city: str, unit: str = "celsius") -> str:
     try:
         # Geocode
         geo_url = f"https://geocoding-api.open-meteo.com/v1/search?name={urllib.parse.quote(city)}&count=1&language=en"
-        with urllib.request.urlopen(geo_url, timeout=10) as response:
+        with urllib.request.urlopen(geo_url, timeout=30) as response:
             geo_data = json.loads(response.read().decode())
         
         if not geo_data.get("results"):
@@ -77,7 +77,7 @@ def tool_get_weather(city: str, unit: str = "celsius") -> str:
         temp_unit = "fahrenheit" if unit.lower() == "fahrenheit" else "celsius"
         weather_url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&temperature_unit={temp_unit}"
         
-        with urllib.request.urlopen(weather_url, timeout=10) as response:
+        with urllib.request.urlopen(weather_url, timeout=30) as response:
             weather = json.loads(response.read().decode())
         
         if not weather.get("current"):
@@ -112,7 +112,7 @@ def tool_web_search(query: str, max_results: int = 3) -> str:
         
         try:
             req = urllib.request.Request(news_url, headers={"User-Agent": "Mozilla/5.0"})
-            with urllib.request.urlopen(req, timeout=10) as response:
+            with urllib.request.urlopen(req, timeout=30) as response:
                 xml = response.read().decode()
             
             items = re.findall(r'<item>(.*?)</item>', xml, re.DOTALL)
@@ -135,7 +135,7 @@ def tool_web_search(query: str, max_results: int = 3) -> str:
             try:
                 wiki_url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{urllib.parse.quote(query.replace(' ', '_'))}"
                 req = urllib.request.Request(wiki_url, headers={"User-Agent": "Mozilla/5.0"})
-                with urllib.request.urlopen(req, timeout=10) as response:
+                with urllib.request.urlopen(req, timeout=30) as response:
                     wiki = json.loads(response.read().decode())
                 
                 if wiki.get("extract") and len(wiki["extract"]) > 50:
