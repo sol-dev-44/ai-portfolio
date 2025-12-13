@@ -22,7 +22,7 @@ const navGroups = [
     name: 'Demos',
     items: [
       { name: 'SnapFix Agent', path: '/snapfix' },
-      { name: 'Agent', path: '/agent' },
+
       { name: 'Robot', path: '/robot' },
       { name: 'LLM Arena', path: '/llm-playground' },
       { name: 'RAG Chat', path: '/rag-chat' },

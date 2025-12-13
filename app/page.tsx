@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe, FileText, Heart, Bot, Palette, Wrench } from 'lucide-react';
+import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe, FileText, Heart, Bot, Palette, Wrench, BarChart } from 'lucide-react';
 import { useRef } from 'react';
 
 const techStack = [
@@ -117,28 +117,29 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-wrap gap-4 justify-center pt-8"
           >
-            {/* SUNSET: Agent Demo
-            <Link href="/agent">
+            <Link href="/contract-auditor">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="group relative px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl font-bold text-lg shadow-2xl shadow-amber-500/30 overflow-hidden"
+                className="px-8 py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-800 rounded-2xl font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200/50 dark:shadow-none"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <span className="relative flex items-center gap-2">
-                  <Cpu className="w-5 h-5" />
-                  Try Agent Demo <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <span className="flex items-center gap-2">
+                  <FileText className="w-5 h-5" />
+                  Try Contract Auditor
                 </span>
               </motion.button>
             </Link>
-            */}
-            <Link href="/dashboard">
+
+            <Link href="/rag-chat">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-800 rounded-2xl font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                className="px-8 py-4 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white rounded-2xl font-bold text-lg shadow-xl shadow-pink-500/30 hover:shadow-pink-500/40 transition-all border border-white/10"
               >
-                Explore Studio
+                <span className="flex items-center gap-2">
+                  <MessageSquare className="w-5 h-5" />
+                  Chat with my Resume
+                </span>
               </motion.button>
             </Link>
           </motion.div>
@@ -509,6 +510,56 @@ export default function Home() {
                     <div className="relative w-full md:w-64 h-48 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/50 dark:border-gray-700/50 backdrop-blur-sm flex items-center justify-center overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-pink-500/10" />
                       <div className="text-6xl animate-bounce">🤖</div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+
+            {/* Generation Strategy Visualizer - NEW */}
+            <Link href="/generation" className="md:col-span-2">
+              <motion.div
+                whileHover={{ y: -10 }}
+                className="group relative h-full bg-gradient-to-br from-cyan-50 via-teal-50 to-green-50 dark:from-cyan-900/20 dark:via-teal-900/20 dark:to-green-900/20 rounded-3xl border border-cyan-200 dark:border-cyan-800 overflow-hidden hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-8 md:p-10">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="p-3 bg-gradient-to-br from-cyan-500 to-teal-500 rounded-2xl text-white shadow-lg shadow-cyan-500/30">
+                          <BarChart className="w-8 h-8" />
+                        </div>
+                        <div className="flex gap-2">
+                          <span className="px-3 py-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-bold rounded-full border border-gray-200 dark:border-gray-700">
+                            Educational
+                          </span>
+                          <span className="px-3 py-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-bold rounded-full border border-gray-200 dark:border-gray-700">
+                            D3.js
+                          </span>
+                        </div>
+                      </div>
+                      <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                        Token Generation Visualizer
+                      </h3>
+                      <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 max-w-2xl">
+                        Interactive deconstruction of LLM sampling strategies. Visualize real-time probability distributions and see how Greedy, Top-k, and Top-p (Nucleus) sampling affect text generation.
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">NLP</span>
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Data Vis</span>
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Interactive</span>
+                      </div>
+                    </div>
+
+                    {/* Visual Preview */}
+                    <div className="relative w-full md:w-64 h-48 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/50 dark:border-gray-700/50 backdrop-blur-sm flex items-center justify-center overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-cyan-500/10" />
+                      <div className="flex items-end gap-2 h-32 px-4 pb-4 w-full">
+                        {[40, 75, 30, 90, 50, 20].map((h, i) => (
+                          <div key={i} className="flex-1 bg-cyan-500/50 rounded-t-md" style={{ height: `${h}%` }} />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>

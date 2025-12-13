@@ -97,7 +97,7 @@ export default function DogMatcherPage() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
             {/* Top Navigation Bar */}
-            <nav className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800">
+            <nav className="sticky top-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
@@ -129,8 +129,8 @@ export default function DogMatcherPage() {
                                         key={feature.id}
                                         onClick={() => setActiveFeature(feature.id)}
                                         className={`relative px-2 sm:px-4 py-2 rounded-xl font-medium transition-all flex items-center gap-1.5 text-sm ${isActive
-                                                ? `bg-gradient-to-r ${feature.gradient} text-white shadow-lg`
-                                                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                                            ? `bg-gradient-to-r ${feature.gradient} text-white shadow-lg`
+                                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
                                             }`}
                                     >
                                         <Icon className="w-4 h-4" />
@@ -139,8 +139,8 @@ export default function DogMatcherPage() {
                                         {/* Badge for compare count */}
                                         {feature.id === 'compare' && selectedBreedsForCompare.length > 0 && (
                                             <span className={`ml-1 px-1.5 py-0.5 text-xs rounded-full ${isActive
-                                                    ? 'bg-white/30 text-white'
-                                                    : 'bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400'
+                                                ? 'bg-white/30 text-white'
+                                                : 'bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400'
                                                 }`}>
                                                 {selectedBreedsForCompare.length}
                                             </span>
