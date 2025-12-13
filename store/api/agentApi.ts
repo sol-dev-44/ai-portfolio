@@ -81,6 +81,7 @@ export const agentApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
     tagTypes: ['AgentStatus'],
     endpoints: (builder) => ({
+        /* SUNSET: Feature disabled
         // GET /api/agent/status - Check both backends
         getAgentStatus: builder.query<AgentStatusResponse, void>({
             query: () => '/agent/status',
@@ -101,14 +102,30 @@ export const agentApi = createApi({
         }, void>({
             query: () => '/agent/hf',
         }),
+        */
     }),
 });
 
+/* SUNSET: Feature disabled
 export const {
     useGetAgentStatusQuery,
     useGetClaudeToolsQuery,
     useGetOpenSourceInfoQuery,
 } = agentApi;
+*/
+
+// Mock hooks to satisfy build and disable functionality
+export const useGetAgentStatusQuery = () => ({
+    data: {
+        status: 'disabled',
+        claude: { available: false, model: '' },
+        opensource: { available: false, model: '' }
+    },
+    isLoading: false,
+    error: 'Feature disabled'
+});
+export const useGetClaudeToolsQuery = () => ({ data: { tools: [] }, isLoading: false });
+export const useGetOpenSourceInfoQuery = () => ({ data: null, isLoading: false });
 
 // =============================================================================
 // STREAMING CHAT HOOK

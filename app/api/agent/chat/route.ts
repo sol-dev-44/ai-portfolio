@@ -6,6 +6,21 @@ import { NextRequest } from 'next/server';
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
+// Helper for safe fetching
+async function fetchWithTimeout(url: string, options: RequestInit = {}, timeout = 15000) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+        });
+        return response;
+    } finally {
+        clearTimeout(id);
+    }
+}
+
 // =============================================================================
 // MCP-STYLE TOOL DEFINITIONS
 // These follow MCP schema patterns but execute in-process
@@ -48,8 +63,10 @@ const TOOLS: MCPTool[] = [
         execute: async ({ city, unit = 'celsius' }) => {
             try {
                 // Geocode
-                const geoRes = await fetch(
-                    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en`
+                const geoRes = await fetchWithTimeout(
+                    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en`,
+                    {},
+                    10000
                 );
                 const geoData = await geoRes.json();
 
@@ -60,8 +77,10 @@ const TOOLS: MCPTool[] = [
                 const { latitude, longitude, name, country } = geoData.results[0];
 
                 // Weather
-                const weatherRes = await fetch(
-                    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&temperature_unit=${unit}`
+                const weatherRes = await fetchWithTimeout(
+                    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&temperature_unit=${unit}`,
+                    {},
+                    10000
                 );
                 const weather = await weatherRes.json();
 
@@ -113,8 +132,10 @@ const TOOLS: MCPTool[] = [
             try {
                 // Strategy 1: Google News RSS (for current events, news)
                 try {
-                    const newsRes = await fetch(
-                        `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=en-US&gl=US&ceid=US:en`
+                    const newsRes = await fetchWithTimeout(
+                        `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=en-US&gl=US&ceid=US:en`,
+                        {},
+                        15000
                     );
                     const xml = await newsRes.text();
 
@@ -161,8 +182,10 @@ const TOOLS: MCPTool[] = [
                 if (results.length < 2) {
                     try {
                         // Try direct article lookup first
-                        const wikiRes = await fetch(
-                            `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.replace(/ /g, '_'))}`
+                        const wikiRes = await fetchWithTimeout(
+                            `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.replace(/ /g, '_'))}`,
+                            {},
+                            10000
                         );
 
                         if (wikiRes.ok) {
@@ -174,8 +197,10 @@ const TOOLS: MCPTool[] = [
                     } catch {
                         // Try Wikipedia search API
                         try {
-                            const searchRes = await fetch(
-                                `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*&srlimit=${max_results}`
+                            const searchRes = await fetchWithTimeout(
+                                `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*&srlimit=${max_results}`,
+                                {},
+                                10000
                             );
                             const searchData = await searchRes.json();
 
@@ -195,8 +220,10 @@ const TOOLS: MCPTool[] = [
                 // Strategy 3: DuckDuckGo Instant Answers (fallback for definitions)
                 if (results.length === 0) {
                     try {
-                        const ddgRes = await fetch(
-                            `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`
+                        const ddgRes = await fetchWithTimeout(
+                            `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`,
+                            {},
+                            10000
                         );
                         const ddg = await ddgRes.json();
 
@@ -316,6 +343,7 @@ async function executeTool(name: string, args: Record<string, any>): Promise<{ r
 // API HANDLER
 // =============================================================================
 
+/* SUNSET: Feature disabled
 export async function POST(request: NextRequest) {
     if (!ANTHROPIC_API_KEY) {
         return Response.json({ error: 'ANTHROPIC_API_KEY not configured' }, { status: 500 });
@@ -344,7 +372,7 @@ export async function POST(request: NextRequest) {
                 while (iteration < maxIterations) {
                     iteration++;
 
-                    const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    const response = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -358,7 +386,7 @@ export async function POST(request: NextRequest) {
                             tools: claudeTools,
                             messages,
                         }),
-                    });
+                    }, 45000); // 45s timeout for LLM generation
 
                     if (!response.ok) {
                         throw new Error(`Claude API error: ${response.status}`);
@@ -408,10 +436,15 @@ export async function POST(request: NextRequest) {
                                 source_url: metadata.source_url
                             });
 
+                            // SAFETY: Truncate large results
+                            const safeResult = result.length > 2000
+                                ? result.slice(0, 2000) + '... [TRUNCATED]'
+                                : result;
+
                             toolResults.push({
                                 type: 'tool_result',
                                 tool_use_id: block.id,
-                                content: result
+                                content: safeResult
                             });
                         }
                     }
@@ -462,4 +495,13 @@ export async function GET() {
         })),
         note: 'Tools follow MCP schema patterns but execute in-process for zero-latency'
     });
+}
+*/
+
+export async function POST(req: NextRequest) {
+    return new Response(JSON.stringify({ error: 'Feature disabled' }), { status: 410 });
+}
+
+export async function GET() {
+    return new Response(JSON.stringify({ error: 'Feature disabled' }), { status: 410 });
 }

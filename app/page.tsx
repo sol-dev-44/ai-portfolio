@@ -117,6 +117,7 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-wrap gap-4 justify-center pt-8"
           >
+            {/* SUNSET: Agent Demo
             <Link href="/agent">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -130,6 +131,7 @@ export default function Home() {
                 </span>
               </motion.button>
             </Link>
+            */}
             <Link href="/dashboard">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -213,7 +215,7 @@ export default function Home() {
               </motion.div>
             </Link>
 
-            {/* Project 2: Tool-Calling Agent */}
+            {/* SUNSET: Tool-Calling Agent
             <Link href="/agent" className="md:col-span-2">
               <motion.div
                 whileHover={{ y: -10 }}
@@ -267,6 +269,7 @@ export default function Home() {
                 </div>
               </motion.div>
             </Link>
+            */}
 
             {/* Project 3: Contract Auditor - NEW */}
             <Link href="/contract-auditor">

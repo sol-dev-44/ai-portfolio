@@ -6,6 +6,21 @@ import { NextRequest } from 'next/server';
 
 const HF_TOKEN = process.env.HF_API_TOKEN;
 
+// Helper for safe fetching
+async function fetchWithTimeout(url: string, options: RequestInit = {}, timeout = 15000) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+        });
+        return response;
+    } finally {
+        clearTimeout(id);
+    }
+}
+
 // Available models - instruction-tuned for best tool-calling
 const MODELS = {
     'qwen': 'Qwen/Qwen2.5-72B-Instruct',
@@ -36,8 +51,10 @@ const TOOLS: Tool[] = [
         execute: async ({ city, unit = 'celsius' }) => {
             try {
                 // Geocode
-                const geoRes = await fetch(
-                    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en`
+                const geoRes = await fetchWithTimeout(
+                    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en`,
+                    {},
+                    10000
                 );
                 const geoData = await geoRes.json();
 
@@ -48,8 +65,10 @@ const TOOLS: Tool[] = [
                 const { latitude, longitude, name, country } = geoData.results[0];
 
                 // Weather
-                const weatherRes = await fetch(
-                    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&temperature_unit=${unit}`
+                const weatherRes = await fetchWithTimeout(
+                    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&temperature_unit=${unit}`,
+                    {},
+                    10000
                 );
                 const weather = await weatherRes.json();
 
@@ -86,8 +105,10 @@ const TOOLS: Tool[] = [
             try {
                 // Google News RSS
                 try {
-                    const newsRes = await fetch(
-                        `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=en-US&gl=US&ceid=US:en`
+                    const newsRes = await fetchWithTimeout(
+                        `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=en-US&gl=US&ceid=US:en`,
+                        {},
+                        15000
                     );
                     const xml = await newsRes.text();
 
@@ -111,8 +132,10 @@ const TOOLS: Tool[] = [
                 // Wikipedia fallback
                 if (results.length < 2) {
                     try {
-                        const wikiRes = await fetch(
-                            `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.replace(/ /g, '_'))}`
+                        const wikiRes = await fetchWithTimeout(
+                            `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.replace(/ /g, '_'))}`,
+                            {},
+                            10000
                         );
                         if (wikiRes.ok) {
                             const wiki = await wikiRes.json();
@@ -223,6 +246,7 @@ function parseToolCall(text: string): { tool: string; args: Record<string, strin
 // API HANDLER
 // =============================================================================
 
+/* SUNSET: Feature disabled
 export async function POST(request: NextRequest) {
     if (!HF_TOKEN) {
         return Response.json({ error: 'HF_API_TOKEN not configured' }, { status: 500 });
@@ -255,7 +279,7 @@ export async function POST(request: NextRequest) {
                     iteration++;
 
                     // Call HuggingFace
-                    const response = await fetch('https://router.huggingface.co/v1/chat/completions', {
+                    const response = await fetchWithTimeout('https://router.huggingface.co/v1/chat/completions', {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${HF_TOKEN}`,
@@ -271,7 +295,7 @@ export async function POST(request: NextRequest) {
                             temperature: 0.7,
                             stream: false, // Non-streaming for tool parsing
                         }),
-                    });
+                    }, 45000);
 
                     if (!response.ok) {
                         const errorText = await response.text();
@@ -298,7 +322,12 @@ export async function POST(request: NextRequest) {
                             });
 
                             // Execute tool
-                            const result = await tool.execute(toolCall.args);
+                            const rawResult = await tool.execute(toolCall.args);
+
+                            // SAFETY: Truncate large results
+                            const result = rawResult.length > 2000
+                                ? rawResult.slice(0, 2000) + '... [TRUNCATED]'
+                                : rawResult;
 
                             // Send tool result event
                             send({
@@ -371,4 +400,13 @@ export async function GET() {
             source: t.metadata.source
         }))
     });
+}
+*/
+
+export async function POST(req: NextRequest) {
+    return new Response(JSON.stringify({ error: 'Feature disabled' }), { status: 410 });
+}
+
+export async function GET() {
+    return new Response(JSON.stringify({ error: 'Feature disabled' }), { status: 410 });
 }

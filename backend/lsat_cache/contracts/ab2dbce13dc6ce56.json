@@ -1,0 +1,90 @@
+{
+  "summary": "This professional services agreement contains several significant risks, particularly around subcontracting restrictions, broad indemnification obligations, and asymmetric termination provisions. The contract heavily favors the Commission with extensive consultant obligations while providing limited protections for the consultant. Key concerns include unlimited liability exposure, restrictive subcontracting requirements, and potential for unilateral changes through amendments.",
+  "overall_risk_score": 78,
+  "risks": [
+    {
+      "type": "subcontracting",
+      "severity": 8,
+      "location": "Section 20.A: The CONSULTANT shall perform the work contemplated with resources available within its own organization; and no portion of the work pertinent to this Agreement shall be subcontracted without prior written authorization by the COMMISSION'S Contract Manager",
+      "explanation": "Extremely restrictive subcontracting clause that requires prior written authorization for ANY subcontracting, which could severely limit operational flexibility and ability to scale resources",
+      "suggested_fix": "Allow subcontracting for non-critical work items or up to a certain percentage without approval",
+      "rewrite_suggestion": "The CONSULTANT may subcontract up to 25% of the work value or non-critical support services without prior approval, provided subconsultants meet the same insurance and qualification requirements. All other subcontracting requires prior written authorization."
+    },
+    {
+      "type": "indemnification",
+      "severity": 9,
+      "location": "Section 5.A: CONSULTANT shall exonerate, indemnify, defend, and hold harmless the COMMISSION... from and against: Any and all claims, demands, losses, damages, defense costs, or liability of any kind or nature",
+      "explanation": "Extremely broad indemnification clause with unlimited liability exposure that goes beyond standard negligence-based indemnification to cover 'any and all' liability",
+      "suggested_fix": "Limit indemnification to consultant's negligent acts and include mutual indemnification",
+      "rewrite_suggestion": "CONSULTANT shall indemnify COMMISSION only for claims arising from CONSULTANT's negligent acts, errors, or omissions in performance of services, excluding COMMISSION's own negligent acts, and subject to a liability cap equal to the contract value or available insurance coverage, whichever is greater."
+    },
+    {
+      "type": "termination",
+      "severity": 7,
+      "location": "Section 4.C: CONSULTANT may terminate this Agreement by giving the COMMISSION at least one hundred and twenty (120) days advance written notice. CONSULTANT shall be liable for any and all reasonable costs incurred by COMMISSION as a result of such default",
+      "explanation": "Asymmetric termination provision requiring 120 days notice from consultant vs 30 days for commission, plus consultant liability for commission's costs even for convenience termination",
+      "suggested_fix": "Make termination provisions mutual with same notice periods and eliminate cost liability for convenience terminations",
+      "rewrite_suggestion": "Either party may terminate this Agreement for convenience with sixty (60) days written notice. In case of convenience termination, each party bears its own costs and consultant is paid for work performed through termination date."
+    },
+    {
+      "type": "liability",
+      "severity": 8,
+      "location": "Section 5: indemnification provisions and lack of liability cap throughout agreement",
+      "explanation": "No liability cap exists anywhere in the contract, creating unlimited financial exposure for the consultant",
+      "suggested_fix": "Add liability cap provision limiting total liability",
+      "rewrite_suggestion": "Except for indemnification obligations, each party's total liability under this Agreement shall not exceed the total contract value or $1,000,000, whichever is greater, except for willful misconduct or breach of confidentiality."
+    },
+    {
+      "type": "assignment",
+      "severity": 6,
+      "location": "Section 21: The CONSULTANT shall not assign the Agreement without the prior written consent of the COMMISSION",
+      "explanation": "One-sided assignment restriction that only applies to consultant, not commission, creating imbalance",
+      "suggested_fix": "Make assignment restrictions mutual",
+      "rewrite_suggestion": "Neither party may assign this Agreement without the prior written consent of the other party, which consent shall not be unreasonably withheld."
+    },
+    {
+      "type": "general",
+      "severity": 6,
+      "location": "Section 17.A: This Agreement may be amended or modified only by mutual written agreement of the parties",
+      "explanation": "While requiring mutual consent, the contract structure heavily favors the Commission in practice, and lacks specific amendment procedures",
+      "suggested_fix": "Add specific amendment procedures and approval timelines",
+      "rewrite_suggestion": "This Agreement may be amended only by written agreement signed by both parties. Proposed amendments must be responded to within 30 days, and any material changes require the same approval process as the original agreement."
+    },
+    {
+      "type": "payment",
+      "severity": 5,
+      "location": "Section 2.H.7: CONSULTANT's final invoice must be submitted within 60-calendar days after acceptance of the CONSULTANT's work",
+      "explanation": "Short deadline for final invoice submission could result in forfeiture of payment if missed",
+      "suggested_fix": "Extend deadline and add grace period provisions",
+      "rewrite_suggestion": "CONSULTANT's final invoice must be submitted within 90 calendar days after acceptance of work, with automatic 30-day extension available upon written request."
+    },
+    {
+      "type": "ip_rights",
+      "severity": 7,
+      "location": "Section 15: All material, data, information, and written, graphic or other work produced under this Agreement is subject to the unqualified and unconditional right of the COMMISSION to use, reproduce, publish, display",
+      "explanation": "Extremely broad work product clause that assigns all rights to Commission without compensation and prohibits consultant from using work for any profit-making venture",
+      "suggested_fix": "Allow consultant to retain rights to pre-existing IP and general methodologies",
+      "rewrite_suggestion": "Commission shall own work products specifically created for this project, but Consultant retains rights to pre-existing intellectual property, general methodologies, and may use project experience for marketing purposes with Commission's prior approval."
+    }
+  ],
+  "missing_clauses": [
+    "Force majeure clause",
+    "Limitation of liability clause",
+    "Mutual indemnification provisions",
+    "Data security and privacy provisions",
+    "Dispute resolution/mediation clause",
+    "Severability clause",
+    "Anti-corruption/compliance representations"
+  ],
+  "key_dates": [
+    "Agreement effective date (blank - to be filled)",
+    "Agreement end date (blank - to be filled)",
+    "30-day termination notice period for Commission",
+    "120-day termination notice period for Consultant",
+    "10-day cure period for consultant default",
+    "45-day invoice submission deadline",
+    "60-day final invoice submission deadline",
+    "30-day insurance cancellation notice requirement",
+    "5-year record retention period"
+  ]
+}
