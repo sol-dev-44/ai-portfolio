@@ -95,42 +95,63 @@ A voice-activated 3D character.
 - Supabase account (or local instance)
 - API Keys: OpenAI, Anthropic, HuggingFace
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/sol-dev-44/ai-portfolio.git
-cd ai-portfolio
+### Setup & Run
+1. **Clone the Repository**
+    ```bash
+    git clone https://github.com/sol-dev-44/ai-portfolio.git
+    cd ai-portfolio
+    ```
+
+2. **Backend Config**
+    ```bash
+    cd backend
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    pip install -r requirements.txt
+    ```
+
+3. **Frontend Config**
+    ```bash
+    # Open new terminal in project root or cd ..
+    npm install
+    echo "NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api" > .env.local
+    ```
+
+4. **Run Everything**
+    Launch both the frontend and backend concurrently with a single command:
+    ```bash
+    npm run dev:all
+    ```
+    - Frontend: `http://localhost:3000`
+    - Backend: `http://localhost:8080`
+
+---
+
+## 🔧 Development
+
+### Available Scripts
+
+| Command | Description |
+| :--- | :--- |
+| **`npm run dev:all`** | **Recommended.** Runs specific frontend and backend concurrently. |
+| `npm run dev` | Runs only the Next.js frontend. |
+| `npm run dev:backend` | Runs only the FastAPI backend (requires virtualenv activation). |
+| `npm run build` | Builds the Next.js application for production. |
+| `npm run lint` | Runs ESLint checks. |
+
+### Environment Variables
+**Backend (.env)**
+```env
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+SUPABASE_URL=...
+SUPABASE_KEY=...
 ```
 
-### 2. Backend Setup
-```bash
-cd backend
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Start backend server
-python main.py
+**Frontend (.env.local)**
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
 ```
-Backend runs on `http://localhost:8080`. Note: The first run may take time to download local models (GPT-2, Qwen).
-
-### 3. Frontend Setup
-```bash
-# In a new terminal, project root
-cd ..  # if coming from backend/
-
-npm install
-
-# Create environment file
-echo "NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api" > .env.local
-
-# Start development server
-npm run dev
-```
-Frontend runs on `http://localhost:3000`.
 
 ---
 
@@ -185,7 +206,7 @@ The backend provides a Swagger UI at `/docs`. Common endpoints:
 ## 🚢 Deployment
 
 ### Backend (Railway)
-1.Connect your GitHub repo to **Railway**.
+1. Connect your GitHub repo to **Railway**.
 2. Select `backend/` as the root directory.
 3. Add environment variables (API keys).
 4. Railway auto-detects Python and installs `requirements.txt`.
@@ -204,7 +225,7 @@ The backend provides a Swagger UI at `/docs`. Common endpoints:
 - On the first backend startup, local models (GPT-2, Qwen) must be downloaded from HuggingFace. This can take 5-10 minutes depending on your connection. Check the backend terminal logs for progress.
 
 **"ModuleNotFoundError: No module named 'torch'"**
-- Ensure you activated your virtual environment (`source venv/bin/activate`) before running `pip install`.
+- Ensure you activated your virtual environment (`source venv/bin/activate`) before running `pip install` or `npm run dev:backend`.
 
 **CORS errors**
 - Verify `NEXT_PUBLIC_API_BASE_URL` in `.env.local` matches your running backend URL exactly.
