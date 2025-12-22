@@ -20,10 +20,17 @@ export async function POST(req: NextRequest) {
 
         // Extract base64 data and media type
         // Support: JPEG, PNG, WebP, GIF, HEIC/HEIF (iPhone), BMP, TIFF, AVIF
+        console.log('Received image upload, blob prefix:', imageBlob.substring(0, 50));
+
         const matches = imageBlob.match(/^data:((?:image\/(?:png|jpe?g|webp|gif|heic|heif|bmp|tiff?|avif)));base64,(.*)$/);
         if (!matches || matches.length !== 3) {
+            // Log the actual format we received for debugging
+            const formatMatch = imageBlob.match(/^data:([^;]+);/);
+            const receivedFormat = formatMatch ? formatMatch[1] : 'unknown';
+            console.error('Invalid image format received:', receivedFormat);
+
             return NextResponse.json(
-                { error: 'Invalid image format. Supported formats: JPEG, PNG, WebP, GIF, HEIC, HEIF, BMP, TIFF, AVIF' },
+                { error: `Invalid image format. Received: ${receivedFormat}. Supported formats: JPEG, PNG, WebP, GIF, HEIC, HEIF, BMP, TIFF, AVIF` },
                 { status: 400 }
             );
         }
@@ -31,11 +38,14 @@ export async function POST(req: NextRequest) {
         let mediaType = matches[1] as string;
         let base64Data = matches[2];
 
+        console.log('Image format detected:', mediaType, 'Data length:', base64Data.length);
+
         // Claude API only supports: image/jpeg, image/png, image/gif, image/webp
         // For other formats (HEIC, BMP, TIFF, AVIF), we accept them but convert to JPEG
         const claudeSupportedFormats = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
 
         if (!claudeSupportedFormats.includes(mediaType)) {
+            console.log(`Converting ${mediaType} to JPEG for Claude API compatibility`);
             // For unsupported formats, we'll pass them through as JPEG
             // The client-side HEIC conversion already handles HEIC files
             // For other formats, the browser's FileReader already converts them to a displayable format

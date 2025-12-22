@@ -35,28 +35,47 @@ export function ImageUploader({ onImageSelected, selectedImage, onClear, isLoadi
             try {
                 let processedFile = file;
 
-                // Convert HEIC/HEIF to JPEG for compatibility
-                if (file.type === 'image/heic' || file.type === 'image/heif' || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
-                    const heic2any = (await import('heic2any')).default;
-                    const convertedBlob = await heic2any({
-                        blob: file,
-                        toType: 'image/jpeg',
-                        quality: 0.9
-                    });
+                // iOS Safari often doesn't set MIME type correctly for HEIC files
+                // Check both MIME type and file extension
+                const isHEIC = file.type === 'image/heic' ||
+                    file.type === 'image/heif' ||
+                    file.name.toLowerCase().endsWith('.heic') ||
+                    file.name.toLowerCase().endsWith('.heif') ||
+                    (file.type === '' && file.name.toLowerCase().match(/\.(heic|heif)$/));
 
-                    // heic2any can return Blob or Blob[], handle both cases
-                    const blob = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
-                    processedFile = new File([blob], file.name.replace(/\.heic$/i, '.jpg'), { type: 'image/jpeg' });
+                if (isHEIC) {
+                    console.log('HEIC file detected, converting to JPEG...', { name: file.name, type: file.type, size: file.size });
+                    try {
+                        const heic2any = (await import('heic2any')).default;
+                        const convertedBlob = await heic2any({
+                            blob: file,
+                            toType: 'image/jpeg',
+                            quality: 0.9
+                        });
+
+                        // heic2any can return Blob or Blob[], handle both cases
+                        const blob = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
+                        processedFile = new File([blob], file.name.replace(/\.(heic|heif)$/i, '.jpg'), { type: 'image/jpeg' });
+                        console.log('HEIC conversion successful');
+                    } catch (heicError) {
+                        console.error('HEIC conversion failed:', heicError);
+                        // If HEIC conversion fails, try to proceed anyway - browser might handle it
+                        alert('Note: HEIC conversion failed, but we\'ll try to process the image anyway.');
+                    }
                 }
 
                 const reader = new FileReader();
                 reader.onload = () => {
                     onImageSelected(processedFile, reader.result as string);
                 };
+                reader.onerror = (error) => {
+                    console.error('FileReader error:', error);
+                    alert('Failed to read image file. Please try again.');
+                };
                 reader.readAsDataURL(processedFile);
             } catch (error) {
                 console.error('Error processing image:', error);
-                alert('Failed to process image. Please try a different format.');
+                alert('Failed to process image. Please try a different format or image.');
             }
         }
     };
