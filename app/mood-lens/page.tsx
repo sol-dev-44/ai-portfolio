@@ -41,11 +41,19 @@ export default function MoodLensPage() {
             console.error('Error details:', {
                 status: err?.status,
                 data: err?.data,
-                message: err?.message
+                message: err?.message,
+                fullError: JSON.stringify(err, null, 2)
             });
-            // Show user-friendly error with details
-            const errorMsg = err?.data?.error || err?.message || 'Unknown error';
-            alert(`Analysis failed: ${errorMsg}\n\nCheck console for details.`);
+            // Extract error message properly
+            let errorMsg = 'Unknown error';
+            if (err?.data?.error) {
+                errorMsg = typeof err.data.error === 'string' ? err.data.error : JSON.stringify(err.data.error);
+            } else if (err?.message) {
+                errorMsg = err.message;
+            } else if (err?.data) {
+                errorMsg = JSON.stringify(err.data);
+            }
+            alert(`Analysis failed: ${errorMsg}\n\nCheck Safari console (Develop > Show JavaScript Console) for full details.`);
         }
     };
 
@@ -56,7 +64,12 @@ export default function MoodLensPage() {
             await analyzeImageA({ imageBlob: base64 }).unwrap();
         } catch (err: any) {
             console.error('Analysis A failed:', err);
-            const errorMsg = err?.data?.error || err?.message || 'Unknown error';
+            let errorMsg = 'Unknown error';
+            if (err?.data?.error) {
+                errorMsg = typeof err.data.error === 'string' ? err.data.error : JSON.stringify(err.data.error);
+            } else if (err?.message) {
+                errorMsg = err.message;
+            }
             alert(`Analysis failed: ${errorMsg}`);
         }
     };
@@ -68,7 +81,12 @@ export default function MoodLensPage() {
             await analyzeImageB({ imageBlob: base64 }).unwrap();
         } catch (err: any) {
             console.error('Analysis B failed:', err);
-            const errorMsg = err?.data?.error || err?.message || 'Unknown error';
+            let errorMsg = 'Unknown error';
+            if (err?.data?.error) {
+                errorMsg = typeof err.data.error === 'string' ? err.data.error : JSON.stringify(err.data.error);
+            } else if (err?.message) {
+                errorMsg = err.message;
+            }
             alert(`Analysis failed: ${errorMsg}`);
         }
     };
