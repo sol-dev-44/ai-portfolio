@@ -29,6 +29,71 @@ export function ImageUploader({ onImageSelected, selectedImage, onClear, isLoadi
     // For now I'll assume standard HTML input logic wrapped in a clear UI
 
 
+    // Compress image to reduce file size before upload
+    const compressImage = async (file: File): Promise<File> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    // Calculate new dimensions (max 1920px on longest side)
+                    const maxSize = 1920;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > maxSize || height > maxSize) {
+                        if (width > height) {
+                            height = (height / width) * maxSize;
+                            width = maxSize;
+                        } else {
+                            width = (width / height) * maxSize;
+                            height = maxSize;
+                        }
+                    }
+
+                    // Create canvas and compress
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+
+                    if (!ctx) {
+                        reject(new Error('Failed to get canvas context'));
+                        return;
+                    }
+
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Convert to blob with compression
+                    canvas.toBlob(
+                        (blob) => {
+                            if (!blob) {
+                                reject(new Error('Failed to compress image'));
+                                return;
+                            }
+                            const compressedFile = new File([blob], file.name, {
+                                type: 'image/jpeg',
+                                lastModified: Date.now(),
+                            });
+                            console.log('Image compressed:', {
+                                original: `${(file.size / 1024 / 1024).toFixed(2)}MB`,
+                                compressed: `${(compressedFile.size / 1024 / 1024).toFixed(2)}MB`,
+                                reduction: `${(((file.size - compressedFile.size) / file.size) * 100).toFixed(1)}%`
+                            });
+                            resolve(compressedFile);
+                        },
+                        'image/jpeg',
+                        0.85 // Quality setting
+                    );
+                };
+                img.onerror = () => reject(new Error('Failed to load image'));
+                img.src = e.target?.result as string;
+            };
+            reader.onerror = () => reject(new Error('Failed to read file'));
+            reader.readAsDataURL(file);
+        });
+    };
+
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -63,6 +128,10 @@ export function ImageUploader({ onImageSelected, selectedImage, onClear, isLoadi
                         alert('Note: HEIC conversion failed, but we\'ll try to process the image anyway.');
                     }
                 }
+
+                // Compress the image before upload to prevent 413 errors
+                console.log('Compressing image before upload...');
+                processedFile = await compressImage(processedFile);
 
                 const reader = new FileReader();
                 reader.onload = () => {

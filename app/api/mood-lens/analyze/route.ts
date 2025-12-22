@@ -6,6 +6,14 @@ const anthropic = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
+// Configure route to handle larger image uploads
+export const maxDuration = 60; // 60 seconds max execution time
+export const runtime = 'nodejs';
+
+// Note: Next.js 13+ uses bodyParser by default with 4.5MB limit
+// For larger images, we rely on client-side compression to keep payloads small
+// If needed, this can be increased via next.config.js api.bodyParser.sizeLimit
+
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
