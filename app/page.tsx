@@ -2,12 +2,13 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe, FileText, Heart, Bot, Palette, Wrench, BarChart } from 'lucide-react';
+import { MessageSquare, Sparkles, ArrowRight, Github, Linkedin, Mail, ExternalLink, Code, Cpu, Zap, Globe, FileText, Heart, Bot, Palette, Wrench, BarChart, Eye } from 'lucide-react';
 import { useRef } from 'react';
 
 const techStack = [
   { name: 'Three.js', icon: '🧊' },
   { name: 'OpenAI', icon: '🤖' },
+  { name: 'Anthropic', icon: '🧠' },
   { name: 'Supabase', icon: '⚡' },
   { name: 'TypeScript', icon: '⚡' },
   { name: 'React', icon: '⚛️' },
@@ -510,6 +511,69 @@ export default function Home() {
                     <div className="relative w-full md:w-64 h-48 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/50 dark:border-gray-700/50 backdrop-blur-sm flex items-center justify-center overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-pink-500/10" />
                       <div className="text-6xl animate-bounce">🤖</div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+
+            {/* MoodLens - NEW */}
+            <Link href="/mood-lens" className="md:col-span-2">
+              <motion.div
+                whileHover={{ y: -10 }}
+                className="group relative h-full bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 dark:from-purple-900/20 dark:via-pink-900/20 dark:to-orange-900/20 rounded-3xl border border-purple-200 dark:border-purple-800 overflow-hidden hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-8 md:p-10">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="p-3 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-2xl text-white shadow-lg shadow-purple-500/30">
+                          <Eye className="w-8 h-8" />
+                        </div>
+                        <div className="flex gap-2">
+                          <span className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold rounded-full">
+                            NEW
+                          </span>
+                          <span className="px-3 py-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-bold rounded-full border border-gray-200 dark:border-gray-700">
+                            Vision AI
+                          </span>
+                        </div>
+                      </div>
+                      <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                        MoodLens
+                      </h3>
+                      <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 max-w-2xl">
+                        Upload any image and reveal its hidden emotional landscape. Claude Vision analyzes mood, extracts color palettes, and generates stunning 3D visualizations driven by sentiment data. Compare two images to see their emotional distance.
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Claude Vision</span>
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Three.js</span>
+                        <span className="px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700">Generative Art</span>
+                      </div>
+                    </div>
+
+                    {/* Visual Preview */}
+                    <div className="relative w-full md:w-64 h-48 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/50 dark:border-gray-700/50 backdrop-blur-sm flex items-center justify-center overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-orange-500/10" />
+                      <div className="flex gap-2">
+                        {['#8B5CF6', '#EC4899', '#F59E0B', '#10B981', '#3B82F6'].map((color, i) => (
+                          <motion.div
+                            key={i}
+                            className="w-8 h-8 rounded-lg shadow-lg"
+                            style={{ backgroundColor: color }}
+                            animate={{
+                              y: [0, -10, 0],
+                              rotate: [0, 5, -5, 0]
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              delay: i * 0.2
+                            }}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>

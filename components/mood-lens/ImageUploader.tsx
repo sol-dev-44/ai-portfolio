@@ -28,14 +28,36 @@ export function ImageUploader({ onImageSelected, selectedImage, onClear, isLoadi
     // If react-dropzone is not available, I'll use a hidden input fallback logic if needed
     // For now I'll assume standard HTML input logic wrapped in a clear UI
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                onImageSelected(file, reader.result as string);
-            };
-            reader.readAsDataURL(file);
+            try {
+                let processedFile = file;
+
+                // Convert HEIC/HEIF to JPEG for compatibility
+                if (file.type === 'image/heic' || file.type === 'image/heif' || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+                    const heic2any = (await import('heic2any')).default;
+                    const convertedBlob = await heic2any({
+                        blob: file,
+                        toType: 'image/jpeg',
+                        quality: 0.9
+                    });
+
+                    // heic2any can return Blob or Blob[], handle both cases
+                    const blob = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
+                    processedFile = new File([blob], file.name.replace(/\.heic$/i, '.jpg'), { type: 'image/jpeg' });
+                }
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    onImageSelected(processedFile, reader.result as string);
+                };
+                reader.readAsDataURL(processedFile);
+            } catch (error) {
+                console.error('Error processing image:', error);
+                alert('Failed to process image. Please try a different format.');
+            }
         }
     };
 
@@ -51,7 +73,7 @@ export function ImageUploader({ onImageSelected, selectedImage, onClear, isLoadi
                     >
                         <input
                             type="file"
-                            accept="image/*"
+                            accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,image/heic,image/heif,image/bmp,image/tiff,image/avif"
                             onChange={handleFileChange}
                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                         />

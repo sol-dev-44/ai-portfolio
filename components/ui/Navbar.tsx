@@ -16,6 +16,7 @@ const navGroups = [
       { name: 'Dog Matcher', path: '/dog-matcher' },
       { name: 'Contract Auditor', path: '/contract-auditor' },
       { name: 'Tokenizer', path: '/tokenizer' },
+      { name: 'MoodLens', path: '/mood-lens' },
     ]
   },
   {

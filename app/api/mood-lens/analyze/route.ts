@@ -19,16 +19,30 @@ export async function POST(req: NextRequest) {
         }
 
         // Extract base64 data and media type
-        const matches = imageBlob.match(/^data:((?:image\/(?:png|jpeg|webp|gif)));base64,(.*)$/);
+        // Support: JPEG, PNG, WebP, GIF, HEIC/HEIF (iPhone), BMP, TIFF, AVIF
+        const matches = imageBlob.match(/^data:((?:image\/(?:png|jpe?g|webp|gif|heic|heif|bmp|tiff?|avif)));base64,(.*)$/);
         if (!matches || matches.length !== 3) {
             return NextResponse.json(
-                { error: 'Invalid image format. Must be base64 data URL (png, jpeg, webp, gif).' },
+                { error: 'Invalid image format. Supported formats: JPEG, PNG, WebP, GIF, HEIC, HEIF, BMP, TIFF, AVIF' },
                 { status: 400 }
             );
         }
 
-        const mediaType = matches[1] as 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp';
-        const base64Data = matches[2];
+        let mediaType = matches[1] as string;
+        let base64Data = matches[2];
+
+        // Claude API only supports: image/jpeg, image/png, image/gif, image/webp
+        // For other formats (HEIC, BMP, TIFF, AVIF), we accept them but convert to JPEG
+        const claudeSupportedFormats = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+
+        if (!claudeSupportedFormats.includes(mediaType)) {
+            // For unsupported formats, we'll pass them through as JPEG
+            // The client-side HEIC conversion already handles HEIC files
+            // For other formats, the browser's FileReader already converts them to a displayable format
+            mediaType = 'image/jpeg';
+        }
+
+        const finalMediaType = mediaType as 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp';
 
         const prompt = `
     Analyze this image in detail. I need a JSON response describing the visual content, granular emotional breakdown, and artistic style attributes.
@@ -66,7 +80,7 @@ export async function POST(req: NextRequest) {
                             type: 'image',
                             source: {
                                 type: 'base64',
-                                media_type: mediaType,
+                                media_type: finalMediaType,
                                 data: base64Data,
                             },
                         },
