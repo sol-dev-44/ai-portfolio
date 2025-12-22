@@ -13,6 +13,7 @@ import { artApi } from './api/artApi';
 import artReducer from './artSlice';
 import { reasoningApi } from './api/reasoningApi';
 import { snapfixApi } from './api/snapfixApi';
+import { moodLensApi } from './api/moodLensApi';
 
 export const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ export const store = configureStore({
     [artApi.reducerPath]: artApi.reducer,
     [reasoningApi.reducerPath]: reasoningApi.reducer,
     [snapfixApi.reducerPath]: snapfixApi.reducer,
+    [moodLensApi.reducerPath]: moodLensApi.reducer,
     dashboard: dashboardReducer,
     lsat: lsatReducer,
     contract: contractReducer,
@@ -40,7 +42,8 @@ export const store = configureStore({
       contractApi.middleware,
       artApi.middleware,
       reasoningApi.middleware,
-      snapfixApi.middleware
+      snapfixApi.middleware,
+      moodLensApi.middleware
     ),
 });
 

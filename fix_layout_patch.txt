@@ -1,0 +1,13 @@
+189a190,201
+>                                         </div>
+>                                         <div className="space-y-2">
+>                                             <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Color Harmony</h3>
+>                                             <ColorHarmonyWheel palette={analysis.colorPalette} />
+>                                         </div>
+>                                         {analysis.sentiment && (
+>                                             <div className="space-y-2">
+>                                                 <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Sentiment Flow</h3>
+>                                                 <SentimentFlow sentiment={analysis.sentiment} palette={analysis.colorPalette} />
+>                                             </div>
+>                                         )}
+>                                         <div className="space-y-2">
