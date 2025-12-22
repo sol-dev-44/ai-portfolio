@@ -33,27 +33,43 @@ export default function MoodLensPage() {
     const handleImageSelected = async (file: File, base64: string) => {
         setSelectedImage(base64);
         try {
-            await analyzeImage({ imageBlob: base64 }).unwrap();
-        } catch (err) {
-            console.error('Analysis failed', err);
+            console.log('Sending image to API...', { fileName: file.name, fileType: file.type, size: file.size });
+            const result = await analyzeImage({ imageBlob: base64 }).unwrap();
+            console.log('Analysis successful:', result);
+        } catch (err: any) {
+            console.error('Analysis failed:', err);
+            console.error('Error details:', {
+                status: err?.status,
+                data: err?.data,
+                message: err?.message
+            });
+            // Show user-friendly error with details
+            const errorMsg = err?.data?.error || err?.message || 'Unknown error';
+            alert(`Analysis failed: ${errorMsg}\n\nCheck console for details.`);
         }
     };
 
     const handleImageASelected = async (file: File, base64: string) => {
         setSelectedImageA(base64);
         try {
+            console.log('Sending image A to API...', { fileName: file.name, fileType: file.type, size: file.size });
             await analyzeImageA({ imageBlob: base64 }).unwrap();
-        } catch (err) {
-            console.error('Analysis A failed', err);
+        } catch (err: any) {
+            console.error('Analysis A failed:', err);
+            const errorMsg = err?.data?.error || err?.message || 'Unknown error';
+            alert(`Analysis failed: ${errorMsg}`);
         }
     };
 
     const handleImageBSelected = async (file: File, base64: string) => {
         setSelectedImageB(base64);
         try {
+            console.log('Sending image B to API...', { fileName: file.name, fileType: file.type, size: file.size });
             await analyzeImageB({ imageBlob: base64 }).unwrap();
-        } catch (err) {
-            console.error('Analysis B failed', err);
+        } catch (err: any) {
+            console.error('Analysis B failed:', err);
+            const errorMsg = err?.data?.error || err?.message || 'Unknown error';
+            alert(`Analysis failed: ${errorMsg}`);
         }
     };
 
@@ -180,28 +196,28 @@ export default function MoodLensPage() {
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                        <div className="space-y-2">
-                                            <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Analysis Metrics</h3>
-                                            {analysis.sentiment && (
-                                                <QuantitativeViz sentiment={analysis.sentiment} />
-                                            )}
-                                        </div>
-                                        <div className="space-y-2">
-                                            <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Color Harmony</h3>
-                                            <ColorHarmonyWheel palette={analysis.colorPalette} />
-                                        </div>
+                                    <div className="space-y-2">
+                                        <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Analysis Metrics</h3>
                                         {analysis.sentiment && (
-                                            <div className="space-y-2">
-                                                <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Sentiment Flow</h3>
-                                                <SentimentFlow sentiment={analysis.sentiment} palette={analysis.colorPalette} />
-                                            </div>
+                                            <QuantitativeViz sentiment={analysis.sentiment} />
                                         )}
-                                        {analysis.emotions && (
-                                            <div className="space-y-2">
-                                                <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Emotion Spectrum</h3>
-                                                <EmotionBreakdown emotions={analysis.emotions} />
-                                            </div>
-                                        )}
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Color Harmony</h3>
+                                        <ColorHarmonyWheel palette={analysis.colorPalette} />
+                                    </div>
+                                    {analysis.sentiment && (
+                                        <div className="space-y-2">
+                                            <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Sentiment Flow</h3>
+                                            <SentimentFlow sentiment={analysis.sentiment} palette={analysis.colorPalette} />
+                                        </div>
+                                    )}
+                                    {analysis.emotions && (
+                                        <div className="space-y-2">
+                                            <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Emotion Spectrum</h3>
+                                            <EmotionBreakdown emotions={analysis.emotions} />
+                                        </div>
+                                    )}
 
                                     <div className="space-y-4">
                                         <div className="bg-white/50 dark:bg-neutral-900/50 rounded-xl border border-neutral-200 dark:border-neutral-800 p-6 flex flex-col justify-center gap-4">
