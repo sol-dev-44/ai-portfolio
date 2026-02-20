@@ -49,6 +49,33 @@ const TechTicker = () => {
   );
 };
 
+
+const DisabledFeatureWrapper = ({ children, className, roundedClass = "rounded-3xl" }: { children: React.ReactNode, className?: string, roundedClass?: string }) => {
+  return (
+    <div
+      className={`relative group cursor-not-allowed ${className || ''}`}
+      onClick={(e) => e.preventDefault()}
+    >
+      <div className={`pointer-events-none transition-all duration-300 ${roundedClass} overflow-hidden`}>
+        <div className="group-hover:blur-sm transition-all duration-300 h-full w-full">
+          {children}
+        </div>
+      </div>
+      <div className={`absolute inset-0 bg-white/40 dark:bg-gray-950/60 backdrop-blur-[2px] ${roundedClass} z-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300`}>
+        <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-2xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 border border-gray-200 dark:border-gray-800 text-center mx-4 max-w-sm pointer-events-auto">
+          <p className="text-xl font-bold text-gray-900 dark:text-white mb-2">Feature Disabled 🥚</p>
+          <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+            Disabled to save money! I'm fully employed right now, but have you seen the price of eggs?
+          </p>
+          <a href="https://github.com/sol-dev-44" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline">
+            View code on GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Home() {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -118,7 +145,7 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-wrap gap-4 justify-center pt-8"
           >
-            <Link href="/contract-auditor">
+            <DisabledFeatureWrapper roundedClass="rounded-2xl">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -129,9 +156,9 @@ export default function Home() {
                   Try Contract Auditor
                 </span>
               </motion.button>
-            </Link>
+            </DisabledFeatureWrapper>
 
-            <Link href="/rag-chat">
+            <DisabledFeatureWrapper roundedClass="rounded-2xl">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -142,7 +169,7 @@ export default function Home() {
                   Chat with my Resume
                 </span>
               </motion.button>
-            </Link>
+            </DisabledFeatureWrapper>
           </motion.div>
         </div>
       </section>
@@ -174,7 +201,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 gap-8">
             {/* Project 1: SnapFix - FEATURED CAPSTONE */}
-            <Link href="/snapfix" className="md:col-span-2">
+            <DisabledFeatureWrapper className="md:col-span-2">
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50 dark:from-indigo-900/20 dark:via-blue-900/20 dark:to-cyan-900/20 rounded-3xl border border-indigo-200 dark:border-indigo-800 overflow-hidden hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300"
@@ -215,7 +242,7 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </Link>
+            </DisabledFeatureWrapper>
 
             {/* SUNSET: Tool-Calling Agent
             <Link href="/agent" className="md:col-span-2">
@@ -274,7 +301,7 @@ export default function Home() {
             */}
 
             {/* Project 3: Contract Auditor - NEW */}
-            <Link href="/contract-auditor">
+            <DisabledFeatureWrapper>
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300"
@@ -301,10 +328,10 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </Link>
+            </DisabledFeatureWrapper>
 
             {/* Project 3: Dog Matcher - NEW */}
-            <Link href="/dog-matcher">
+            <DisabledFeatureWrapper>
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-pink-500/10 transition-all duration-300"
@@ -331,10 +358,10 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </Link>
+            </DisabledFeatureWrapper>
 
             {/* Project 4: Dashboard Studio */}
-            <Link href="/dashboard">
+            <DisabledFeatureWrapper>
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300"
@@ -358,10 +385,10 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </Link>
+            </DisabledFeatureWrapper>
 
             {/* Project 3: LLM Arena */}
-            <Link href="/llm-playground">
+            <DisabledFeatureWrapper>
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300"
@@ -385,10 +412,10 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </Link>
+            </DisabledFeatureWrapper>
 
             {/* Project 4: Tokenizer */}
-            <Link href="/tokenizer">
+            <DisabledFeatureWrapper>
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300"
@@ -412,10 +439,10 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </Link>
+            </DisabledFeatureWrapper>
 
             {/* Project 5: RAG Chat */}
-            <Link href="/rag-chat">
+            <DisabledFeatureWrapper>
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-teal-500/10 transition-all duration-300"
@@ -439,7 +466,7 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </Link>
+            </DisabledFeatureWrapper>
           </div>
         </div>
       </section>
@@ -471,7 +498,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 gap-8">
             {/* Robot Project */}
-            <Link href="/robot" className="md:col-span-2">
+            <DisabledFeatureWrapper className="md:col-span-2">
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20 rounded-3xl border border-purple-200 dark:border-purple-800 overflow-hidden hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300"
@@ -515,10 +542,10 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </Link>
+            </DisabledFeatureWrapper>
 
             {/* MoodLens - NEW */}
-            <Link href="/mood-lens" className="md:col-span-2">
+            <DisabledFeatureWrapper className="md:col-span-2">
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 dark:from-purple-900/20 dark:via-pink-900/20 dark:to-orange-900/20 rounded-3xl border border-purple-200 dark:border-purple-800 overflow-hidden hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300"
@@ -578,10 +605,10 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </Link>
+            </DisabledFeatureWrapper>
 
             {/* Generation Strategy Visualizer - NEW */}
-            <Link href="/generation" className="md:col-span-2">
+            <DisabledFeatureWrapper className="md:col-span-2">
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-gradient-to-br from-cyan-50 via-teal-50 to-green-50 dark:from-cyan-900/20 dark:via-teal-900/20 dark:to-green-900/20 rounded-3xl border border-cyan-200 dark:border-cyan-800 overflow-hidden hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300"
@@ -628,7 +655,7 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </Link>
+            </DisabledFeatureWrapper>
           </div>
         </div>
       </section>
@@ -664,7 +691,7 @@ export default function Home() {
       </section>
 
       {/* Floating RAG Chat Button */}
-      <Link href="/rag-chat">
+      <DisabledFeatureWrapper roundedClass="rounded-full flex">
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -686,7 +713,7 @@ export default function Home() {
           />
           <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-yellow-400 dark:text-yellow-600 opacity-0 group-hover:opacity-100 transition-opacity" />
         </motion.button>
-      </Link>
+      </DisabledFeatureWrapper>
     </main >
   );
 }

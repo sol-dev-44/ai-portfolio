@@ -1,5 +1,6 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 import tiktoken
 from typing import List, Dict, Any
@@ -129,6 +130,29 @@ GPT2_MODEL = initialize_gpt2()
 # REMOVED: Not used by frontend - saves 2-3GB memory
 # AGENT_MODEL = initialize_local_model()
 AGENT_MODEL = None  # Disabled to reduce memory usage
+
+# ===== DISABLED FEATURES MIDDLEWARE =====
+@app.middleware("http")
+async def disable_paid_features_middleware(request: Request, call_next):
+    disabled_prefixes = [
+        "/api/tokenize",
+        "/api/generation",
+        "/api/llm",
+        "/api/contract",
+        "/api/dog-matcher",
+        "/api/reasoning",
+        "/api/lsat",
+        "/api/agent"
+    ]
+    if any(request.url.path.startswith(prefix) for prefix in disabled_prefixes):
+        return JSONResponse(
+            status_code=503,
+            content={
+                "error": "Feature Disabled",
+                "message": "Disabled to save money. I'm full-time employed currently, but have you seen the price of eggs? Check out my GitHub for the implementation."
+            }
+        )
+    return await call_next(request)
 
 # ===== BASIC ROUTES =====
 @app.get("/")

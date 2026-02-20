@@ -82,8 +82,12 @@ export function Navbar() {
                     {group.items.map((item) => (
                       <Link
                         key={item.path}
-                        href={item.path}
-                        className={`block px-4 py-2 rounded-lg text-sm transition-colors ${pathname === item.path
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          alert("Feature disabled to save money. I'm full-time employed currently, but have you seen the price of eggs? 🥚");
+                        }}
+                        className={`block px-4 py-2 rounded-lg text-sm transition-colors cursor-not-allowed opacity-50 ${pathname === item.path
                           ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
                           : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
                           }`}
@@ -100,16 +104,15 @@ export function Navbar() {
           {/* CTA Button & Mobile Toggle */}
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <Link href="/rag-chat" className="hidden sm:block">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium text-sm shadow-lg hover:shadow-blue-500/25 transition-shadow"
+            <div className="hidden sm:block cursor-not-allowed opacity-50" title="Disabled to save money 🥚">
+              <button
+                disabled
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-full font-medium text-sm shadow-lg cursor-not-allowed"
               >
                 <Sparkles className="w-4 h-4" />
                 <span className="hidden sm:inline">Ask AI</span>
-              </motion.button>
-            </Link>
+              </button>
+            </div>
 
             {/* Mobile Menu Toggle */}
             <button
@@ -140,9 +143,12 @@ export function Navbar() {
                   {group.items.map((item) => (
                     <Link
                       key={item.path}
-                      href={item.path}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors ${pathname === item.path
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        alert("Feature disabled to save money. I'm full-time employed currently, but have you seen the price of eggs? 🥚");
+                      }}
+                      className={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors cursor-not-allowed opacity-50 ${pathname === item.path
                         ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
                         : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
                         }`}
@@ -153,12 +159,12 @@ export function Navbar() {
                 </div>
               </div>
             ))}
-            <Link href="/rag-chat" onClick={() => setIsMobileMenuOpen(false)} className="block">
-              <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold text-sm shadow-lg">
+            <div onClick={() => alert("Feature disabled to save money 🥚")} className="block cursor-not-allowed opacity-50">
+              <button disabled className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-xl font-bold text-sm shadow-lg cursor-not-allowed">
                 <Sparkles className="w-4 h-4" />
                 Ask AI Assistant
               </button>
-            </Link>
+            </div>
           </div>
         </motion.div>
       )}
