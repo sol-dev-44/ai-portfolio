@@ -41,7 +41,7 @@ export default function BreedExplorer({ onCompare, selectedBreeds, onStartChat, 
 
     // Fetch breeds on mount
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/dog-matcher/breeds`)
+        fetch(`/api/dog-matcher/breeds`)
             .then(res => res.json())
             .then(data => {
                 setBreeds(data.breeds || []);

@@ -1,7 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-
-console.log('API_BASE_URL:', API_BASE_URL);
+const API_BASE_URL = '/api';
 
 
 // TypeScript types matching backend models

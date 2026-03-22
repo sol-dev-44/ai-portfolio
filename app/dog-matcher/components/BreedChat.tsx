@@ -61,7 +61,7 @@ export default function BreedChat({ initialBreedId, onClearBreed }: BreedChatPro
 
     // Fetch all breeds on mount
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/dog-matcher/breeds`)
+        fetch(`/api/dog-matcher/breeds`)
             .then(res => res.json())
             .then(data => {
                 const breeds = data.breeds || [];

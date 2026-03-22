@@ -42,7 +42,7 @@ export default function QuizFeature({ onStartChat, onAddToCompare, selectedForCo
         setError(null);
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/dog-matcher/match`, {
+            const response = await fetch(`/api/dog-matcher/match`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

@@ -1,88 +1,86 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
-
 interface ReasoningProblem {
     id: string;
     title: string;
-    problem_text: string;
+    problem: string;
     category: string;
     difficulty: string;
-    ground_truth_answer?: string;
+    expected_answer?: string;
+}
+
+interface TraceTokens {
+    input: number;
+    output: number;
 }
 
 interface ReasoningTrace {
-    id?: string;
-    session_id: string;
-    trace_index: number;
-    round_number?: number;
-    reasoning_text: string;
-    final_answer: string;
-    score?: number;
-    is_golden?: boolean;
-    model_used: string;
-    tokens_used?: number;
-    latency_ms?: number;
-    votes?: number;
-}
-
-interface ReasoningSession {
-    id: string;
-    problem_id?: string;
-    user_query?: string;
-    strategy: string;
-    status: string;
-    created_at: string;
-    completed_at?: string;
-}
-
-interface STaRRound {
-    round_number: number;
-    num_traces: number;
-    avg_score: number;
-    improvement_pct?: number;
-    golden_trace_ids: string[];
-    traces?: ReasoningTrace[];
+    reasoning: string;
+    answer: string;
+    tokens: TraceTokens;
 }
 
 interface RunReasoningRequest {
     problem_id?: string;
-    custom_question?: string;
-    strategy: 'zero_shot_cot' | 'self_consistency';
-    model?: string;
-    n_traces?: number;
+    problem: string;
+    strategy: 'zero_shot_cot' | 'self_consistency' | 'few_shot_cot';
+    expected_answer?: string;
 }
 
 interface RunSTaRRequest {
-    problem_id?: string;
-    custom_question?: string;
-    num_rounds?: number;
+    problem: string;
+    rounds?: number;
     traces_per_round?: number;
-    model?: string;
 }
 
 interface ReasoningResponse {
     session_id: string;
     strategy: string;
-    status: string;
-    traces: ReasoningTrace[];
+    reasoning: string;
+    answer?: string;
+    finalAnswer?: string;
+    tokens?: TraceTokens;
+    traces?: ReasoningTrace[];
+    agreement?: number;
+    cost_estimate: number;
+    total_tokens: number;
+}
+
+interface STaRRoundTrace {
+    reasoning: string;
+    score: number;
+}
+
+interface STaRRound {
+    round: number;
+    traces: STaRRoundTrace[];
+    golden_count: number;
+    avg_score: number;
+    best_score: number;
 }
 
 interface STaRResponse {
-    session_id: string;
     rounds: STaRRound[];
-    total_improvement_pct: number;
+    total_rounds: number;
+    improvement: number;
 }
 
 interface SessionResponse {
-    session: ReasoningSession;
-    traces: ReasoningTrace[];
-    rounds?: STaRRound[];
+    id: string;
+    problem_id: string;
+    problem: string;
+    strategy: string;
+    reasoning: string;
+    answer: string;
+    expected_answer?: string;
+    total_tokens: number;
+    cost_estimate: number;
+    created_at: string;
 }
 
 export const reasoningApi = createApi({
     reducerPath: 'reasoningApi',
-    baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}/api/reasoning` }),
+    baseQuery: fetchBaseQuery({ baseUrl: '/api/reasoning' }),
     tagTypes: ['ReasoningSession', 'Problems'],
     endpoints: (builder) => ({
         // Get available problems

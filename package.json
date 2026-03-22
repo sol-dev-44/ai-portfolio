@@ -29,6 +29,7 @@
     "glob": "^13.0.0",
     "heic2any": "^0.0.4",
     "html-to-image": "^1.11.13",
+    "js-tiktoken": "^1.0.21",
     "lamina": "^1.2.2",
     "leva": "^0.10.1",
     "lucide-react": "^0.552.0",

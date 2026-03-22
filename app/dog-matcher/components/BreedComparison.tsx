@@ -176,7 +176,7 @@ export default function BreedComparison({ selectedBreedIds, onRemoveBreed, onSta
         }
 
         // Fetch all breeds and filter selected ones
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/dog-matcher/breeds`)
+        fetch(`/api/dog-matcher/breeds`)
             .then(res => res.json())
             .then(data => {
                 const allBreeds = data.breeds || [];

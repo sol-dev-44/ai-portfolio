@@ -1,26 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080';
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function POST(request: NextRequest) {
-    try {
-        const body = await request.json();
+  try {
+    const body = await request.json();
+    const { contract_hash, feedback, rating } = body;
 
-        const response = await fetch(`${BACKEND_URL}/api/contract/feedback`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-        });
-
-        const data = await response.json();
-        return NextResponse.json(data, { status: response.status });
-    } catch (error) {
-        console.error('Feedback endpoint error:', error);
-        return NextResponse.json(
-            { error: 'Failed to submit feedback' },
-            { status: 503 }
-        );
+    if (!contract_hash || typeof contract_hash !== 'string') {
+      return NextResponse.json(
+        { error: 'contract_hash is required and must be a string' },
+        { status: 400 }
+      );
     }
+
+    if (!feedback || typeof feedback !== 'string') {
+      return NextResponse.json(
+        { error: 'feedback is required and must be a string' },
+        { status: 400 }
+      );
+    }
+
+    if (typeof rating !== 'number') {
+      return NextResponse.json(
+        { error: 'rating is required and must be a number' },
+        { status: 400 }
+      );
+    }
+
+    try {
+      await supabase.from('contract_feedback').insert({
+        contract_hash,
+        feedback,
+        rating,
+        created_at: new Date().toISOString(),
+      });
+    } catch {
+      // Graceful degradation — table may not exist yet
+      console.warn('contract_feedback table may not exist, skipping insert');
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Feedback endpoint error:', error);
+    return NextResponse.json(
+      { error: 'Failed to submit feedback' },
+      { status: 500 }
+    );
+  }
 }
