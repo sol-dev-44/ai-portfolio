@@ -73,6 +73,8 @@ export async function POST(request: NextRequest) {
 
     const allRounds = [];
     let goldenExamples: string[] = [];
+    let totalInputTokens = 0;
+    let totalOutputTokens = 0;
 
     for (let round = 0; round < Math.min(rounds, 5); round++) {
       const traces = [];
@@ -81,6 +83,8 @@ export async function POST(request: NextRequest) {
       for (let i = 0; i < n; i++) {
         const trace = await generateTrace(problemText, goldenExamples);
         const score = await scoreTrace(trace.reasoning, problemText);
+        totalInputTokens += trace.tokens.input_tokens;
+        totalOutputTokens += trace.tokens.output_tokens;
         traces.push({
           reasoning: trace.reasoning,
           score,
@@ -92,24 +96,59 @@ export async function POST(request: NextRequest) {
       const threshold = 6.0;
       const eligible = sorted.filter((t) => t.score >= threshold);
       const golden = eligible.slice(0, Math.min(2, Math.ceil(traces.length / 2)));
+      const goldenSet = new Set(golden.map((g) => g.reasoning));
 
       goldenExamples = golden.map((g) => g.reasoning);
 
+      const avgScore = traces.reduce((sum, t) => sum + t.score, 0) / traces.length;
+      const prevAvg: number | null = allRounds.length > 0 ? allRounds[allRounds.length - 1].avg_score : null;
+
+      // Extract final answer from reasoning text
+      const extractFinalAnswer = (text: string) => {
+        const match = text.match(/Final Answer:\s*([\s\S]*?)$/i);
+        return match ? match[1].trim() : text.slice(-200);
+      };
+
       allRounds.push({
-        round: round + 1,
-        traces: traces.map((t) => ({ reasoning: t.reasoning, score: t.score })),
+        round_number: round + 1,
+        num_traces: traces.length,
+        traces: traces.map((t, i) => ({
+          reasoning: t.reasoning,
+          reasoning_text: t.reasoning,
+          score: t.score,
+          trace_index: i,
+          is_golden: goldenSet.has(t.reasoning),
+          final_answer: extractFinalAnswer(t.reasoning),
+        })),
         golden_count: golden.length,
-        avg_score: traces.reduce((sum, t) => sum + t.score, 0) / traces.length,
+        avg_score: avgScore,
         best_score: sorted[0]?.score || 0,
+        improvement_pct: prevAvg != null && prevAvg > 0
+          ? ((avgScore - prevAvg) / prevAvg) * 100
+          : undefined,
       });
     }
+
+    const totalTokens = totalInputTokens + totalOutputTokens;
+    // Rough cost estimate: Sonnet input $3/M, output $15/M
+    const totalCost = (totalInputTokens * 3 + totalOutputTokens * 15) / 1_000_000;
+
+    const firstAvg = allRounds[0]?.avg_score || 0;
+    const lastAvg = allRounds[allRounds.length - 1]?.avg_score || 0;
+    const totalImprovementPct = firstAvg > 0
+      ? ((lastAvg - firstAvg) / firstAvg) * 100
+      : 0;
 
     return NextResponse.json({
       rounds: allRounds,
       total_rounds: allRounds.length,
+      total_improvement_pct: totalImprovementPct,
+      problem_text: problemText,
+      total_cost: totalCost,
+      total_tokens: totalTokens,
       improvement:
         allRounds.length > 1
-          ? allRounds[allRounds.length - 1].avg_score - allRounds[0].avg_score
+          ? lastAvg - firstAvg
           : 0,
     });
   } catch (error: any) {

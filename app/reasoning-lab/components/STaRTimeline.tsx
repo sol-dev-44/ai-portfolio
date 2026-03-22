@@ -80,7 +80,7 @@ export default function STaRTimeline({ rounds, totalImprovement, problemText, to
                         <div className="space-y-3">
                             <div className="flex items-center justify-between text-sm">
                                 <span className="text-green-800 dark:text-green-200">
-                                    <strong>Why this trace?</strong> Highest score ({bestTrace.score.toFixed(1)}/10) {bestTrace.is_golden && '• Marked as Golden'}
+                                    <strong>Why this trace?</strong> Highest score ({(bestTrace.score ?? 0).toFixed(1)}/10) {bestTrace.is_golden && '• Marked as Golden'}
                                 </span>
                             </div>
                             <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-green-100 dark:border-green-700">
@@ -224,7 +224,7 @@ export default function STaRTimeline({ rounds, totalImprovement, problemText, to
                         </div>
                         <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 flex items-center gap-2">
                             <TrendingUp className="w-6 h-6" />
-                            {totalImprovement >= 0 ? '+' : ''}{totalImprovement.toFixed(1)}%
+                            {(totalImprovement || 0) >= 0 ? '+' : ''}{(totalImprovement || 0).toFixed(1)}%
                         </div>
                     </div>
                     <div className="text-right">
@@ -232,7 +232,7 @@ export default function STaRTimeline({ rounds, totalImprovement, problemText, to
                             {rounds.length} Rounds
                         </div>
                         <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {rounds[0]?.avg_score.toFixed(2)} → {rounds[rounds.length - 1]?.avg_score.toFixed(2)}
+                            {(rounds[0]?.avg_score ?? 0).toFixed(2)} → {(rounds[rounds.length - 1]?.avg_score ?? 0).toFixed(2)}
                         </div>
                     </div>
                 </div>
@@ -274,7 +274,7 @@ export default function STaRTimeline({ rounds, totalImprovement, problemText, to
                                     </div>
                                     <div className="text-right">
                                         <div className="text-lg font-bold text-gray-900 dark:text-white">
-                                            {round.avg_score.toFixed(2)}
+                                            {(round.avg_score ?? 0).toFixed(2)}
                                         </div>
                                         <div className="text-xs text-gray-500 dark:text-gray-400">
                                             Avg Score
@@ -290,7 +290,7 @@ export default function STaRTimeline({ rounds, totalImprovement, problemText, to
                                         <TrendingUp className={`w-4 h-4 ${round.improvement_pct < 0 ? 'rotate-180' : ''
                                             }`} />
                                         <span className="text-sm font-medium">
-                                            {round.improvement_pct >= 0 ? '+' : ''}{round.improvement_pct.toFixed(1)}% vs Round {round.round_number - 1}
+                                            {(round.improvement_pct ?? 0) >= 0 ? '+' : ''}{(round.improvement_pct ?? 0).toFixed(1)}% vs Round {round.round_number - 1}
                                         </span>
                                     </div>
                                 )}

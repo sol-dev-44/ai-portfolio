@@ -142,7 +142,7 @@ export default function STaRVisualization({ rounds }: STaRVisualizationProps) {
             .attr('font-weight', 'bold')
             .attr('fill', '#374151')
             .style('pointer-events', 'none')
-            .text((d: any) => d.score.toFixed(1));
+            .text((d: any) => (d.score ?? 0).toFixed(1));
 
         // Golden star
         nodeGroup
@@ -170,7 +170,7 @@ export default function STaRVisualization({ rounds }: STaRVisualizationProps) {
                 .attr('text-anchor', 'middle')
                 .attr('font-size', '12px')
                 .attr('fill', '#6b7280')
-                .text(`Avg: ${round.avg_score.toFixed(1)}`);
+                .text(`Avg: ${(round.avg_score ?? 0).toFixed(1)}`);
         });
 
     }, [rounds]);
@@ -197,7 +197,7 @@ export default function STaRVisualization({ rounds }: STaRVisualizationProps) {
                             {selectedNode.is_golden && ' ⭐'}
                         </h4>
                         <span className="text-base font-bold px-3 py-1 rounded-lg bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300">
-                            Score: {selectedNode.score.toFixed(1)}/10
+                            Score: {(selectedNode.score ?? 0).toFixed(1)}/10
                         </span>
                     </div>
                     <div className="space-y-3">
