@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         char_to_token_ratio: count > 0 ? parseFloat((text.length / count).toFixed(2)) : 0,
       };
 
-      enc.free();
+      if (typeof enc.free === 'function') enc.free();
     }
 
     return NextResponse.json(results);
