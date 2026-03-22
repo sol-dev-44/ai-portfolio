@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useTheme } from '@/app/theme-provider';
 import { Sun, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -10,6 +11,13 @@ interface ThemeToggleProps {
 
 export default function ThemeToggle({ className = '' }: ThemeToggleProps) {
   const { theme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) {
+    return <div className={`w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-800 ${className}`} />;
+  }
 
   return (
     <motion.button

@@ -5,40 +5,46 @@ const SUPPORTED = ['cl100k_base', 'p50k_base', 'r50k_base', 'o200k_base'];
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, tokenizer } = await request.json();
+    const { text, tokenizers } = await request.json();
 
-    if (!text || !tokenizer) {
-      return NextResponse.json({ error: 'text and tokenizer are required' }, { status: 400 });
-    }
-
-    if (!SUPPORTED.includes(tokenizer)) {
+    if (!text || !tokenizers || !Array.isArray(tokenizers) || tokenizers.length === 0) {
       return NextResponse.json(
-        { error: `Unsupported tokenizer. Use: ${SUPPORTED.join(', ')}` },
+        { error: 'text and tokenizers (array) are required' },
         { status: 400 }
       );
     }
 
-    const enc = getEncoding(tokenizer as any);
-    const tokens = enc.encode(text);
+    const invalid = tokenizers.filter((t: string) => !SUPPORTED.includes(t));
+    if (invalid.length > 0) {
+      return NextResponse.json(
+        { error: `Unsupported tokenizer(s): ${invalid.join(', ')}. Use: ${SUPPORTED.join(', ')}` },
+        { status: 400 }
+      );
+    }
 
-    // Decode each token individually to get the text representation
-    const tokenDetails = Array.from(tokens).map((tokenId, index) => {
-      const decoded = enc.decode(new Uint32Array([tokenId]));
-      return {
-        id: tokenId,
-        text: decoded,
-        index,
+    const results: Record<string, any> = {};
+
+    for (const tokenizerName of tokenizers) {
+      const enc = getEncoding(tokenizerName as any);
+      const tokenIds = enc.encode(text);
+
+      const decoded_tokens = Array.from(tokenIds).map((tokenId) => {
+        return enc.decode(new Uint32Array([tokenId]));
+      });
+
+      const count = tokenIds.length;
+
+      results[tokenizerName] = {
+        tokens: Array.from(tokenIds),
+        decoded_tokens,
+        count,
+        char_to_token_ratio: count > 0 ? parseFloat((text.length / count).toFixed(2)) : 0,
       };
-    });
 
-    enc.free(); // Clean up WASM memory
+      enc.free();
+    }
 
-    return NextResponse.json({
-      tokens: tokenDetails,
-      token_count: tokens.length,
-      tokenizer,
-      text_length: text.length,
-    });
+    return NextResponse.json(results);
   } catch (error: any) {
     console.error('Tokenize error:', error);
     return NextResponse.json(
