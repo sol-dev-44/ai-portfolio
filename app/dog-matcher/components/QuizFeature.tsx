@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Quiz, { QuizAnswers } from './Quiz';
 import MatchResults from './MatchResults';
-import TechnicalGuide from './TechnicalGuide';
 import { Loader2, Dog } from 'lucide-react';
 
 type BreedMatch = {
@@ -147,8 +146,6 @@ export default function QuizFeature({ onStartChat, onAddToCompare, selectedForCo
                                 </p>
                             </div>
                         </motion.div>
-
-                        <TechnicalGuide />
 
                         <motion.button
                             initial={{ opacity: 0 }}

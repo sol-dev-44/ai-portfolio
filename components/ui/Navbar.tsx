@@ -12,22 +12,22 @@ const navGroups = [
   {
     name: 'Tools',
     items: [
-      { name: 'Dashboard Studio', path: '/dashboard' },
-      { name: 'Dog Matcher', path: '/dog-matcher' },
-      { name: 'Contract Auditor', path: '/contract-auditor' },
-      { name: 'Tokenizer', path: '/tokenizer' },
-      { name: 'MoodLens', path: '/mood-lens' },
+      { name: 'Dashboard Studio', path: '/dashboard', enabled: true },
+      { name: 'Dog Matcher', path: '/dog-matcher', enabled: true },
+      { name: 'Contract Auditor', path: '/contract-auditor', enabled: true },
+      { name: 'Tokenizer', path: '/tokenizer', enabled: true },
+      { name: 'MoodLens', path: '/mood-lens', enabled: true },
     ]
   },
   {
     name: 'Demos',
     items: [
-      { name: 'SnapFix Agent', path: '/snapfix' },
-
-      { name: 'Robot', path: '/robot' },
-      { name: 'LLM Arena', path: '/llm-playground' },
-      { name: 'RAG Chat', path: '/rag-chat' },
-      { name: 'Generation', path: '/generation' },
+      { name: 'SnapFix Agent', path: '/snapfix', enabled: true },
+      { name: 'Reasoning Lab', path: '/reasoning-lab', enabled: true },
+      { name: 'RAG Chat', path: '/rag-chat', enabled: true },
+      { name: 'Generation', path: '/generation', enabled: true },
+      { name: 'Robot', path: '/robot', enabled: false },
+      { name: 'LLM Arena', path: '/llm-playground', enabled: false },
     ]
   }
 ];
@@ -79,22 +79,27 @@ export function Navbar() {
                 {/* Dropdown */}
                 <div className="absolute top-full left-0 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover/menu:opacity-100 group-hover/menu:translate-y-0 group-hover/menu:pointer-events-auto transition-all duration-200">
                   <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 p-2 min-w-[200px]">
-                    {group.items.map((item) => (
-                      <Link
-                        key={item.path}
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          alert("Feature disabled to save money. I'm full-time employed currently, but have you seen the price of eggs? 🥚");
-                        }}
-                        className={`block px-4 py-2 rounded-lg text-sm transition-colors cursor-not-allowed opacity-50 ${pathname === item.path
-                          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
-                          }`}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
+                    {group.items.map((item) =>
+                      item.enabled ? (
+                        <Link
+                          key={item.path}
+                          href={item.path}
+                          className={`block px-4 py-2 rounded-lg text-sm transition-colors ${pathname === item.path
+                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                            }`}
+                        >
+                          {item.name}
+                        </Link>
+                      ) : (
+                        <span
+                          key={item.path}
+                          className="block px-4 py-2 rounded-lg text-sm cursor-not-allowed opacity-40 text-gray-400 dark:text-gray-600"
+                        >
+                          {item.name}
+                        </span>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
@@ -104,14 +109,14 @@ export function Navbar() {
           {/* CTA Button & Mobile Toggle */}
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <div className="hidden sm:block cursor-not-allowed opacity-50" title="Disabled to save money 🥚">
-              <button
-                disabled
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-full font-medium text-sm shadow-lg cursor-not-allowed"
+            <div className="hidden sm:block">
+              <Link
+                href="/rag-chat"
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium text-sm shadow-lg hover:shadow-xl hover:scale-105 transition-all"
               >
                 <Sparkles className="w-4 h-4" />
                 <span className="hidden sm:inline">Ask AI</span>
-              </button>
+              </Link>
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -140,31 +145,41 @@ export function Navbar() {
                   {group.name}
                 </h3>
                 <div className="grid grid-cols-1 gap-2">
-                  {group.items.map((item) => (
-                    <Link
-                      key={item.path}
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        alert("Feature disabled to save money. I'm full-time employed currently, but have you seen the price of eggs? 🥚");
-                      }}
-                      className={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors cursor-not-allowed opacity-50 ${pathname === item.path
-                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
-                        }`}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                  {group.items.map((item) =>
+                    item.enabled ? (
+                      <Link
+                        key={item.path}
+                        href={item.path}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors ${pathname === item.path
+                          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                          }`}
+                      >
+                        {item.name}
+                      </Link>
+                    ) : (
+                      <span
+                        key={item.path}
+                        className="block px-4 py-3 rounded-xl text-sm font-medium cursor-not-allowed opacity-40 text-gray-400 dark:text-gray-600"
+                      >
+                        {item.name}
+                      </span>
+                    )
+                  )}
                 </div>
               </div>
             ))}
-            <div onClick={() => alert("Feature disabled to save money 🥚")} className="block cursor-not-allowed opacity-50">
-              <button disabled className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-xl font-bold text-sm shadow-lg cursor-not-allowed">
+            <Link
+              href="/rag-chat"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block w-full"
+            >
+              <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold text-sm shadow-lg hover:shadow-xl transition-all">
                 <Sparkles className="w-4 h-4" />
                 Ask AI Assistant
               </button>
-            </div>
+            </Link>
           </div>
         </motion.div>
       )}

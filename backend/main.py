@@ -135,13 +135,6 @@ AGENT_MODEL = None  # Disabled to reduce memory usage
 @app.middleware("http")
 async def disable_paid_features_middleware(request: Request, call_next):
     disabled_prefixes = [
-        "/api/tokenize",
-        "/api/generation",
-        "/api/llm",
-        "/api/contract",
-        "/api/dog-matcher",
-        "/api/reasoning",
-        "/api/lsat",
         "/api/agent"
     ]
     if any(request.url.path.startswith(prefix) for prefix in disabled_prefixes):

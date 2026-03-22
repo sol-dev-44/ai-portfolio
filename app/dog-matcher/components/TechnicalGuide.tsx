@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dog, Sparkles, Search, GitCompare, MessageCircle, ChevronRight } from 'lucide-react';
-import QuizFeature from './Quiz';
+import QuizFeature from './QuizFeature';
 import BreedExplorer from './BreedExplorer';
 import BreedComparison from './BreedComparison';
 import BreedChat from './BreedChat';

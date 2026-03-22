@@ -145,7 +145,7 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-wrap gap-4 justify-center pt-8"
           >
-            <DisabledFeatureWrapper roundedClass="rounded-2xl">
+            <Link href="/contract-auditor">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -156,9 +156,9 @@ export default function Home() {
                   Try Contract Auditor
                 </span>
               </motion.button>
-            </DisabledFeatureWrapper>
+            </Link>
 
-            <DisabledFeatureWrapper roundedClass="rounded-2xl">
+            <Link href="/rag-chat">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -169,7 +169,7 @@ export default function Home() {
                   Chat with my Resume
                 </span>
               </motion.button>
-            </DisabledFeatureWrapper>
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -201,7 +201,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 gap-8">
             {/* Project 1: SnapFix - FEATURED CAPSTONE */}
-            <DisabledFeatureWrapper className="md:col-span-2">
+            <Link href="/snapfix" className="md:col-span-2">
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50 dark:from-indigo-900/20 dark:via-blue-900/20 dark:to-cyan-900/20 rounded-3xl border border-indigo-200 dark:border-indigo-800 overflow-hidden hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300"
@@ -242,7 +242,7 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </DisabledFeatureWrapper>
+            </Link>
 
             {/* SUNSET: Tool-Calling Agent
             <Link href="/agent" className="md:col-span-2">
@@ -301,7 +301,7 @@ export default function Home() {
             */}
 
             {/* Project 3: Contract Auditor - NEW */}
-            <DisabledFeatureWrapper>
+            <Link href="/contract-auditor">
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300"
@@ -328,10 +328,10 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </DisabledFeatureWrapper>
+            </Link>
 
             {/* Project 3: Dog Matcher - NEW */}
-            <DisabledFeatureWrapper>
+            <Link href="/dog-matcher">
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-pink-500/10 transition-all duration-300"
@@ -358,10 +358,10 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </DisabledFeatureWrapper>
+            </Link>
 
             {/* Project 4: Dashboard Studio */}
-            <DisabledFeatureWrapper>
+            <Link href="/dashboard">
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300"
@@ -385,7 +385,7 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </DisabledFeatureWrapper>
+            </Link>
 
             {/* Project 3: LLM Arena */}
             <DisabledFeatureWrapper>
@@ -415,7 +415,7 @@ export default function Home() {
             </DisabledFeatureWrapper>
 
             {/* Project 4: Tokenizer */}
-            <DisabledFeatureWrapper>
+            <Link href="/tokenizer">
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300"
@@ -439,10 +439,10 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </DisabledFeatureWrapper>
+            </Link>
 
             {/* Project 5: RAG Chat */}
-            <DisabledFeatureWrapper>
+            <Link href="/rag-chat">
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-teal-500/10 transition-all duration-300"
@@ -466,7 +466,34 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </DisabledFeatureWrapper>
+            </Link>
+
+            {/* Project 6: Reasoning Lab */}
+            <Link href="/reasoning-lab">
+              <motion.div
+                whileHover={{ y: -10 }}
+                className="group relative h-full bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-300"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-8 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="p-3 bg-amber-100 dark:bg-amber-900/30 rounded-2xl text-amber-600 dark:text-amber-400">
+                      <Cpu className="w-8 h-8" />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                    Reasoning Lab
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6 flex-grow">
+                    Explore advanced AI reasoning strategies. Compare Chain-of-Thought vs STaR (Self-Taught Reasoner) with interactive problem solving and step-by-step visualization.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">Chain-of-Thought</span>
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">STaR</span>
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
           </div>
         </div>
       </section>
@@ -545,7 +572,7 @@ export default function Home() {
             </DisabledFeatureWrapper>
 
             {/* MoodLens - NEW */}
-            <DisabledFeatureWrapper className="md:col-span-2">
+            <Link href="/mood-lens" className="md:col-span-2">
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 dark:from-purple-900/20 dark:via-pink-900/20 dark:to-orange-900/20 rounded-3xl border border-purple-200 dark:border-purple-800 overflow-hidden hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300"
@@ -605,10 +632,10 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </DisabledFeatureWrapper>
+            </Link>
 
             {/* Generation Strategy Visualizer - NEW */}
-            <DisabledFeatureWrapper className="md:col-span-2">
+            <Link href="/generation" className="md:col-span-2">
               <motion.div
                 whileHover={{ y: -10 }}
                 className="group relative h-full bg-gradient-to-br from-cyan-50 via-teal-50 to-green-50 dark:from-cyan-900/20 dark:via-teal-900/20 dark:to-green-900/20 rounded-3xl border border-cyan-200 dark:border-cyan-800 overflow-hidden hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300"
@@ -655,7 +682,7 @@ export default function Home() {
                   </div>
                 </div>
               </motion.div>
-            </DisabledFeatureWrapper>
+            </Link>
           </div>
         </div>
       </section>
@@ -691,7 +718,7 @@ export default function Home() {
       </section>
 
       {/* Floating RAG Chat Button */}
-      <DisabledFeatureWrapper roundedClass="rounded-full flex">
+      <Link href="/rag-chat">
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -713,7 +740,7 @@ export default function Home() {
           />
           <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-yellow-400 dark:text-yellow-600 opacity-0 group-hover:opacity-100 transition-opacity" />
         </motion.button>
-      </DisabledFeatureWrapper>
+      </Link>
     </main >
   );
 }
