@@ -5,10 +5,12 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, model_id } = await request.json();
+    const body = await request.json();
+    const text = body.text || body.prompt;
+    const top_k = body.top_k || 10;
 
     if (!text) {
-      return NextResponse.json({ error: 'text is required' }, { status: 400 });
+      return NextResponse.json({ error: 'text or prompt is required' }, { status: 400 });
     }
 
     // Use OpenAI to get token probabilities via logprobs
@@ -25,34 +27,29 @@ export async function POST(request: NextRequest) {
       max_tokens: 50,
       temperature: 1.0,
       logprobs: true,
-      top_logprobs: 10,
+      top_logprobs: Math.min(top_k, 20),
     });
 
     const choice = response.choices[0];
     const logprobsData = choice.logprobs?.content || [];
 
-    // Format probabilities like the Python backend expected
-    const probabilities = logprobsData.map((tokenLogprob) => {
-      const topTokens = tokenLogprob.top_logprobs.map((lp) => ({
-        token: lp.token,
-        probability: Math.exp(lp.logprob),
-        logprob: lp.logprob,
-      }));
-
-      return {
-        token: tokenLogprob.token,
-        probability: Math.exp(tokenLogprob.logprob),
-        logprob: tokenLogprob.logprob,
-        top_alternatives: topTokens,
-      };
-    });
+    // Collect all unique tokens from top_logprobs across all positions
+    // The frontend expects a flat list of top_tokens with probability distribution
+    // Use the first token position's top_logprobs as the primary distribution
+    const firstPosition = logprobsData[0];
+    const top_tokens = firstPosition
+      ? firstPosition.top_logprobs.map((lp, i) => ({
+          token: lp.token,
+          token_id: i,
+          probability: Math.exp(lp.logprob),
+          log_probability: lp.logprob,
+        }))
+      : [];
 
     return NextResponse.json({
-      input_text: text,
-      generated_text: choice.message.content,
-      probabilities,
-      model: 'gpt-4o-mini',
-      token_count: probabilities.length,
+      prompt: text,
+      top_tokens,
+      total_tokens_considered: top_tokens.length,
     });
   } catch (error: any) {
     console.error('Generation probabilities error:', error);
