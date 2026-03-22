@@ -9,8 +9,40 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+const PROBLEMS: Record<string, { problem: string; expected_answer: string }> = {
+  'logic-1': {
+    problem:
+      'A farmer needs to cross a river with a wolf, a goat, and a cabbage. The boat can only carry the farmer and one item. If left alone, the wolf will eat the goat, and the goat will eat the cabbage. How can the farmer get everything across safely?',
+    expected_answer:
+      'Take goat across, return, take wolf across, bring goat back, take cabbage across, return, take goat across',
+  },
+  'math-1': {
+    problem:
+      'How many times do the hour and minute hands of a clock overlap in a 12-hour period?',
+    expected_answer: '11 times',
+  },
+  'logic-2': {
+    problem:
+      "Three people are wearing hats. Each hat is either red or blue. Each person can see the other two hats but not their own. At least one hat is red. They are asked simultaneously if they know their hat color. The first two say no. What color is the third person's hat, and how do they know?",
+    expected_answer:
+      "Red. If the third person's hat were blue, the second person would see one red (first) and one blue (third), and knowing at least one is red, could deduce their own is red. Since the second person said no, the third person's hat must be red.",
+  },
+  'math-2': {
+    problem:
+      "You have 12 coins. One is counterfeit and weighs differently (you don't know if heavier or lighter). Using a balance scale exactly 3 times, find the counterfeit coin and determine if it's heavier or lighter.",
+    expected_answer:
+      'Divide into groups of 4. Weigh 4 vs 4. Based on result, narrow down and use remaining 2 weighings to identify the coin and whether it is heavier or lighter.',
+  },
+  'logic-3': {
+    problem:
+      'You are outside a room with 3 light switches. One controls a lightbulb inside the room. You can only enter the room once. How do you determine which switch controls the bulb?',
+    expected_answer:
+      "Turn on switch 1 for a few minutes, then turn it off. Turn on switch 2. Enter the room. If the bulb is on, it's switch 2. If off and warm, it's switch 1. If off and cold, it's switch 3.",
+  },
+};
+
 async function generateText(
-  prompt: string,
+  problemText: string,
   systemPrompt?: string
 ): Promise<{ text: string; inputTokens: number; outputTokens: number }> {
   const response = await anthropic.messages.create({
@@ -18,7 +50,7 @@ async function generateText(
     max_tokens: 2048,
     temperature: 0.7,
     system: systemPrompt || 'You are a careful reasoning assistant.',
-    messages: [{ role: 'user', content: prompt }],
+    messages: [{ role: 'user', content: problemText }],
   });
   const text = response.content[0].type === 'text' ? response.content[0].text : '';
   return {
@@ -64,7 +96,6 @@ async function selfConsistency(problem: string, n = 3) {
       tokens: { input: result.inputTokens, output: result.outputTokens },
     });
   }
-  // Majority vote
   const answerCounts: Record<string, number> = {};
   for (const t of traces) {
     const a = t.answer.toLowerCase();
@@ -111,10 +142,17 @@ Show your reasoning step by step. End with "Final Answer: <your answer>"`;
 
 export async function POST(request: NextRequest) {
   try {
-    const { problem_id, problem, strategy, expected_answer } = await request.json();
+    const body = await request.json();
+    const { problem_id, custom_question, strategy, n_traces, expected_answer } = body;
+    // Also accept "problem" directly for backwards compat
+    const problemText =
+      custom_question || body.problem || (problem_id && PROBLEMS[problem_id]?.problem);
 
-    if (!problem || !strategy) {
-      return NextResponse.json({ error: 'problem and strategy are required' }, { status: 400 });
+    if (!problemText || !strategy) {
+      return NextResponse.json(
+        { error: 'strategy and either problem_id, custom_question, or problem are required' },
+        { status: 400 }
+      );
     }
 
     const sessionId = randomUUID();
@@ -122,19 +160,18 @@ export async function POST(request: NextRequest) {
 
     switch (strategy) {
       case 'zero_shot_cot':
-        result = await zeroShotCoT(problem);
+        result = await zeroShotCoT(problemText);
         break;
       case 'self_consistency':
-        result = await selfConsistency(problem);
+        result = await selfConsistency(problemText, n_traces || 3);
         break;
       case 'few_shot_cot':
-        result = await fewShotCoT(problem);
+        result = await fewShotCoT(problemText);
         break;
       default:
         return NextResponse.json({ error: `Unknown strategy: ${strategy}` }, { status: 400 });
     }
 
-    // Calculate cost estimate (Claude Sonnet pricing rough estimate)
     const totalInput =
       strategy === 'self_consistency'
         ? result.traces.reduce((sum: number, t: any) => sum + t.tokens.input, 0)
@@ -145,17 +182,16 @@ export async function POST(request: NextRequest) {
         : result.tokens?.output || 0;
     const costEstimate = (totalInput * 0.003 + totalOutput * 0.015) / 1000;
 
-    // Store session in Supabase (best effort)
     try {
       await supabase.from('reasoning_sessions').insert({
         id: sessionId,
         problem_id: problem_id || 'custom',
-        problem,
+        problem: problemText,
         strategy,
         reasoning:
           strategy === 'self_consistency' ? result.traces[0].reasoning : result.reasoning,
         answer: strategy === 'self_consistency' ? result.finalAnswer : result.answer,
-        expected_answer,
+        expected_answer: expected_answer || PROBLEMS[problem_id]?.expected_answer,
         total_tokens: totalInput + totalOutput,
         cost_estimate: costEstimate,
         created_at: new Date().toISOString(),

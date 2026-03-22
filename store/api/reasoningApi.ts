@@ -22,15 +22,22 @@ interface ReasoningTrace {
 
 interface RunReasoningRequest {
     problem_id?: string;
-    problem: string;
+    custom_question?: string;
+    problem?: string;
     strategy: 'zero_shot_cot' | 'self_consistency' | 'few_shot_cot';
+    n_traces?: number;
+    model?: string;
     expected_answer?: string;
 }
 
 interface RunSTaRRequest {
-    problem: string;
+    problem_id?: string;
+    custom_question?: string;
+    problem?: string;
+    num_rounds?: number;
     rounds?: number;
     traces_per_round?: number;
+    model?: string;
 }
 
 interface ReasoningResponse {
